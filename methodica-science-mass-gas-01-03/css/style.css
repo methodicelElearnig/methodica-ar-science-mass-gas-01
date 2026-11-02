@@ -1,0 +1,60 @@
+/* Part 03 — screen-specific rules only. Shared rules: css/engine.css (synced from shared/). */
+
+/* S0 intro — character stands on the bottom line (mirrors part 02 intro) */
+[data-key="intro"] .tr-content { justify-content: flex-start; padding-top: 111px; }
+[data-key="intro"] .tr-media-wrap { position: absolute; bottom: 0; left: 0; right: 0; margin: 0 auto; height: 340px; }
+[data-key="intro"] .tr-media-clip { align-items: flex-end; }
+[data-key="intro"] .tr-media-clip .char-slot { align-items: flex-end; }
+
+/* Q2–Q4 (slides 37–39) — photo fills its frame, no letterbox bars */
+[data-key="q2"] .scq-img-inner img,
+[data-key="q3"] .scq-img-inner img,
+[data-key="q4"] .scq-img-inner img { object-fit: cover; }
+/* Q2 feedback — keep "הכדור." on the first line: that line measures 428px,
+   so the popup grows from 426px to 460px (text area 430px) on this screen only. */
+[data-key="q2"] .scq-popup { width: 460px; }
+.q2-fb-lead { white-space: nowrap; }
+/* Q2 hint — the lead line is the whole hint: regular weight, kept on one line;
+   popup widens on this screen only to fit it. */
+[data-key="q2"] .scq-hint-popup { width: auto; max-width: none; }
+[data-key="q2"] .scq-hint-content { width: auto; }
+[data-key="q2"] .scq-hint-title { font-weight: 400; white-space: nowrap; }
+
+/* S5 basic-end (slide 40) — bubble-only screen: larger character, bubble
+   centered above the head (tail points down), text on two balanced lines. */
+[data-key="basic-end"] .tr-media-wrap { height: 490px; width: 640px; }
+[data-key="basic-end"] .tr-media-clip { top: 110px; }
+[data-key="basic-end"] .tr-media-wrap .bubble {
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: 440px; text-wrap: balance; text-align: center;
+}
+[data-key="basic-end"] .bubble::after { right: 50%; margin-right: -8px; }
+
+/* S6 stdb-intro (slide 41) — cheering character stands on the bottom line
+   (like S0); bubble centered above the head, tail pointing down. */
+[data-key="stdb-intro"] .tr-content { justify-content: flex-start; padding-top: 111px; }
+[data-key="stdb-intro"] .tr-media-wrap { position: absolute; bottom: 0; left: 0; right: 0; margin: 0 auto; height: 400px; }
+[data-key="stdb-intro"] .tr-media-clip { top: 70px; align-items: flex-end; }
+[data-key="stdb-intro"] .tr-media-clip .char-slot { align-items: flex-end; }
+[data-key="stdb-intro"] .tr-media-wrap .bubble {
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: 440px; text-align: center;
+}
+[data-key="stdb-intro"] .bubble::after { right: 50%; margin-right: -8px; }
+
+/* Q5 (slide 42) — each distractor on a single line: the answer column widens
+   to its longest option (min 604px) instead of wrapping inside the pill. */
+[data-key="q5"] .scq-question--text { width: auto; }
+[data-key="q4"] .scq-answers { width: max-content; min-width: 604px; max-width: 100%; }   /* pills hug the longest answer */
+[data-key="q2"] .scq-answers { width: max-content; min-width: 604px; max-width: 100%; }   /* pills hug the longest answer */
+[data-key="q5"] .scq-answers { width: max-content; min-width: 604px; }
+[data-key="q5"] .scq-opt-text { white-space: nowrap; }
+
+/* Q6 (slide 43) — speech-bubble image choice: text block top-right, first two
+   stem lines together, gap before the question line; image row centred with wide
+   gaps (no mis-clicks), each two-line bubble centred under its card. */
+[data-key="q6"] .icq-content { left: 0; top: 0; transform: none; width: 1280px; height: 100%; display: block; }
+[data-key="q6"] .icq-header { position: absolute; top: 100px; right: 64px; width: auto; padding: 0; gap: 20px; }
+[data-key="q6"] .icq-cards { position: absolute; top: 236px; left: 197px; margin: 0; gap: 56px; }   /* (1280 − 3×258 − 2×56) / 2 */
+[data-key="q6"] .icq-card-frame { height: 260px; }
+[data-key="q6"] .icq-bubble { font-size: 18px; white-space: nowrap; padding: 10px 14px; }

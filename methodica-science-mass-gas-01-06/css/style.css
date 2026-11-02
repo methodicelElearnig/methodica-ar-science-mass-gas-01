@@ -1,0 +1,38 @@
+/* Part 06 — screen-specific rules only. Shared rules: css/engine.css (synced from shared/). */
+
+/* Peak sections א–ד — hint lead line in regular weight; the bulb on its own
+   row above the text, right-aligned (same treatment as part 05). */
+[data-key="a"] .scq-hint-title,
+[data-key="b"] .scq-hint-title,
+[data-key="c"] .scq-hint-title,
+[data-key="d"] .scq-hint-title { font-weight: 400; }
+.scq-hint-popup--lead .scq-hint-title { padding-right: 0; padding-top: calc(34.3px + 24px); }
+.scq-hint-popup--lead .scq-hint-title::before { top: 0; transform: none; width: 40px; height: 34.3px; }
+.scq-hint-popup--lead .scq-hint-body { padding-right: 0; }
+
+/* סעיף א — all four options at the same (two-line) height. */
+[data-key="a"] .scq-answers { display: grid; grid-auto-rows: 1fr; }
+
+/* סעיף ג — enlarged image: frame top level with the stem's line two rows
+   above the options, frame bottom level with the last option's bottom
+   (frame 382×317 = the photo's 400×332 ratio; +8px padding each side). */
+[data-key="c"] .scq-img--std { width: 398px; height: 333px; margin-top: 126px; }
+[data-key="c"] .scq-img-inner img { object-fit: cover; }
+
+/* סעיפים א/ב — hamster clip in the media slot, 16:9 frame (+8px padding). */
+.scq-img--video.scq-img--std { width: 556px; height: 320px; align-self: flex-end; }
+.scq-img-inner video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Scenario — lower the clip toward the vertical centre of the content. */
+[data-key="scenario"] .ct-media { margin-top: 40px; }
+
+/* סעיף ד — no image: each option on a single line (column widened to fit). */
+[data-key="d"] .scq-question--text { width: auto; left: 40px; }
+[data-key="d"] .scq-answers { width: max-content; gap: 8px; }
+[data-key="d"] .scq-opt-text { white-space: nowrap; }
+
+/* Feedback popups — widened per section (from 426px) just enough to lift the
+   orphaned last word(s) up a line: ב "לצלוחית.", ג "במקומם.", ד "שאבא תאר." */
+[data-key="b"] .scq-popup { width: 446px; }
+[data-key="c"] .scq-popup { width: 486px; }
+[data-key="d"] .scq-popup { width: 720px; }   /* wide: bold line fits one row, so the popup clears the single-line options */

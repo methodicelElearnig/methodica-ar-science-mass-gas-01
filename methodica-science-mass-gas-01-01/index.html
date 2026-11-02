@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حجم الغاز · الجزء 01</title>
+  <link rel="stylesheet" href="css/engine.css">
+  <link rel="stylesheet" href="css/motion.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-subject-theme="science">
+<div id="app">
+
+  <!-- GLOBAL — Report / Issue button (Figma 207:3590). Visual only (Q12). -->
+  <button class="flag-btn" id="flag-btn" type="button" aria-label="هل وجدتم مشكلة؟">
+    <span class="flag-btn-icon"></span> <span class="flag-btn-label">هل وجدتم مشكلة؟</span>
+  </button>
+
+  <!-- Screens are rendered here by js/engine.js from the PART config in js/main.js. -->
+  <div id="screens-anchor" hidden></div>
+
+  <!-- GLOBAL — Image zoom modal (shared, outside all .screen sections) -->
+  <div class="img-zoom-modal hidden" id="img-zoom-modal" aria-hidden="true">
+    <div class="img-zoom-modal__backdrop" data-zoom-close="true"></div>
+    <div class="img-zoom-modal__panel" role="dialog" aria-modal="true" aria-label="عرض الصورة المكبَّرة">
+      <button class="img-zoom-modal__close" type="button" aria-label="إغلاق الصورة" data-zoom-close="true"><svg class="img-zoom-modal__close-icon" aria-hidden="true" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.192 1.192L13.808 13.808M13.808 1.192L1.192 13.808" stroke="currentColor" stroke-width="2.383" stroke-linecap="round"/></svg></button>
+      <p class="img-zoom-modal__caption" id="img-zoom-modal-caption"></p>
+      <div class="img-zoom-modal__stage" id="img-zoom-modal-stage"></div>
+    </div>
+  </div>
+
+</div><!-- /#app -->
+
+<script src="js/motion.js"></script>
+<script src="js/widgets.js"></script>
+<script src="js/main.js"></script>
+<script src="js/engine.js"></script>
+</body>
+</html>

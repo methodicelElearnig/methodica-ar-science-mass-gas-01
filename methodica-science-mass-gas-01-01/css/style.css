@@ -1,0 +1,503 @@
+/* Part 01 — screen-specific rules only. Shared rules: css/engine.css (synced from shared/). */
+
+/* ═══════ Ported from Target 6 part 01 — TwoOptionSelection (select-*, option-card*) ═══════ */
+.select-content {
+  position: absolute;
+  left: 50%; top: calc(50% - 37px);   /* vertically centered above the 74px bar */
+  transform: translate(-50%, -50%);
+  width: 810px;
+  display: flex; flex-direction: column; align-items: center; gap: 40px;
+}
+
+.select-head {
+  display: flex; flex-direction: column; gap: 8px;
+  align-items: center; width: 100%;
+}
+.select-title {
+  width: 100%; text-align: center;
+  font-size: 40px; font-weight: 700; color: #303030;
+  direction: rtl; line-height: 1.2;
+}
+.select-subtitle {
+  width: 100%; text-align: center;
+  font-size: 28px; font-weight: 700; color: #303030;
+  direction: rtl;
+}
+
+/* ── Cards row ── */
+.option-cards {
+  display: flex; justify-content: center; gap: 24px;
+  direction: ltr;   /* keep the two cards in a stable left-to-right order */
+}
+
+.option-card {
+  width: 296px;
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 16px;
+  outline: none;
+}
+.option-card-img {
+  width: 220px;
+  border: 3px solid rgba(201, 206, 216, 0.4);
+  border-radius: 16px; padding: 16px;
+  background: #fff; overflow: hidden;
+  transition: border-color 0.15s, background 0.15s;
+}
+.option-card-img img,
+.option-card-img video {
+  width: 100%;
+  aspect-ratio: 296 / 278;
+  object-fit: cover; border-radius: 16px;
+  display: block;
+}
+/* Card videos: clicks belong to the card (the radio), never to the player;
+   clip 1px to hide the GPU edge-blend seam at fractional canvas scales
+   (same reason as .s1-talk-video). */
+.option-card-video {
+  pointer-events: none;
+  clip-path: inset(1px);
+}
+/* Hover + keyboard-focus — Figma ImageContainer state=hover: Subject/500 border */
+.option-card:hover .option-card-img,
+.option-card:focus-visible .option-card-img { border-color: var(--subject-500); }
+/* Selected — Figma ImageContainer state=selected: 2px Subject/500 border + Subject/100 fill */
+.option-card.selected .option-card-img {
+  border: 2px solid var(--subject-500);
+  background: var(--subject-100);
+}
+
+.option-card-labels {
+  display: flex; flex-direction: column; gap: 12px;
+  align-items: center; text-align: center; color: #303030;
+}
+.option-card-name {
+  font-size: 32px; font-weight: 700;
+  color: #303030; white-space: nowrap;
+}
+.option-card-img { width: 238px; height: 238px; padding: 4px; display: flex; align-items: center; justify-content: center; }
+.option-card-img .char-slot, .option-card-img .char-select-slot { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.option-card-img .char-media { max-height: 100%; }
+/* Select videos have a near-white backdrop — multiply lets the card fill show through (selected = Subject/100). */
+.option-card-img video.char-select-video { width: auto; height: 100%; max-width: 100%; aspect-ratio: auto; object-fit: contain; border-radius: 0; mix-blend-mode: multiply; pointer-events: none; }
+
+/* ═══════ Ported from Target 6 part 01 — FlipCardsReveal (frc-*) ═══════ */
+.frc-card-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.frc-card-caption {
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 22px; font-weight: 700; color: #303030;
+  text-align: center; direction: rtl;
+}
+
+.frc-card {
+  width: 325px;
+  height: 325px;             /* square */
+  background: transparent;
+  border: none; padding: 0;
+  cursor: pointer; outline: none;
+  position: relative;
+  perspective: 900px;
+}
+
+/* Rotating inner wrapper */
+.frc-card-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.frc-card.is-flipped .frc-card-inner {
+  transform: rotateY(-180deg);
+}
+
+/* Both faces: identical 325×325, same padding, same border-radius */
+.frc-card-front,
+.frc-card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 16px;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* ── Front face: image ───────────────────────────────── */
+.frc-card-front {
+  border: 3px solid rgba(201, 206, 216, 0.4);
+  background: #fff;
+}
+.frc-card-front img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  border-radius: 12px;
+  display: block;
+}
+
+/* Hover + keyboard focus on unflipped card — Subject/500 border */
+.frc-card:not(.is-flipped):hover .frc-card-front,
+.frc-card:not(.is-flipped):focus-visible .frc-card-front {
+  border-color: var(--subject-500);
+}
+
+/* ── Back face: text ─────────────────────────────────── */
+.frc-card-back {
+  transform: rotateY(180deg);
+  border: 3px solid var(--subject-500);
+  background: var(--subject-100);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+/* Cards flip freely back and forth here (producer notes) — once flipped,
+   allow the back face's inline tooltip to escape the card's own bounds.
+   Nothing on this face relies on the overflow:hidden clip (rounded corners
+   come from the face's own border-radius, not from clipped content); see
+   figma-lomda-builder/reference/patterns.md → "floating overlay cut in a
+   straight line" for why z-index alone can't fix this. */
+.frc-card.is-flipped .frc-card-back {
+  overflow: visible;
+}
+
+/* Text wrapper: fills padded area, right-aligned RTL Hebrew */
+.frc-card-back-content {
+  width: 100%;
+  display: flex; flex-direction: column; gap: 10px;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding-top: 2px;
+  text-align: right;
+  direction: rtl;
+}
+.frc-card-back-content p {
+  width: 100%;
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 22px; font-weight: 400;
+  line-height: 29px; letter-spacing: 0;
+  color: #222; margin: 0;
+}
+
+/* Revealed card stays interactive (can flip back) — no cursor change */
+.frc-card:focus-visible { outline: none; }
+.frc-card.is-flipped:focus-visible .frc-card-back {
+  box-shadow: 0 0 0 2px var(--subject-700);
+}
+
+/* Back button in S2 bottom bar — S2 has no .scq-bar flex container, so the
+   button is anchored to the bar area directly (mirrors .btn-continue). */
+/* ═══════════════════════════════════════════════════════
+   Target 9 part 01 — screen layouts (PPTX 960×540 → canvas 1280×710).
+   Custom screens ("מסך ללא תבנית" / "מסך יישומון") are local layouts
+   pending Figma designs (plan §6).
+   ═══════════════════════════════════════════════════════ */
+.char-slot { display: flex; align-items: flex-end; justify-content: center; }
+
+/* S1 hook-balloon (slides 4+5): story line shown as the slide 4 card */
+/* Portrait photo (4:5): frame matches its ratio so the image fills it edge to edge */
+[data-key="hook-balloon"] .scq-img--std { width: 356px; height: 441px; }
+[data-key="hook-balloon"] .scq-img-inner img { object-fit: cover; }
+[data-key="hook-balloon"] .scq-title + .scq-body { background: var(--subject-100); border-radius: 16px; padding: 18px 22px; line-height: 1.4; }
+/* Slide 23: text-only question — widen the column so "לגזים:" stays on line 1 */
+[data-key="dropdown"] .scq-question { width: 1000px; }
+/* Slide 23 hint: question on one line (lead-line styling lives in engine.css) */
+[data-key="dropdown"] .scq-popup, [data-key="tf"] .scq-popup, [data-key="hook-balloon"] .scq-popup { width: 540px; }   /* feedback: each sentence on its own line */
+[data-key="dropdown"] .scq-hint-popup { width: 700px; }
+[data-key="dropdown"] .scq-hint-content { width: 620px; }
+[data-key="dropdown"] .scq-hint-body p { white-space: nowrap; }
+
+/* S3 hypothesis (slide 6) */
+.hy-input { position: absolute; left: 170px; top: 150px; width: 500px; height: 200px; }
+.hy-input .oq-textarea { width: 100%; height: 100%; resize: none; border: 1px solid #ececec; border-radius: 16px; padding: 16px 20px; font-family: Calibri, Arial, sans-serif; font-size: 22px; color: #222; direction: rtl; }
+.hy-input .oq-textarea:focus { outline: none; border-color: var(--subject-500); }
+.hy-input .oq-textarea::placeholder { color: #8a8a8a; }
+.hy-char { position: absolute; right: 60px; top: 110px; width: 480px; height: 270px; }
+.hy-char .char-slot { position: absolute; right: 0; top: 0; width: 230px; height: 255px; }
+.hy-char .char-slot .char-media { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: contain; object-position: right bottom; }
+.hy-char .bubble { top: 58px; right: 218px; width: 230px; }
+/* Tail on the bubble's right edge, pointing at the character's mouth (≈38% of the slot height) */
+.hy-char .bubble::after { bottom: auto; top: calc(50% - 8px); right: -9px; transform: rotate(-45deg); }
+.hy-note { position: absolute; left: 285px; top: 462px; width: 717px; background: var(--subject-100); border-radius: 16px; padding: 22px 28px; font-size: 26px; line-height: 1.4; text-align: center; color: #303030; }
+
+/* S4/S5/S6 (slides 7–9) — layout from "יעד 9 - תיקונים לאחר הפקה" slides 1–3.
+   PPTX 960×540 pt → canvas 1280×710: every coordinate below is pt × 4/3. */
+.st-card { position: absolute; left: 398px; top: 23px; width: 821px; min-height: 113px; display: flex; flex-direction: column; justify-content: center; background: var(--subject-100); border-radius: 16px; padding: 10px 24px; font-size: 22px; line-height: 1.4; color: #303030; direction: rtl; }
+.st-card--twins { top: 58px; }
+.bbq-img { position: absolute; left: 498px; top: 174px; width: 718px; height: 372px; border-radius: 16px; overflow: hidden; }
+.bbq-img img { width: 100%; height: 100%; object-fit: cover; }
+/* "5 KG" — separate layer over the gas tank (PPTX 718,389 pt) */
+.kg-tag { position: absolute; left: 494px; top: 347px; width: 70px; text-align: center; background: #fff; border-radius: 6px; font-size: 16px; font-weight: 700; color: #303030; }
+/* Dad: left of the photo, tail on the right edge pointing at him */
+.bbq-dad { left: 43px; top: 336px; width: 423px; min-height: 210px; display: flex; flex-direction: column; justify-content: center; font-size: 22px; line-height: 1.4; padding: 12px 18px; }
+.bbq-dad::after { bottom: auto; top: 39px; right: -9px; transform: rotate(-45deg); }
+.bbq-dad p + p { margin-top: 18px; }
+.bubble.is-pending { visibility: hidden; opacity: 0; }
+.bubble[data-late] { transition: opacity .5s; }
+
+/* Thought cloud (PPTX cloudCallout) — svg outline + three dots toward the tail point */
+.cloud { position: absolute; z-index: 3; display: flex; align-items: center; justify-content: center; }
+.cloud-shape { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08)); }
+.cloud-shape path { fill: #fff; stroke: var(--subject-500); stroke-width: 2px; vector-effect: non-scaling-stroke; }
+.cloud-dot { position: absolute; background: #fff; border: 2px solid var(--subject-500); border-radius: 50%; transform: translate(-50%, -50%); }
+.cloud-text { position: relative; margin: 0; font-size: 20px; line-height: 1.3; color: #303030; text-align: center; direction: rtl; }
+/* Girl: on the photo, tail toward her face (PPTX tail point ≈ 261,123 px from the cloud's corner) */
+.bbq-girl { left: 832px; top: 184px; width: 245px; height: 163px; }
+.bbq-girl .cloud-dot:nth-of-type(1) { left: 236px; top: 115px; width: 16px; height: 16px; }
+.bbq-girl .cloud-dot:nth-of-type(2) { left: 250px; top: 121px; width: 11px; height: 11px; }
+.bbq-girl .cloud-dot:nth-of-type(3) { left: 261px; top: 126px; width: 7px; height: 7px; }
+/* Saar: over the top-right of the ice-rink photo, tail down-left toward him */
+.tw-boy { left: 832px; top: 196px; width: 197px; height: 113px; }
+.tw-boy .cloud-dot:nth-of-type(1) { left: 34px; top: 110px; width: 14px; height: 14px; }
+.tw-boy .cloud-dot:nth-of-type(2) { left: 22px; top: 121px; width: 10px; height: 10px; }
+.tw-boy .cloud-dot:nth-of-type(3) { left: 12px; top: 130px; width: 6px; height: 6px; }
+
+/* Twins: two phones, ice rink (mom + Saar) left, beach (dad + Neta) right.
+   1080×1920 phone-framed photos (frame is in the image). */
+.tw-phones { position: absolute; inset: 0; pointer-events: none; }
+.tw-phone { position: absolute; top: 222px; width: 200px; height: 356px; }
+.tw-phone--saar { left: 651px; }
+.tw-phone--neta { left: 1021px; }
+.tw-phone img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* Mom: left of the photos, tail on the right edge */
+.tw-mom { left: 63px; top: 372px; width: 496px; display: flex; flex-direction: column; justify-content: center; font-size: 22px; line-height: 1.4; padding: 12px 20px; }
+.tw-mom::after { bottom: auto; top: 128px; right: -9px; transform: rotate(-45deg); }
+
+/* S6 lets-start (slide 9) — plain text block (no card), character bottom-left */
+.ls-stage { position: absolute; inset: 0 0 74px 0; }
+.ls-char { position: absolute; left: 251px; top: 302px; width: 320px; height: 332px; }   /* white clip backdrop stays above the bar line */
+.ls-char .char-media { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: contain; object-position: center bottom; transform: scaleX(-1); }   /* mirrored: faces the summary text */
+.ls-right { position: absolute; left: 400px; top: 58px; width: 821px; height: 226px; display: flex; flex-direction: column; justify-content: center; font-size: 22px; line-height: 1.5; color: #303030; direction: rtl; }
+.ls-right p + p { margin-top: 4px; }
+.ls-left { left: 82px; top: 272px; width: 256px; min-height: 106px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 24px; line-height: 1.3; visibility: hidden; opacity: 0; transition: opacity .4s; }
+[data-key="lets-start"].is-step2 .ls-left { visibility: visible; opacity: 1; }
+/* Tail under the bubble's right side, pointing down-right at the character */
+.ls-left::after { right: 24px; bottom: -9px; transform: rotate(25deg); }
+/* Directional entrances (per design request): right text slides in from the right on
+   first visit; left bubble slides in from the left when Continue #1 reveals it. */
+@keyframes ls-in-from-right { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+@keyframes ls-in-from-left  { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: none; } }
+.screen.m-animate .ls-right[data-reveal] { animation-name: ls-in-from-right; }
+[data-key="lets-start"].is-step2-anim .ls-left { transition: none; animation: ls-in-from-left var(--m-reveal-duration) var(--m-ease) both; }
+@media (prefers-reduced-motion: reduce) { [data-key="lets-start"].is-step2-anim .ls-left { animation: none; } }
+
+/* S7 path-select labels */
+[data-key="path-select"] .option-card-name { font-size: 28px; }
+/* Character media have a white backdrop — multiply lets the card fill show through (selected = full Subject/100). */
+[data-key="path-select"] .option-card-img .char-media { mix-blend-mode: multiply; }
+
+/* Learning-path toggle — bottom bar centre; positions fixed (right: לנסות בעצמי) */
+.path-toggle {   /* Figma "Mode Buttons" (2638:23960): blue track, white sliding pill */
+  position: absolute; bottom: 13px; left: 50%; transform: translateX(-50%); z-index: 14;   /* 48px tall, centred in the 74px bar */
+  display: grid; grid-template-columns: 1fr 1fr; direction: rtl;
+  padding: 4px; border-radius: 1000px; background: var(--subject-500);
+}
+.path-toggle__opt { position: relative; z-index: 1; border: none; background: none; border-radius: 1000px; height: 40px; padding: 0 24px; font-family: Calibri, Arial, sans-serif; font-size: 20px; font-weight: 400; line-height: 1; white-space: nowrap; color: #fff; cursor: pointer; transition: color .25s ease; }
+.path-toggle[data-active="hands-on"] .path-toggle__opt[data-path="hands-on"],
+.path-toggle[data-active="video"] .path-toggle__opt[data-path="video"] { color: var(--subject-500); }
+.path-toggle__pill { position: absolute; top: 4px; bottom: 4px; right: 4px; width: calc(50% - 4px); border-radius: 1000px; background: #fff; transition: transform .25s ease; }
+.path-toggle[data-active="video"] .path-toggle__pill { transform: translateX(-100%); }
+.path-toggle.no-anim .path-toggle__pill { transition: none; }
+
+/* Video screen (slide 11) */
+.vd-head { position: absolute; top: 40px; left: 0; right: 0; text-align: center; }
+.vd-sub { font-size: 24px; font-weight: 400; }
+.vd-frame { position: absolute; left: 240px; top: 160px; width: 800px; height: 450px; border-radius: 16px; overflow: hidden; background: #f3f4f5; }
+.vd-video, .vd-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.vd-placeholder { width: 100%; height: 100%; position: relative; }
+/* Open-question stop over the video (hint-popup shell) */
+.vd-q-popup { width: 640px; }
+.vd-q-title { width: 100%; text-align: right; direction: rtl; font-family: Calibri, Arial, sans-serif; font-size: 28px; font-weight: 400; color: #fff; line-height: normal; text-wrap: pretty; }
+.vd-q-text { width: 100%; height: 160px; resize: none; border: none; border-radius: 16px; padding: 16px 20px; font-family: Calibri, Arial, sans-serif; font-size: 22px; color: #222; direction: rtl; }
+.vd-q-text:focus { outline: 2px solid #fff; outline-offset: 2px; }
+.vd-q-text::placeholder { color: #8a8a8a; }
+.vd-q-btn { width: auto; padding: 10px 32px; }
+.vd-q-btn:disabled { opacity: .5; cursor: default; font-weight: 400; }
+.vd-placeholder .ct-placeholder-tag { top: 50%; right: 50%; transform: translate(50%, -50%); font-size: 18px; }
+
+/* Observation tabs (sequential, progress only) */
+.obs-tabs { position: absolute; top: 44px; right: 60px; list-style: none; display: flex; flex-direction: column; gap: 8px; z-index: 5; }
+.obs-tab { width: 96px; height: 40px; border-radius: 10px; border: 1.5px solid #ececec; color: #8a8a8a; font-size: 18px; display: flex; align-items: center; justify-content: center; background: #fff; }
+.obs-tab.is-current { border-color: var(--subject-500); background: var(--subject-100); color: #303030; font-weight: 700; }
+.obs-tab.is-done { border-color: #609e12; color: #416d0b; }
+.obs-tab.is-done::before { content: '✓'; margin-left: 6px; }
+
+/* H0 obs-intro (slide 15) */
+.oi-stage { position: absolute; inset: 0 0 74px 0; }
+.oi-char { position: absolute; left: 430px; top: 200px; width: 420px; height: 436px; }
+.oi-char .char-media { height: 100%; }
+.oi-bubble { left: 498px; top: 120px; width: max-content; font-size: 22px; }
+.oi-bubble::after { right: calc(50% - 8px); }
+
+/* Observation summaries — "מה היה לנו פה?" (תיקונים לאחר הפקה, slides 4–6) */
+.os-content { position: absolute; top: 44px; right: 220px; left: 130px; direction: rtl; text-align: right; }
+.os-title { font-size: 27px; font-weight: 700; color: var(--subject-500); margin-bottom: 18px; }
+.os-text p { font-size: 26px; line-height: 1.4; color: #303030; }
+.os-text p + p { margin-top: 26px; }
+
+/* Widgets */
+.wg-wrap { position: absolute; inset: 30px 190px 84px 60px; display: flex; flex-direction: column; gap: 10px; direction: rtl; }
+.wg-instr { font-size: 24px; font-weight: 700; color: #303030; min-height: 32px; }
+.wg-label { position: absolute; font-size: 18px; color: #303030; background: var(--subject-100); border-radius: 10px; padding: 6px 10px; width: 170px; }
+/* Widget 1 — photo art; water overlays are drawn in the photo's pixel space */
+.wg-svg--w1 { overflow: visible; }
+.wg-stage--w1 { overflow: hidden; background: #6f7176; }
+.wg-w1-scene { pointer-events: none; }
+.wg-w1-water { fill: url(#w1-water-grad); }
+.wg-w1-liquid { opacity: .9; mix-blend-mode: multiply; }
+.wg-w1-edge { fill: none; stroke: #001a7a; stroke-width: 46; opacity: .55; filter: url(#w1-soft); }
+.wg-w1-surface { fill: url(#w1-surf-grad); stroke: rgba(255,255,255,.55); stroke-width: 2; opacity: .85; }
+.wg-w1-puddle { fill: #2a5ff0; opacity: .3; mix-blend-mode: multiply; filter: blur(2px); }
+.wg-w1-puddle-hl { fill: #fff; opacity: .28; filter: blur(3px); }
+.wg-w1-wetrim { fill: none; stroke: #2a5ff0; stroke-width: 7; opacity: .4; mix-blend-mode: multiply; filter: blur(1px); }
+.wg-w1-drop { fill: #2a5ff0; opacity: .6; mix-blend-mode: multiply; }
+.wg-w1-drop-hl { fill: #fff; opacity: .8; }
+.wg-w1-drip { opacity: 0; animation: .62s cubic-bezier(.45,0,.9,.6) infinite; }
+.wg-w1-drip--long { animation-name: wg-w1-drip-long; }
+.wg-w1-drip--mid { animation-name: wg-w1-drip-mid; animation-duration: .42s; }
+.wg-w1-drip--low { animation-name: wg-w1-drip-low; animation-duration: .5s; }
+@keyframes wg-w1-drip-long { 0% { transform: translateY(0); opacity: 0; } 8% { opacity: 1; } 94% { opacity: 1; } 100% { transform: translateY(855px); opacity: 0; } }
+@keyframes wg-w1-drip-mid { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(388px); opacity: 0; } }
+@keyframes wg-w1-drip-low { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: 1; } 92% { opacity: 1; } 100% { transform: translateY(362px); opacity: 0; } }
+.wg-w1-shadow { fill: rgba(0,0,0,.35); filter: blur(5px); transition: opacity .15s; }
+.wg-dragging .wg-w1-shadow, .is-pouring .wg-w1-shadow { opacity: 0; }
+.wg-stream.wg-w1-stream { stroke: #1f56ff; stroke-width: 9; }
+.wg-w1-label { margin: 0; font-size: 25px; line-height: 1.3; color: #303030; background: var(--subject-100); border-radius: 12px; padding: 8px 14px; direction: rtl; }
+.wg-w1-label--word { text-align: center; white-space: nowrap; }
+.wg-w1-arrow { fill: none; stroke: #000; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+.wg-stage { position: relative; flex: 1; min-height: 0; border-radius: 16px; background: #fafcff; border: 1px solid #ececec; }
+.wg-svg { width: 100%; height: 100%; display: block; touch-action: none; user-select: none; }
+.dnd-locked .dnd-tile { cursor: default; }
+.wg-table { stroke: #b9a88a; stroke-width: 4; }
+.wg-glass { fill: rgba(200, 230, 245, .25); stroke: #5b8aa6; stroke-width: 3; stroke-linejoin: round; }
+.wg-water { fill: #3d8bff; opacity: .75; }
+.wg-spill { fill: none; stroke: #3d8bff; stroke-width: 5; stroke-linecap: round; opacity: .7; }
+.wg-stream { fill: none; stroke: #1f5fe0; stroke-width: 7; stroke-linecap: round; }
+.wg-dropzone { fill: rgba(1,157,229,.06); stroke: rgba(1,157,229,.35); stroke-width: 2; stroke-dasharray: 6 6; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.wg-dropzone.is-armed { opacity: .55; }
+.wg-dropzone.is-hot { opacity: 1; fill: rgba(1,157,229,.14); stroke: rgba(1,157,229,.8); }
+.wg-grab-on { cursor: grab; }
+.wg-grab-on:hover > * { filter: drop-shadow(0 0 4px rgba(1,157,229,.8)); }
+.wg-dragging { cursor: grabbing; }
+.wg-grab:not(.wg-grab-on) { pointer-events: none; }
+[data-w2-cup].wg-grab { pointer-events: auto; }
+.wg-steps { list-style: none; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-size: 24px; line-height: 1.3; color: #8a8a8a; }
+.wg-steps li { padding: 4px 14px; border-right: 5px solid transparent; border-radius: 8px; }
+.wg-steps li.is-current { color: #303030; font-weight: 700; background: var(--subject-100); border-right-color: var(--subject-500); animation: wg-step-in .9s ease-out 2; }
+@keyframes wg-step-in { 0%, 100% { box-shadow: 0 0 0 0 rgba(1,157,229,0); } 50% { box-shadow: 0 0 0 6px rgba(1,157,229,.25); } }
+.wg-steps li.is-done { color: #416d0b; }
+.wg-steps--staged li { visibility: hidden; }   /* space reserved: the stage does not jump as steps appear */
+.wg-steps--staged li.is-shown { visibility: visible; }
+/* Widget 2 — photo art in the scene photo's pixel space */
+.wg-stage--w2 { overflow: hidden; background: #e9edf2; }
+/* W2 has 6 steps: compact single-line rows so the wide photo stage keeps (almost) its full height */
+.wg-wrap--w2 { top: 16px; gap: 8px; }
+.wg-wrap--w2 .wg-steps { gap: 0; font-size: 20px; line-height: 1.25; }
+.wg-wrap--w2 .wg-steps li { padding: 2px 12px; white-space: nowrap; }
+.wg-w2-noptr { pointer-events: none; }
+.wg-stage--w2 .wg-w1-label { font-size: 20px; padding: 6px 10px; border-radius: 10px; }   /* W2 viewBox is narrower than W1 → same on-screen size */
+.wg-stage--w2 .wg-w1-arrow { stroke-width: 4.5; }
+.wg-w2-glass { mix-blend-mode: multiply; }
+.wg-w2-water { fill: #8fc2ff; opacity: .5; mix-blend-mode: multiply; }
+.wg-w2-tint { opacity: .32; }
+.wg-w2-air { fill: #fff; opacity: .45; transition: opacity .25s; }
+.wg-w2-bubble { fill: rgba(255,255,255,.75); stroke: #6aa5e8; stroke-width: 2; animation: wg-w2-bubble 1.1s ease-in infinite; }
+@keyframes wg-w2-bubble { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-120px); opacity: 0; } }
+.wg-stage--w2 .wg-drip { stroke-width: 4; opacity: 0; }
+.wg-stage--w2 .is-dripping { animation-iteration-count: 3; }   /* a few drips, then it stops */
+.wg-drip { stroke: #3d8bff; stroke-width: 3; stroke-linecap: round; }
+.is-dripping { animation: wg-drip 1s linear infinite; }
+@keyframes wg-drip { from { transform: translateY(0); opacity: 1; } to { transform: translateY(18px); opacity: 0; } }
+.wg-rot { cursor: pointer; }
+.wg-rot-knob { fill: #fff; stroke: var(--subject-500); stroke-width: 2.5; }
+.wg-rot-arrow { fill: none; stroke: var(--subject-500); stroke-width: 2.5; stroke-linecap: round; }
+.wg-wrap--w1 .wg-steps, .wg-wrap--w2 .wg-steps, .wg-wrap--w3 .wg-steps { margin-left: 60px; }
+/* Widget 3 — syringe photo layers + vector rubber stopper */
+.wg-stage--w3 { background: #fff; }
+.wg-w3-still { pointer-events: none; }
+.wg-w3-air { fill: #6aa9e0; opacity: .5; }
+.wg-w3-line { stroke: #9aa8b4; stroke-width: 2; }
+.wg-w3-rib { stroke: #bfc8cf; stroke-width: 3; stroke-linecap: round; }
+.wg-w3-scale line { stroke: #4b5864; stroke-width: 2; }
+.wg-w3-scale line.is-major { stroke-width: 2.6; }
+.wg-w3-scale text { font-family: Calibri, Arial, sans-serif; font-size: 24px; font-weight: 600; fill: #3c4752; text-anchor: middle; stroke: #f4f7fa; stroke-width: 5px; stroke-linejoin: round; paint-order: stroke; }
+.wg-w3-stopper-shadow { fill: rgba(0,0,0,.18); filter: blur(3px); transition: opacity .15s; }
+.wg-dragging .wg-w3-stopper-shadow, .is-on .wg-w3-stopper-shadow { opacity: 0; }
+/* air gust at the syringe tip — dashes run towards the tip (in) or away from it (out) */
+.wg-w3-gust path { fill: none; stroke: #3d8bff; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 40 24; opacity: 0; transition: opacity .2s; }
+.wg-w3-gust.is-in path, .wg-w3-gust.is-out path { opacity: .9; }
+.wg-stage--w3 .wg-w1-label { font-size: 30px; }
+.wg-w3-gust.is-in path { animation: wg-w3-gust-in .45s linear infinite; }
+.wg-w3-gust.is-out path { animation: wg-w3-gust-out .45s linear infinite; }
+@keyframes wg-w3-gust-in { from { stroke-dashoffset: 64; } to { stroke-dashoffset: 0; } }
+@keyframes wg-w3-gust-out { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 64; } }
+[data-w3-plunger]:focus-visible, [data-w3-stopper]:focus-visible { outline: none; }
+[data-w3-plunger]:focus-visible > *, [data-w3-stopper]:focus-visible > * { filter: drop-shadow(0 0 5px rgba(1,157,229,.95)); }
+
+/* Flip cards */
+.fc-content { gap: 28px; }
+.fc-content .select-subtitle { font-weight: 400; }
+.fc-content .frc-card { width: 290px; height: 275px; }
+/* Front face: full-bleed image — no frame, no white margin */
+.fc-content .frc-card-front { padding: 0; border: none; background: none; }
+.fc-content .frc-card-front img { border-radius: 16px; }
+.fc-content .frc-card:not(.is-flipped):hover .frc-card-front,
+.fc-content .frc-card:not(.is-flipped):focus-visible .frc-card-front { outline: 3px solid var(--subject-500); outline-offset: -3px; }
+/* Slide 20–21 backs: text right-aligned, centred vertically; no one-word last lines */
+.fc-content .frc-card-back { align-items: center; justify-content: center; }
+.fc-content .frc-card-back-content { justify-content: center; padding-top: 0; text-align: right; }
+.fc-content .frc-card-back-content p { text-wrap: pretty; }
+.frc-placeholder { width: 100%; height: 100%; position: relative; background: #f3f4f5; border-radius: 12px; }
+.frc-placeholder .ct-placeholder-tag { top: 50%; right: 50%; transform: translate(50%, -50%); white-space: nowrap; }
+.frc-card-back-content p { font-size: 20px; line-height: 1.35; }
+
+/* Summary drag-and-drop (slide 22) */
+.dnd-wrap { position: absolute; inset: 24px 50px 84px 50px; display: flex; flex-direction: column; gap: 14px; direction: rtl; }
+.dnd-head { text-align: center; }
+.dnd-head .select-title { font-size: 34px; }
+.dnd-instr { font-size: 20px; color: #303030; }
+.dnd-pool { display: flex; justify-content: center; gap: 24px; direction: ltr; min-height: 168px; }
+.dnd-slot { width: 184px; height: 164px; border-radius: 12px; border: 2px dashed #ececec; }
+.dnd-tile { position: relative; box-sizing: border-box; width: 180px; height: 160px; border-radius: 10px; overflow: hidden; background: #fff; border: 2px solid rgba(201,206,216,.6); cursor: grab; touch-action: none; }
+.dnd-tile img { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }   /* A11: no inline baseline gap */
+.dnd-tile img.is-cover { object-fit: cover; }   /* photos fill the tile edge to edge (no side margins) */
+.dnd-tile.is-multi { display: flex; }
+.dnd-tile.is-multi img { width: 50%; min-width: 0; }   /* balloon pair: two images share one tile */
+.dnd-tile.is-lifted { opacity: .25; }
+.dnd-tile.is-placed { cursor: default; border-color: var(--subject-500); }
+.dnd-ghost { position: absolute; z-index: 60; pointer-events: none; box-shadow: 0 10px 22px rgba(0,0,0,.2); }
+.dnd-overlay { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 4px; padding: 0 6px; font-size: 13px; font-weight: 700; }
+.dnd-targets { display: flex; gap: 22px; justify-content: center; }
+.dnd-target { width: 330px; border: 2px solid var(--subject-300); border-radius: 16px; background: #fff; padding: 10px; display: flex; flex-direction: column; gap: 8px; transition: border-color .15s, background .15s; }
+.dnd-target.is-hot { border-color: var(--subject-500); background: var(--subject-100); }
+.dnd-tile.is-selected { border-color: var(--subject-500); }
+.dnd-tile:focus-visible, .dnd-target:focus-visible { outline: 3px solid var(--subject-700); outline-offset: 3px; }
+.dnd-target.is-wrong { border-color: #b20010; background: #ffdbdc; animation: dnd-reject .4s ease-in-out; }
+.dnd-status { position: absolute; bottom: -6px; inset-inline: 0; min-height: 24px; text-align: center; font-size: 18px; line-height: 1.3; color: #303030; }
+@keyframes dnd-reject {
+  0%, 100% { translate: 0; }
+  20%, 60% { translate: -6px; }
+  40%, 80% { translate: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dnd-target.is-wrong { animation: none; }
+}
+.dnd-target-slots { display: flex; gap: 10px; justify-content: center; direction: ltr; }
+.dnd-drop { width: 184px; height: 164px; border-radius: 12px; border: 2px dashed var(--subject-300); display: flex; align-items: center; justify-content: center; }
+.dnd-target-text { font-size: 18px; line-height: 1.35; color: #303030; text-align: right; }
+.dnd-target-text p { text-wrap: pretty; }   /* no one-word last lines */
+
+/* S11 statement + S12 character after wrong answer (slide 26) */
+.def-char { position: absolute; left: 60px; top: 170px; width: 360px; height: 330px; display: none; }
+.show-char .def-char { display: block; }
+.def-char .char-slot { position: absolute; left: 70px; bottom: 0; width: 230px; height: 250px; }
+.def-char .bubble { top: 0; left: 40px; width: 280px; }
+.option-card-img img.char-media { width: auto; height: 100%; max-width: 100%; aspect-ratio: auto; object-fit: contain; border-radius: 0; }
+
+/* S10 warm-up intro (slide 24): character stands on the bottom-bar line; text keeps its place */
+[data-key="warmup-intro"] .tr-content { justify-content: flex-start; padding-top: 111px; }
+[data-key="warmup-intro"] .tr-media-wrap { position: absolute; bottom: 0; left: 0; right: 0; margin: 0 auto; height: 340px; }
+[data-key="warmup-intro"] .tr-media-clip { align-items: flex-end; }
+[data-key="warmup-intro"] .tr-media-clip .char-slot { align-items: flex-end; }

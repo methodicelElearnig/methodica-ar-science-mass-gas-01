@@ -1,0 +1,939 @@
+/* ═══════════════════════════════════════════════════════
+   shared/engine.css — methodica-science-mass-gas-01 (Target 9, נפח של גז)
+   SOURCE OF TRUTH for every part's css/engine.css — edit here, then run
+   scripts/sync-shared.sh. Never edit a part's copy directly.
+   Base blocks ported from Target 6 (methodica-science-volume-liquid-01,
+   parts 02/06) + 720-templates contracts; Figma file eSbp4bKHgBky0rakDb8l9N.
+   Part-specific rules live in each part's css/style.css.
+   ═══════════════════════════════════════════════════════ */
+
+
+/* ─── Fonts ─────────────────────────────────────────────
+   Calibri (system font), fallback Arial. No font files / network requests.
+   ───────────────────────────────────────────────────────── */
+
+/* ─── Reset ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Subject theme tokens — Figma Variable Collection (720 UI Templates)
+   Source of truth: Colors System page, Figma eSbp4bKHgBky0rakDb8l9N node 618:10118.
+   Default theme: science. Theme switch = data-subject-theme attribute on <body>;
+   only Subject/* tokens may change between themes. ── */
+:root {
+  --subject-100: #d4f3ff;
+  --subject-200: #c7f0ff;
+  --subject-300: #b9ecff;
+  --subject-400: #00baff;
+  --subject-500: #019de5;
+  --subject-600: #0690d0;
+  --subject-700: #007ac6;
+  --subject-800: #0070c0;
+  --subject-900: #002060;
+  --subject-alpha-100: rgba(0, 186, 255, 0);
+  --subject-alpha-200: rgba(0, 186, 255, 0.3);
+}
+
+body[data-subject-theme="math"] {
+  --subject-100: #f1d9ff;
+  --subject-200: #e7c2ff;
+  --subject-300: #e0bff5;
+  --subject-400: #ce82ff;
+  --subject-500: #7100b9;
+  --subject-600: #8518cc;
+  --subject-700: #8300d9;
+  --subject-800: #7106b7;
+  --subject-900: #580091;
+  --subject-alpha-100: rgba(165, 28, 255, 0);
+  --subject-alpha-200: rgba(165, 28, 255, 0.3);
+}
+
+
+/* ─── Global utility ───────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ─── Global ────────────────────────────────────────────── */
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  direction: rtl;
+  font-family: Calibri, Arial, sans-serif;
+  background: #fff;
+}
+
+/* ─── App Canvas ────────────────────────────────────────── */
+#app {
+  position: absolute;
+  width: 1280px; height: 710px;
+  transform-origin: top left;
+  background: #fff;
+  /* Clip to the canvas, except the 74px bottom-bar band, which bleeds
+     sideways into the letterbox margins (--side-ext, set by scaleApp). */
+  overflow: visible;
+  --side-ext: 0px;
+  --top-ext: 0px;
+  clip-path: polygon(
+    0 0, 100% 0, 100% calc(100% - 74px),
+    calc(100% + var(--side-ext)) calc(100% - 74px), calc(100% + var(--side-ext)) 100%,
+    calc(0px - var(--side-ext)) 100%, calc(0px - var(--side-ext)) calc(100% - 74px),
+    0 calc(100% - 74px));
+}
+
+/* An open feedback popup can reach into the letterbox margin (it follows the bar's
+   check button) — widen the clip sideways while it is shown. */
+#app:has(.screen.active .scq-popup:not(.hidden)) {
+  clip-path: polygon(
+    calc(0px - var(--side-ext)) 0, calc(100% + var(--side-ext)) 0,
+    calc(100% + var(--side-ext)) 100%, calc(0px - var(--side-ext)) 100%);
+}
+
+/* A modal backdrop (hint overlay, image zoom / magnifier) dims the whole viewport —
+   lift the clip into every letterbox margin while one is shown (+2px: scaleApp rounds left/top). :is() keeps this rule's
+   specificity equal to the popup rule above, so it wins when both apply. */
+#app:is(:has(.screen.active .scq-hint-overlay:not(.hidden)), :has(.img-zoom-modal:not(.hidden))) {
+  clip-path: polygon(
+    calc(-2px - var(--side-ext)) calc(-2px - var(--top-ext)), calc(100% + 2px + var(--side-ext)) calc(-2px - var(--top-ext)),
+    calc(100% + 2px + var(--side-ext)) calc(100% + 2px + var(--top-ext)), calc(-2px - var(--side-ext)) calc(100% + 2px + var(--top-ext)));
+}
+
+/* ─── Screens ───────────────────────────────────────────── */
+.screen {
+  position: absolute; inset: 0;
+  width: 1280px; height: 710px;
+  display: none; overflow: visible;   /* clipped by #app (see clip-path there) */
+}
+.screen.active { display: block; }
+
+/* 74px white feedback bar at the bottom of every screen (Figma standard). */
+.screen::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: calc(0px - var(--side-ext)); right: calc(0px - var(--side-ext));
+  height: 74px;
+  background: #fff;
+  border-top: 0.4px solid #AEAEAE;
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* ═══════════════════════════════════════════════════════
+   GLOBAL COMPONENT — Report / Issue button (top-left).
+   Figma "issue button" component (default + hover variants).
+   Appears on every screen. Visual only for now (no behavior).
+   - default: gray circle + flag icon
+   - hover:   blue/white circle + flag icon + "מצאתם בעיה?" label
+   Icon = exact Figma PNG; label = live HTML (never baked in).
+   ═══════════════════════════════════════════════════════ */
+.flag-btn {
+  position: absolute; top: 16px; left: 16px;
+  width: 88px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  background: none; border: none; padding: 0; cursor: pointer;
+  z-index: 30;          /* above screen content + feedback bar */
+}
+.flag-btn-icon {
+  width: 38px; height: 38px; flex-shrink: 0;
+  background: url('../assets/img/btn-flag-default.png') no-repeat center / contain;
+}
+.flag-btn:hover .flag-btn-icon,
+.flag-btn:focus-visible .flag-btn-icon {
+  background-image: url('../assets/img/btn-flag-hover.png');
+}
+.flag-btn-label {
+  font-family: Calibri, Arial, sans-serif;
+  font-weight: 600; font-size: 18px; color: var(--subject-500);
+  text-align: center; width: 80px; line-height: normal;
+  direction: rtl; display: none;
+}
+.flag-btn:hover .flag-btn-label,
+.flag-btn:focus-visible .flag-btn-label { display: block; }
+
+/* ─── Shared: Continue Button — blue pill, bottom-left of bar ── */
+.btn-continue {
+  position: absolute;
+  bottom: 17.5px; left: calc(24px - var(--side-ext));   /* centered in 74px bar: (74-39)/2 = 17.5px */
+  z-index: 12;                /* above the ::after white bar (z-index 9) */
+  min-width: 140px;
+  height: 39px;   /* canonical nav-pill height — see _global-components.md § Nav bar button geometry */
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 40px;
+  background: linear-gradient(180deg, #005FBE 9%, #0059B2 23.36%, #003971 100%);
+  color: #fff;
+  border: none; border-radius: 1000px;
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl;
+  text-align: center; white-space: nowrap;
+}
+.btn-continue:not(:disabled):hover { font-weight: 600; }
+.btn-continue.hidden { display: none !important; }
+/* Disabled state — gray inactive pill (modeled on the reference צדקתי button) */
+.btn-continue:disabled {
+  background: #AEAEAE;
+  color: #303030;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* ─── Shared: Back Button — white outline pill ──
+   Visual styling only, NOT positioned here — it's normally the second
+   flex child of a .scq-bar (question-template bottom bar; add that
+   component when the first question-style screen needs it), which
+   positions it via flex layout. A screen with no .scq-bar wrapper
+   (TransitionScreen convention, e.g. #s0/#s4 in part 02) instead
+   positions its own back button with an ID-scoped rule, e.g.:
+     #s0-back { position: absolute; bottom: 17.5px; right: 24px; z-index: 12; }
+   Never add position:absolute to the shared .scq-back rule itself —
+   that breaks it when used inside a .scq-bar flex row. */
+.scq-back {
+  width: 140px; padding: 0 40px;
+  height: 39px;   /* canonical nav-pill height — see _global-components.md § Nav bar button geometry */
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--subject-700); border-radius: 1000px; background: #fff;
+  color: var(--subject-700);
+  font-family: Calibri, Arial, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl;
+}
+.scq-back:not(:disabled):hover { font-weight: 600; border-width: 1.5px; }
+/* Peak B1: Back is blocked while a recorded answer was changed but not re-confirmed */
+.scq-back:disabled { border-color: #aeaeae; color: #aeaeae; cursor: default; }
+
+/* ─── Shared: bottom action bar (question-template screens) ── */
+.scq-bar {
+  position: absolute; left: calc(0px - var(--side-ext)); right: calc(0px - var(--side-ext)); bottom: 0; height: 74px;
+  background: #fff; border-top: 0.4px solid #aeaeae;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 34px; direction: ltr;   /* check+hint left, back right */
+  z-index: 15;
+}
+.scq-bar-main { display: flex; align-items: center; gap: 16px; }
+
+.scq-check {
+  min-width: 140px; padding: 0 40px;
+  height: 39px;   /* canonical nav-pill height — see _global-components.md § Nav bar button geometry */
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: 1000px;
+  background: #aeaeae; color: #303030;
+  font-family: Calibri, Arial, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: not-allowed; direction: rtl; white-space: nowrap;
+  text-align: center;
+}
+.scq-check:not(:disabled) {
+  background: linear-gradient(180deg, #005FBE 9%, #0059B2 23.36%, #003971 100%);
+  color: #fff; cursor: pointer;
+}
+.scq-check:not(:disabled):hover { font-weight: 600; }
+
+.scq-hint {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 0 20px;
+  height: 39px;   /* canonical nav-pill height — see _global-components.md § Nav bar button geometry */
+  border: 1px solid var(--subject-700); border-radius: 1000px; background: #fff;
+  color: var(--subject-700);
+  font-family: Calibri, Arial, sans-serif; font-size: 20px; font-weight: 400;
+  cursor: pointer; direction: rtl;
+}
+.scq-hint .scq-hint-ico { width: 26px; height: 22.3px; order: -1; }
+.scq-hint:hover:not(:disabled) { font-weight: 600; }
+.scq-hint:disabled { border-color: #aeaeae; color: #aeaeae; cursor: default; }
+.scq-hint:disabled .scq-hint-ico { filter: brightness(0) invert(0.682); }
+
+/* Base shape (row: image left + text column right) — matches the
+   standard SingleChoiceQuestionImage template; used as-is by S3
+   onward. #s2 overrides this to a single column below, since it has
+   no content image. */
+.scq-question {
+  position: absolute; top: 139px; right: 40px; left: 40px;
+  display: flex; direction: ltr; align-items: flex-start; gap: 40px;
+}
+/* Text-only question (no content image) — single right-anchored column. */
+.scq-question--text {
+  direction: rtl;
+  flex-direction: column; gap: 24px;
+  left: auto; width: 792px;
+}
+.scq-qtext {
+  display: flex; flex-direction: column; gap: 16px;
+  direction: rtl; text-align: right; line-height: normal;
+}
+.scq-qtext p { margin: 0; }
+.scq-title { font-family: Calibri, Arial, sans-serif; font-size: 24px; font-weight: 700; color: #303030; }
+.scq-body  { font-family: Calibri, Arial, sans-serif; font-size: 24px; font-weight: 400; color: #303030; }
+
+.scq-answers {
+  align-self: flex-start;   /* RTL: flex-start = physical right */
+  width: max-content; min-width: 604px; max-width: 100%;   /* pills hug the longest answer; wrap only if the column is full */
+  display: flex; flex-direction: column; gap: 12px;
+}
+.scq-opt {
+  width: 100%; min-height: 46px;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  background: #fff; padding: 7px 20px;
+  display: flex; align-items: center; gap: 10px;
+  direction: rtl; cursor: pointer;
+  font-family: Calibri, Arial, sans-serif;
+  overflow: visible;
+}
+.scq-opt-text {
+  flex: 1; text-align: right;
+  font-size: 22px; font-weight: 400; color: #222; line-height: 1.1;
+}
+.scq-opt:focus-visible { outline: 2px solid var(--subject-700); outline-offset: 2px; }
+.scq-opt:disabled { cursor: default; }
+.scq-opt.correct { background: #edf8ed; border: 2px solid #609e12; }
+.scq-opt.wrong   { background: #fff0f4; border: 2px solid #b20010; }
+
+.scq-radio {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 2px solid var(--subject-500); border-radius: 1000px;
+  position: relative; box-sizing: border-box;
+  order: -1;   /* first flex item → right edge in the RTL row */
+}
+.scq-opt.selected .scq-radio { background: var(--subject-500); }
+.scq-opt.correct  .scq-radio { background: #609e12; border-color: #609e12; }
+.scq-opt.wrong    .scq-radio { background: #b20010; border-color: #b20010; }
+/* Feedback icon — exact Figma vector (white), centered (node 196:6229 / 196:6232) */
+.scq-opt.correct .scq-radio::after,
+.scq-opt.wrong .scq-radio::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+}
+.scq-opt.correct .scq-radio::after {
+  width: 13px; height: 11px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 12' fill='none'%3E%3Cpath d='M4.52036 12C4.12296 12.0002 3.74183 11.8126 3.46106 11.4787L0.258452 7.67744C-0.0861507 7.26814 -0.0861507 6.60467 0.258452 6.19536C0.603165 5.78619 1.16194 5.78619 1.50666 6.19536L4.52036 9.77374L12.4933 0.306878C12.8381 -0.102293 13.3968 -0.102293 13.7415 0.306878C14.0862 0.716179 14.0862 1.37966 13.7415 1.78896L5.57966 11.4787C5.29889 11.8126 4.91776 12.0002 4.52036 12Z' fill='white'/%3E%3C/svg%3E");
+}
+.scq-opt.wrong .scq-radio::after {
+  width: 11px; height: 11px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M13.6743 0.325691C13.4657 0.117151 13.1828 0 12.8879 0C12.5929 0 12.31 0.117151 12.1014 0.325691L7 5.42709L1.8986 0.325691C1.69 0.117151 1.40711 0 1.11215 0C0.817183 0 0.534294 0.117151 0.325691 0.325691C0.117151 0.534294 0 0.817183 0 1.11215C0 1.40711 0.117151 1.69 0.325691 1.8986L5.42709 7L0.325691 12.1014C0.117151 12.31 0 12.5929 0 12.8879C0 13.1828 0.117151 13.4657 0.325691 13.6743C0.534294 13.8829 0.817183 14 1.11215 14C1.40711 14 1.69 13.8829 1.8986 13.6743L7 8.57291L12.1014 13.6743C12.31 13.8829 12.5929 14 12.8879 14C13.1828 14 13.4657 13.8829 13.6743 13.6743C13.8829 13.4657 14 13.1828 14 12.8879C14 12.5929 13.8829 12.31 13.6743 12.1014L8.57291 7L13.6743 1.8986C13.8829 1.69 14 1.40711 14 1.11215C14 0.817183 13.8829 0.534294 13.6743 0.325691Z' fill='white'/%3E%3C/svg%3E");
+}
+
+/* ── Feedback popup (draggable) ── */
+.scq-popup {
+  position: absolute;
+  left: calc(34px - var(--side-ext)); bottom: 76px;   /* left edge aligned with the bar's check button (.scq-bar padding 34px) */
+  width: 426px; height: auto;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.18);
+  display: flex; flex-direction: column; gap: 4px;
+  direction: rtl; z-index: 50;
+  cursor: move;
+}
+.scq-popup.hidden { display: none !important; }
+.scq-popup-header { display: flex; align-items: flex-start; gap: 8px; direction: ltr; width: 100%; }
+.scq-popup-title {
+  flex: 1;
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 20px; font-weight: 700;
+  text-align: right; direction: rtl;
+  line-height: normal; margin: 0; padding-top: 4px;
+}
+.scq-popup-body { direction: rtl; }
+.scq-popup-body p {
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 20px; font-weight: 400; color: #222;
+  text-align: right; direction: rtl;
+  line-height: normal; margin: 0 0 4px;
+}
+.scq-popup-body p:last-child { margin-bottom: 0; }
+
+/* ── Hint popup (modal) ── */
+.scq-hint-overlay {
+  position: absolute; z-index: 60;
+  inset: calc(-2px - var(--top-ext)) calc(-2px - var(--side-ext));   /* cover the letterbox margins too (+2px: scaleApp rounds left/top) */
+  background: rgba(255, 255, 255, 0.78);
+  display: flex; align-items: center; justify-content: center;
+}
+.scq-hint-overlay.hidden { display: none !important; }
+.scq-hint-popup {
+  background: var(--subject-500); border-radius: 48px;
+  padding: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 24px;
+  width: 546px; max-width: 92%;
+}
+.scq-hint-content { display: flex; flex-direction: column; gap: 24px; width: 462px; max-width: 100%; direction: rtl; }
+.scq-hint-text { flex: 1; min-width: 0; direction: rtl; display: flex; flex-direction: column; gap: 24px; color: #fff; }
+.scq-hint-title {
+  width: 100%; text-align: right; position: relative;
+  padding-right: 56px;
+  font-family: Calibri, Arial, sans-serif; font-weight: 700; font-size: 32px;
+  color: #fff; line-height: normal;
+}
+.scq-hint-title::before {
+  content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 40px; height: 34.3px;
+  background: url("../assets/img/icon-idea-blue.svg") no-repeat center / contain;
+  filter: brightness(0) invert(1);
+}
+/* No authored title: the bulb stands alone in the title row (no "רמז" word). */
+.scq-hint-title--icon { height: 34.3px; padding-right: 0; }
+.scq-hint-body {
+  width: 100%; text-align: right;
+  font-family: Calibri, Arial, sans-serif; font-weight: 400; font-size: 24px;
+  color: #fff; line-height: normal;
+}
+.scq-hint-body p { line-height: normal; text-wrap: pretty; }   /* no one-word last line */
+/* Lead-line hint (title = the hint's own question, slide 23 treatment):
+   title at question size, small bulb, body starts under the title text. */
+.scq-hint-popup--lead .scq-hint-text { gap: 12px; }
+.scq-hint-popup--lead .scq-hint-title { font-size: 24px; padding-right: 38px; text-wrap: pretty; }
+.scq-hint-popup--lead .scq-hint-title::before { width: 28px; height: 24px; }
+.scq-hint-popup--lead .scq-hint-body { padding-right: 38px; box-sizing: border-box; }
+/* Script asks for a regular-weight lead line (no bold). */
+.scq-hint-popup--plain .scq-hint-title { font-weight: 400; }
+.scq-hint-close {
+  align-self: center;
+  width: 196px; padding: 10px 0; white-space: nowrap;
+  border: none; border-radius: 1000px; background: #fff;
+  color: #303030;
+  font-family: Calibri, Arial, sans-serif; font-size: 24px; font-weight: 400;
+  cursor: pointer;
+}
+.scq-hint-close:hover, .scq-hint-close:active { font-weight: 600; }
+
+.scq-img { padding: 8px; }
+.scq-img-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  background: #fff; border: 0.5px solid rgba(174, 174, 174, 0.5);
+  border-radius: 16px; overflow: hidden;
+}
+.scq-img-inner img {
+  width: 100%; height: 100%;
+  object-fit: contain; object-position: center; display: block;
+}
+
+/* Image zoom — global component (720-templates → _global-components.md).
+   Clone sizing is computed in JS (openImageZoom, main.js) from the source
+   wrapper's own aspect ratio AND #app's own scaleApp() zoom factor — never
+   hardcode a fixed clone width/height here. */
+.img-zoom-btn {
+  appearance: none; -webkit-appearance: none;
+  position: absolute; top: 10px; right: 10px;
+  width: 44px; height: 44px;
+  border: 2px solid var(--subject-500); border-radius: 50%;
+  background: #fff; color: var(--subject-500);
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0; z-index: 10; cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  pointer-events: auto;
+}
+.img-zoom-btn:hover {
+  background: var(--subject-500); border-color: var(--subject-500); color: #fff;
+}
+.img-zoom-btn__icon { width: 20px; height: 20px; display: block; }
+.img-zoom-modal { position: fixed; inset: calc(-2px - var(--top-ext)) calc(-2px - var(--side-ext)); z-index: 120; }   /* fixed = #app-relative (transformed); extend into the letterbox */
+.img-zoom-modal.hidden { display: none !important; }
+.img-zoom-modal__backdrop { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.78); }
+.img-zoom-modal__panel {
+  position: absolute; inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: 660px; height: 660px;
+  background: #fff; border-radius: 24px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.img-zoom-modal__caption {
+  flex: none;
+  padding: 20px 20px 0 76px;
+  font-family: Calibri, Arial, sans-serif; font-size: 20px; font-weight: 700; color: #222;
+  text-align: right; direction: rtl;
+}
+.img-zoom-modal__caption:empty { display: none; }
+.img-zoom-modal__stage {
+  position: relative; flex: 1; min-height: 0;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.img-zoom-modal__stage > .img-zoom-clone { flex: none; border: none; transform-origin: center; }
+.img-zoom-modal__close {
+  position: absolute; top: 16px; left: 16px;
+  width: 44px; height: 44px;
+  border: 2px solid var(--subject-500); border-radius: 50%;
+  background: #fff; color: var(--subject-500);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 2;
+}
+.img-zoom-modal__close:hover {
+  background: var(--subject-500); border-color: var(--subject-500); color: #fff;
+}
+.img-zoom-modal__close-icon { width: 15px; height: 15px; display: block; }
+
+.scq-textcol {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 24px;
+  direction: rtl;
+}
+
+
+/* ─── Progress Question (720-templates _global-components → Progress Question) ─── */
+.progress-question {
+  position: absolute;
+  top: 48px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: row; gap: 4px;
+  align-items: flex-start;
+  direction: rtl;
+}
+.progress-question__item {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  width: 56px; flex-shrink: 0;   /* was 43px — widened so "שאלה N" fits at 18px (see label below) */
+  cursor: default;
+}
+/* Status icon — base = not-answered */
+.progress-question__icon {
+  width: 24px; height: 24px;
+  aspect-ratio: 1 / 1; border-radius: 50%;
+  border: 2px solid #ececec; background: #fff;
+  box-sizing: border-box; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.progress-question__icon::before {
+  content: '';
+  display: block;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #ececec;
+}
+/* Current — Figma 96:809: subject-500 dot > white > subject-500 ring >
+   subject-300 halo. Built from border + inset shadow + ::before dot (all
+   antialiased) — the old hard-stop radial-gradient rendered jagged/pixelated
+   once the canvas was scaled. */
+.progress-question__icon--current {
+  border: 2.4px solid var(--subject-300);
+  background: #fff;
+  box-shadow: inset 0 0 0 2px var(--subject-500);
+}
+.progress-question__icon--current::before {
+  width: 7.2px; height: 7.2px;
+  background: var(--subject-500);
+}
+.progress-question__icon--correct {
+  background: var(--subject-500); border-color: var(--subject-500);
+}
+/* Exact Figma vector (white), node 96:812 "ProgressStatusIcons" */
+.progress-question__icon--correct::before {
+  content: ''; width: 12.7273px; height: 9.188px; border-radius: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12.7273 9.18763' fill='none'%3E%3Cpath d='M4.10942 9.18763C3.74814 9.18778 3.40167 9.04418 3.14642 8.78851L0.234956 5.87812C-0.0783188 5.56475 -0.0783188 5.05677 0.234956 4.74339C0.548332 4.43012 1.05631 4.43012 1.36969 4.74339L4.10942 7.48312L11.3576 0.234956C11.671 -0.0783188 12.1789 -0.0783188 12.4923 0.234956C12.8056 0.548332 12.8056 1.05631 12.4923 1.36969L5.07242 8.78851C4.81717 9.04418 4.47069 9.18778 4.10942 9.18763Z' fill='white'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+.progress-question__icon--incorrect {
+  background: var(--subject-500); border-color: var(--subject-500);
+}
+.progress-question__icon--incorrect::before {
+  content: ''; width: 10px; height: 10px; border-radius: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none'%3E%3Cpath d='M9.76736 0.232637C9.61836 0.0836796 9.4163 0 9.20561 0C8.99492 0 8.79286 0.0836796 8.64386 0.232637L5 3.87649L1.35615 0.232637C1.20714 0.0836796 1.00508 0 0.794391 0C0.583702 0 0.381639 0.0836796 0.232637 0.232637C0.0836796 0.381639 0 0.583702 0 0.794391C0 1.00508 0.0836796 1.20714 0.232637 1.35615L3.87649 5L0.232637 8.64386C0.0836796 8.79286 0 8.99492 0 9.20561C0 9.4163 0.0836796 9.61836 0.232637 9.76736C0.381639 9.91632 0.583702 10 0.794391 10C1.00508 10 1.20714 9.91632 1.35615 9.76736L5 6.12351L8.64386 9.76736C8.79286 9.91632 8.99492 10 9.20561 10C9.4163 10 9.61836 9.91632 9.76736 9.76736C9.91632 9.61836 10 9.4163 10 9.20561C10 8.99492 9.91632 8.79286 9.76736 8.64386L6.12351 5L9.76736 1.35615C9.91632 1.20714 10 1.00508 10 0.794391C10 0.583702 9.91632 0.381639 9.76736 0.232637Z' fill='white'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+/* Nav label — base = not-visited */
+.progress-question__label {
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 18px; font-weight: 400;
+  color: #ececec; text-align: right;
+  width: 56px; white-space: nowrap;
+  direction: rtl; display: block;
+}
+.progress-question__label--visited { color: #303030; text-align: center; }
+/* Connector — base = not-visited */
+.progress-question__connector {
+  width: 64px; flex-shrink: 0;
+  padding-top: 11.5px; box-sizing: content-box;
+}
+.progress-question__connector::after {
+  content: ''; display: block;
+  height: 1.5px; border-radius: 2px;
+  background: #ececec;
+}
+.progress-question__connector--visited::after { background: rgba(0, 0, 0, 0.6); }
+
+/* ─── Image-choice cards (T6 image-choice variant, legacy Figma Image Choice 126:2209) ─── */
+.icq-content {
+  position: absolute;
+  left: 50%; top: calc(50% - 5px);
+  transform: translate(-50%, -50%);
+  width: 1120px;
+  display: flex; flex-direction: column; align-items: center; gap: 36px;
+}
+.icq-header {
+  display: flex; flex-direction: column; gap: 8px;
+  align-items: stretch; width: 100%; padding: 0 10px;
+}
+.icq-title {
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 24px; font-weight: 700; color: #303030;
+  text-align: right; direction: rtl; margin: 0;
+}
+.icq-body {
+  width: 100%; text-align: right;
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 24px; font-weight: 400; color: #303030;
+  direction: rtl; line-height: 1.35; margin: 0;
+}
+.icq-cards {
+  display: flex; gap: 40px; justify-content: center;
+  direction: ltr;
+}
+
+/* Options row right-aligned with the header text (T6 producer decision). */
+.icq-content { align-items: flex-start; }   /* rtl column: flex-start = right */
+.icq-cards { margin-right: 10px; }
+.icq-card {
+  position: relative;
+  background: transparent; border: none; padding: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  cursor: pointer; outline: none;
+  width: 216px;
+}
+.icq-card:disabled { cursor: default; }
+.icq-card-frame {
+  width: 216px; height: 216px;
+  border: 3px solid rgba(201, 206, 216, 0.4);
+  border-radius: 16px; background: #fff;
+  overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.icq-card-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover; border-radius: 13px;
+  display: block; pointer-events: none; user-select: none;
+}
+/* Non-square tool photos (MedicineSpoon.png is 1212×1119) are shown whole
+   instead of cropped to the square frame — same rule as part 01. */
+.icq-card-frame img.img-contain { object-fit: contain; }
+.icq-card-label {
+  font-family: Calibri, Arial, sans-serif;
+  font-size: 18px; font-weight: 700; color: #303030;
+  text-align: center; direction: rtl; line-height: 1.3;
+}
+.icq-card:not(:disabled):hover .icq-card-frame,
+.icq-card:focus-visible .icq-card-frame { border-color: var(--subject-500); }
+.icq-card.selected .icq-card-frame { border-color: var(--subject-500); background: var(--subject-100); }
+.icq-card.correct .icq-card-frame { border-color: #609e12; background: #edf8ed; }
+.icq-card.wrong   .icq-card-frame { border-color: #b20010; background: #fff0f4; }
+/* Feedback icon badge — exact Figma vector (32px circle), pinned to the
+   card frame's top-right corner (nodes 3707:23340 / 2134:21437) */
+.icq-card.correct::after,
+.icq-card.wrong::after {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  transform: translate(50%, -50%);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background-repeat: no-repeat; background-position: center;
+}
+.icq-card.correct::after {
+  background-color: #609e12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 11' fill='none'%3E%3Cpath d='M5.16613 11C4.71195 11.0002 4.27638 10.8283 3.9555 10.5222L0.295374 7.03766C-0.0984579 6.66246 -0.0984579 6.05428 0.295374 5.67908C0.689332 5.30401 1.32794 5.30401 1.72189 5.67908L5.16613 8.95926L14.2781 0.281305C14.6721 -0.0937682 15.3107 -0.0937682 15.7046 0.281305C16.0985 0.656497 16.0985 1.26468 15.7046 1.63988L6.37675 10.5222C6.05587 10.8283 5.6203 11.0002 5.16613 11Z' fill='white'/%3E%3C/svg%3E");
+  background-size: 16px 11px;
+}
+.icq-card.wrong::after {
+  background-color: #b20010;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M15.6278 0.372219C15.3894 0.133887 15.0661 0 14.729 0C14.3919 0 14.0686 0.133887 13.8302 0.372219L8 6.20239L2.16983 0.372219C1.93143 0.133887 1.60813 0 1.27103 0C0.933923 0 0.610622 0.133887 0.372219 0.372219C0.133887 0.610622 0 0.933923 0 1.27103C0 1.60813 0.133887 1.93143 0.372219 2.16983L6.20239 8L0.372219 13.8302C0.133887 14.0686 0 14.3919 0 14.729C0 15.0661 0.133887 15.3894 0.372219 15.6278C0.610622 15.8661 0.933923 16 1.27103 16C1.60813 16 1.93143 15.8661 2.16983 15.6278L8 9.79761L13.8302 15.6278C14.0686 15.8661 14.3919 16 14.729 16C15.0661 16 15.3894 15.8661 15.6278 15.6278C15.8661 15.3894 16 15.0661 16 14.729C16 14.3919 15.8661 14.0686 15.6278 13.8302L9.79761 8L15.6278 2.16983C15.8661 1.93143 16 1.60813 16 1.27103C16 0.933923 15.8661 0.610622 15.6278 0.372219Z' fill='white'/%3E%3C/svg%3E");
+  background-size: 16px 16px;
+}
+
+/* Speech-bubble card variant — images side by side, labels as bubbles,
+   radio dot in the frame's top-right corner (feedback badge takes its place). */
+.icq-cards--bubbles { gap: 10px; }
+.icq-cards--bubbles .icq-card { width: auto; }
+.icq-cards--bubbles .icq-card-frame { width: 258px; height: 280px; }
+.icq-radio {
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--subject-500);
+  box-sizing: border-box; pointer-events: none;
+}
+.icq-card.selected .icq-radio { background: var(--subject-500); }   /* solid fill, no white ring */
+.icq-card.correct .icq-radio, .icq-card.wrong .icq-radio { display: none; }
+.icq-cards--bubbles .icq-card.correct::after,
+.icq-cards--bubbles .icq-card.wrong::after { top: 27px; right: 27px; z-index: 4; }
+.icq-bubble {
+  display: block; font-family: Calibri, Arial, sans-serif;
+  font-size: 20px; font-weight: 400; text-align: center; padding: 12px 16px;
+}
+/* Tail = two stacked triangles (border colour + white fill), so the bubble's
+   own border is covered where the tail joins it. Default: bottom, near the right. */
+.icq-bubble--center { transform: translateX(-50%); }   /* with x: '50%' — centred under the card */
+.bubble.icq-bubble::before, .bubble.icq-bubble::after {
+  content: ''; position: absolute; width: 0; height: 0;
+  background: none; border: solid transparent; transform: none;
+}
+.bubble.icq-bubble::before { border-width: 14px 12px 0; border-top-color: var(--subject-500); bottom: -14px; right: 30px; }
+.bubble.icq-bubble::after  { border-width: 11px 9.5px 0; border-top-color: #fff; bottom: -11px; right: 32.5px; }
+.bubble.icq-bubble.bubble--tail-top::before, .bubble.icq-bubble.bubble--tail-top-left::before {
+  bottom: auto; top: -14px; border-width: 0 12px 14px; border-color: transparent transparent var(--subject-500);
+}
+.bubble.icq-bubble.bubble--tail-top::after, .bubble.icq-bubble.bubble--tail-top-left::after {
+  bottom: auto; top: -11px; border-width: 0 9.5px 11px; border-color: transparent transparent #fff;
+}
+.bubble.icq-bubble.bubble--tail-top::before { right: calc(50% - 12px); }
+.bubble.icq-bubble.bubble--tail-top::after  { right: calc(50% - 9.5px); }
+.bubble.icq-bubble.bubble--tail-top-left::before { right: auto; left: 30px; }
+.bubble.icq-bubble.bubble--tail-top-left::after  { right: auto; left: 32.5px; }
+
+/* =======================================================
+   Navigation-button width consistency
+   -------------------------------------------------------
+   Design rule (Foundation, approved 2026-07-28):
+     W(label) = max(140px, intrinsic width of the SAME label
+                rendered in the hover weight, SemiBold 600)
+   The rendered width must be identical in Default and Hover for
+   ANY label, in any language -- not merely for the labels this
+   module happens to use today.
+
+   Mechanism: .nav-label stacks an invisible SemiBold copy of the
+   label (a ::before pseudo-element fed by attr(data-label)) into
+   the same grid cell as the visible text, so the box always sizes
+   to the SemiBold measurement. The reserve is not a DOM node, and
+   visibility:hidden keeps it out of the accessibility tree, so the
+   accessible label stays single-sourced. data-label is populated
+   from each button's own existing text by initNavLabels() in
+   js/main.js -- it is never authored by hand, and must never be
+   adjusted for visual balance.
+
+   Height/positioning migrated to Foundation (2026-08-16): nav pills
+   are now explicit 39px tall, flex-centered, vertically centered in
+   the 74px bar (17.5px top/bottom). Still deliberately NOT changed
+   (recorded production/Foundation divergence, tracked as a separate
+   future migration item):
+     - horizontal padding stays 40px on .btn-continue / .scq-back
+       and 20px on .scq-hint   (Foundation specifies 20px)
+   ======================================================= */
+
+/* Back was width:140px with white-space:normal, which wrapped any
+   label containing a space (2-4 lines tall) and overflowed labels
+   without one. No visual change for the current label. */
+.scq-back { width: auto; min-width: 140px; white-space: nowrap; }
+
+/* Hint had no 140px floor. Inert for the current label (already
+   wider); required so the rule also holds for shorter labels. */
+.scq-hint { min-width: 140px; justify-content: center; }
+
+/* Width reservation. */
+.nav-label { display: inline-grid; }
+.nav-label::before {
+  content: attr(data-label);
+  grid-area: 1 / 1;
+  font-weight: 600;
+  block-size: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.nav-label > span { grid-area: 1 / 1; }
+
+/* Uniform nav-pill size (2026-10-15): every bottom-bar button — Continue,
+   Back, Check, Hint — is ONE fixed size, 160x39, on every screen and in
+   every state (default/hover/disabled, and label swaps such as
+   צדקתי? → שנמשיך?). Supersedes the label-driven width above.
+   160px fits the longest current label in SemiBold (קחו אותי לשאלות,
+   130px) and the Hint label + icon (120px). A new label wider than
+   136px (SemiBold, 20px) needs this width raised for ALL buttons. */
+.btn-continue, .scq-back, .scq-check, .scq-hint {
+  width: 160px; min-width: 160px; max-width: 160px; height: 39px;
+  flex: none; padding: 0 12px; white-space: nowrap; overflow: hidden;
+}
+
+/* Arabic hint label ("هل يمكنني الحصول على تلميح؟") is wider than 160px:
+   the hint pill grows to fit its label (160px floor) instead of clipping it. */
+.scq-hint { width: auto; max-width: none; padding: 0 20px; }
+
+/* ═══════════════════════════════════════════════════════
+   Target 9 additions (not in the T6 base)
+   ═══════════════════════════════════════════════════════ */
+
+/* Bottom-bar anchors for screens without a .scq-bar (TransitionScreen etc.) */
+.screen > .btn-back-abs { position: absolute; bottom: 17.5px; right: calc(24px - var(--side-ext)); z-index: 12; }
+.btn-continue:disabled:hover { font-weight: 400; }
+
+/* ─── TransitionScreen (720-templates TransitionScreen.md, A/D) ─── */
+.tr-content {
+  position: absolute; inset: 0 0 74px 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 20px;
+}
+.tr-text {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  text-align: center; max-width: 1050px; direction: rtl;
+}
+.tr-lead   { font-size: 24px; font-weight: 400; color: #303030; line-height: 1.3; }
+.tr-title  { font-size: 40px; font-weight: 700; color: #303030; line-height: 1.2; margin: 4px 0; }
+.tr-sub    { font-size: 28px; font-weight: 400; color: #303030; line-height: 1.3; }
+.tr-strong { font-size: 24px; font-weight: 700; color: #303030; line-height: 1.3; }
+.tr-tag {
+  font-size: 20px; font-weight: 700; color: var(--subject-700);
+  background: var(--subject-100); border-radius: 1000px; padding: 2px 18px;
+}
+.tr-media-wrap { position: relative; width: 640px; height: 300px; flex-shrink: 0; }
+.tr-media-clip { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+/* A10: fit the character media inside the 300px clip instead of cropping it */
+.tr-media-clip .char-slot { height: 100%; max-width: 100%; display: flex; align-items: center; justify-content: center; }
+.tr-media-clip .char-media { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+/* Companion character media — image or decorative video (autoplay once,
+   muted, no loop, no controls, hold final frame; _global-components →
+   Companion character system). Resolved from selectedCharacter at entry. */
+.char-media { max-width: 100%; max-height: 100%; object-fit: contain; display: block; pointer-events: none; user-select: none; }
+
+/* Speech bubble — sibling of the clip layer (TransitionScreen.md D).
+   Visual is a placeholder pending a canonical Figma bubble (legacy
+   components 26:260 / 196:5991): white card, subject outline, tail. */
+.bubble {
+  position: absolute; z-index: 3;
+  background: #fff; border: 2px solid var(--subject-500); border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 20px; font-weight: 400; color: #303030; line-height: 1.3;
+  text-align: right; direction: rtl;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.bubble p { margin: 0; }
+.bubble::after {
+  content: ''; position: absolute; width: 16px; height: 16px;
+  background: #fff; border: 2px solid var(--subject-500);
+  border-top: none; border-left: none;
+  bottom: -9px; right: 36px; transform: rotate(45deg);
+}
+.bubble--tail-left::after { right: auto; left: 36px; transform: rotate(45deg); }
+.bubble--tail-none::after { display: none; }
+.bubble--tail-up::after { bottom: auto; top: -9px; transform: rotate(-135deg); }
+.tr-media-wrap .bubble { top: 0; left: 20px; width: 250px; }
+
+/* ─── Question image variants ─── */
+.scq-img { position: relative; flex-shrink: 0; }
+.scq-img--std { width: 380px; height: 380px; }
+.scq-img--bubbles { width: 420px; margin-top: 64px; }  /* room for bubbles that overhang the image top */
+.scq-img--bubbles .scq-img-inner { height: auto; }
+.scq-img--bubbles .scq-img-inner img { height: auto; }
+.scq-img .bubble { font-size: 17px; padding: 8px 12px; border-radius: 16px; }
+
+/* Data table inside a question stem (slide 57) */
+.q-table { border-collapse: collapse; direction: rtl; margin-top: 4px; }
+.q-table th, .q-table td {
+  border: 1px solid #c9ced8; padding: 6px 16px;
+  font-size: 20px; color: #303030; text-align: center;
+}
+.q-table th { background: var(--subject-100); font-weight: 700; }
+/* A1: table in the media column (tableSlot:'media', slide 57 layout) */
+.scq-img--table { width: 380px; padding: 8px 0 0; }
+.scq-img--table .q-table { width: 100%; margin-top: 0; }
+
+/* Progress nav — Target 9 peak deviation: sections show a neutral
+   "answered" state until the whole peak question is submitted (PPTX:
+   "משוב בסיום כל הסעיפים"), overriding the skill's resolve-immediately
+   default for peak items. */
+.progress-question__icon--answered { background: var(--subject-500); border-color: var(--subject-500); }
+.progress-question__icon--answered::before { background: #fff; }
+
+/* Long stem text — shrink body line-height slightly for dense slides */
+.scq-body--dense { font-size: 22px; line-height: 1.3; }
+
+/* ─── Content / scenario screen ─── */
+.ct-wrap { position: absolute; inset: 108px 48px 94px 48px;   /* top clears the report-problem flag (A9) */ display: flex; direction: ltr; gap: 32px; align-items: flex-start; }
+.ct-media { display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
+.ct-media-row { display: flex; gap: 12px; }
+.ct-frame { border: 0.5px solid rgba(174,174,174,0.5); border-radius: 16px; overflow: hidden; background: #fff; }
+.ct-frame img, .ct-frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ct-text { flex: 1; direction: rtl; text-align: right; display: flex; flex-direction: column; gap: 12px; }
+.ct-text p { font-size: 24px; line-height: 1.4; color: #303030; margin: 0; }
+.ct-text .ct-title { font-size: 28px; font-weight: 700; }
+
+/* ─── FullImageWithTextOverlay (peak-question scenario) — Figma 720 UI Templates 1038:19205 ───
+   Full-bleed photo band down to the 74px bottom bar; white card hugging its
+   longest line, anchored lower-right (40px from the band's right/bottom). */
+.fito-img { position: absolute; left: 0; right: 0; top: 0; bottom: 74px; overflow: hidden; z-index: 0; }
+.fito-img img, .fito-img video { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; pointer-events: none; }
+.fito-text {
+  position: absolute; right: 40px; bottom: calc(74px + 40px); z-index: 1;
+  width: fit-content; max-width: 788px;   /* guard = Figma card width */
+  background: #fff; border-radius: 12px; padding: 16px;
+  direction: rtl; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+}
+.fito-text p { font-size: 24px; line-height: normal; color: #303030; margin: 0; }
+
+/* Inline tooltip term (720 "Inline tooltip icons in RTL Hebrew text") */
+.tip { position: relative; display: inline; white-space: nowrap; }
+.tip-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; margin: 0 4px; vertical-align: middle;
+  border-radius: 50%; border: 2px solid var(--subject-500); background: #fff;
+  color: var(--subject-500); font-size: 15px; font-weight: 700; cursor: pointer;
+  font-family: Calibri, Arial, sans-serif; line-height: 1;
+}
+.tip-btn:hover, .tip-btn[aria-expanded="true"] { background: var(--subject-500); color: #fff; }
+.tip-pop {
+  position: absolute; bottom: calc(100% + 10px); right: 0; z-index: 40;
+  width: 320px; white-space: normal;
+  background: var(--subject-500); color: #fff; border-radius: 16px;
+  padding: 12px 16px; font-size: 20px; line-height: 1.35;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+
+/* ─── Peak accumulated feedback screen (slides 58/59, 67/68) ─── */
+.pf-wrap { position: absolute; inset: 70px 40px 94px 40px; display: flex; direction: ltr; gap: 24px; align-items: stretch; }
+.pf-char { position: relative; width: 300px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; }
+.pf-char .bubble { top: auto; bottom: 300px; left: 10px; right: 10px; }
+.pf-char .char-media { max-height: 280px; }
+.pf-card {
+  flex: 1; min-width: 0; direction: rtl; overflow-y: auto;
+  border-radius: 24px; padding: 24px 28px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.pf-card--success { background: #edf8ed; border: 2px solid #609e12; }
+.pf-card--partial { background: #fff0f4; border: 2px solid #b20010; }
+.pf-title { font-size: 26px; font-weight: 700; color: #303030; }
+.pf-item { display: flex; flex-direction: column; gap: 2px; }
+.pf-item-head { font-size: 21px; font-weight: 700; color: #303030; line-height: 1.3; }
+.pf-item-body { font-size: 20px; font-weight: 400; color: #303030; line-height: 1.35; }
+
+/* Media placeholder marker (asset not yet produced) */
+.ct-video-placeholder { position: relative; }
+.ct-video-placeholder img { object-fit: contain; background: #f3f4f5; }
+.ct-placeholder-tag {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(48,48,48,0.75); color: #fff; border-radius: 1000px;
+  padding: 2px 14px; font-size: 16px; font-weight: 600;
+}
+/* Table questions: tighter stem spacing so table + 4 options fit */
+.q-table-screen .scq-textcol { gap: 16px; }
+.q-table-screen .scq-qtext { gap: 8px; }
+.q-table-screen .scq-question { top: 118px; }
+
+/* ─── DropdownQuestion (single blank in a sentence) ─── */
+.dq-sentence { font-size: 26px; line-height: 2; color: #303030; direction: rtl; text-align: right; }
+.dq-dropdown-wrap { position: relative; display: inline-block; vertical-align: middle; margin: 0 6px; }
+.dq-btn {
+  min-width: 180px; height: 42px; padding: 0 14px;
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 10px;
+  border: 1px solid rgba(174,174,174,.5); border-radius: 10px; background: #fff;
+  font-family: Calibri, Arial, sans-serif; font-size: 24px; color: #303030; cursor: pointer; direction: rtl;
+}
+.dq-btn[data-empty="true"] .dq-selected { color: #8a8a8a; }
+.dq-btn[aria-expanded="true"] { border: 1.5px solid var(--subject-500); }
+.dq-btn.dq-correct { border: 1px solid #609e12; background: #fff; padding: 0 17px; }   /* Figma state=correct */
+.dq-btn.dq-wrong { border: 1px solid #b20010; background: #fff; }   /* Figma state=Incorrect */
+.dq-btn:disabled { cursor: default; }
+.dq-chevron { color: var(--subject-500); flex-shrink: 0; }
+.dq-list {
+  position: absolute; top: calc(100% + 4px); right: 0; z-index: 20; min-width: 100%;
+  list-style: none; background: #fff; border: 1px solid rgba(174,174,174,.5); border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.12); padding: 4px 0;
+}
+.dq-option { padding: 6px 16px; font-size: 22px; line-height: 1.4; cursor: pointer; text-align: right; }
+.dq-option:hover, .dq-option:focus-visible { background: var(--subject-100); outline: none; }
+/* ✓ sits to the right of the answer (RTL: first flex item), right next to it */
+.dq-btn:has(.dq-check-ico) { justify-content: flex-start; }
+.dq-check-ico {
+  order: -1; flex-shrink: 0;
+  width: 16px; height: 16px; background: no-repeat center / 16px 16px;   /* Figma 1249:32682 state=correct icon */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6.52 15c-.4 0-.78-.19-1.06-.52l-3.2-3.8a1.13 1.13 0 0 1 0-1.48.83.83 0 0 1 1.25 0l3.01 3.57 7.97-9.46a.83.83 0 0 1 1.25 0c.34.4.34 1.07 0 1.48l-8.16 9.69c-.28.33-.66.52-1.06.52Z' fill='%23609E12'/%3E%3C/svg%3E");
+}
+
+/* ─── TrueFalseQuestion (Figma 720 UI Templates 4827:28896) ─── */
+.scq-question--tf { width: 919px; }
+.scq-question--tf .scq-textcol { gap: 56px; }   /* text block → slot, per Figma */
+.scq-question--tf .scq-title { color: var(--subject-500); }
+.tf-row { display: flex; align-items: center; gap: 24px; direction: rtl; }
+.tf-statement { margin: 0; font-family: Calibri, Arial, sans-serif; font-size: 24px; font-weight: 400; color: #303030; line-height: normal; }
+.tf-answers { flex-direction: row; width: auto; gap: 16px; flex-shrink: 0; }
+.tf-answers .scq-opt { width: auto; min-width: 128px; flex: none; height: 46px; min-height: 46px; padding: 0 20px; gap: 8px; }
+.tf-answers .scq-opt-text { white-space: nowrap; }
+.scq-answers--inline { flex-direction: row; width: auto; }
+.scq-answers--inline .scq-opt { width: 220px; }

@@ -1,0 +1,64 @@
+screen_id,screen_key,screen_title,screen_type,source_file,units
+09-00-00,root,Module root redirect page,chrome,index.html,2
+09-00-99,engine,Shared engine — runtime chrome,chrome,shared/engine.js,19
+09-01-00,char-select,מי תלווה אותנו בלמידה?,content,methodica-science-mass-gas-01-01/js/main.js,5
+09-01-01,hook-balloon,רון מנסה לנפח בלון בתוך בקבוק,scq,methodica-science-mass-gas-01-01/js/main.js,14
+09-01-02,hypothesis,כתבו כאן את ההשערה שלכם,content,methodica-science-mass-gas-01-01/js/main.js,6
+09-01-03,bbq,"משפחת כהן קנתה מנגל גז חדש והזמינה את כל המשפחה ל""על האש"" בגינת הבית ש",content,methodica-science-mass-gas-01-01/js/main.js,6
+09-01-04,twins,"סער ונטע - תאומים בני 9, קיבלו כל אחד בלון זהה ליום ההולדת.",content,methodica-science-mass-gas-01-01/js/main.js,10
+09-01-05,lets-start,הכרנו 2 תכונות של גז:,content,methodica-science-mass-gas-01-01/js/main.js,4
+09-01-06,path-select,איך תרצו ללמוד בדקות הבאות?,content,methodica-science-mass-gas-01-01/js/main.js,10
+09-01-07,video,מהו לדעתכם החומר שתפס מקום בכוס ולא נתן למים להיכנס?,content,methodica-science-mass-gas-01-01/js/main.js,9
+09-01-08,obs-intro,בואו נחקור תכונה נוספת של גז. בצעו את 3 התצפיות הבאות.,content,methodica-science-mass-gas-01-01/js/main.js,1
+09-01-09,obs1,,content,methodica-science-mass-gas-01-01/js/main.js,9
+09-01-10,obs1-sum,האוויר שבתוך בקבוק הזכוכית תופס מקום .,content,methodica-science-mass-gas-01-01/js/main.js,3
+09-01-11,obs2,,content,methodica-science-mass-gas-01-01/js/main.js,11
+09-01-12,obs2-sum,כשהכנסנו את הכוס בצורה ישרה למים האוויר שנמצא בתוכה תפס מקום והמים לא ,content,methodica-science-mass-gas-01-01/js/main.js,2
+09-01-13,obs3,,content,methodica-science-mass-gas-01-01/js/main.js,10
+09-01-14,obs3-sum,"כשמשכנו את בוכנת המזרק, אוויר התפשט בתוך המזרק ומילא אותו .",content,methodica-science-mass-gas-01-01/js/main.js,3
+09-01-15,flipcards,איך נשתמש בתכונות הייחודיות של גזים ביום - יום?,content,methodica-science-mass-gas-01-01/js/main.js,14
+09-01-16,summary-dnd,מה למדנו?,content,methodica-science-mass-gas-01-01/js/main.js,18
+09-01-17,dropdown,"בואו ננסח ביחד הגדרה לנפח שתתאים לנוזלים, למוצקים וכמו שלמדנו עכשיו - ",scq,methodica-science-mass-gas-01-01/js/main.js,13
+09-01-18,warmup-intro,קחו אותי לשאלות,transition,methodica-science-mass-gas-01-01/js/main.js,3
+09-01-19,tf,האם המשפט הבא הוא נכון או לא נכון?,scq,methodica-science-mass-gas-01-01/js/main.js,9
+09-01-20,def-scq,מהי ההגדרה הנכונה של נפח?,scq,methodica-science-mass-gas-01-01/js/main.js,11
+09-01-99,chrome,Part-wide chrome / strings not tied to one screen,chrome,methodica-science-mass-gas-01-01/index.html + js,8
+09-02-00,intro,אפשר להתחיל!,transition,methodica-science-mass-gas-01-02/js/main.js,4
+09-02-01,q1,יהלי מנסה למזוג מיץ דרך משפך המודבק לבקבוק,scq,methodica-science-mass-gas-01-02/js/main.js,15
+09-02-02,q2,ילדה מכניסה בקבוק ריק לבריכה ובועות אוויר יוצאות ממנו,scq,methodica-science-mass-gas-01-02/js/main.js,13
+09-02-03,q3,המורה למדעים אומרת שהיום תבצעו ניסוי כדי לבדוק אם אוויר תופס מקום.,scq,methodica-science-mass-gas-01-02/js/main.js,14
+09-02-04,q4,גלעד ואור מחזיקים שקית צ'יפס,scq,methodica-science-mass-gas-01-02/js/main.js,18
+09-02-05,q5,"איזו מהתכונות הבאות מאפיינת גזים, אך אינה מאפיינת מוצקים או נוזלים?",scq,methodica-science-mass-gas-01-02/js/main.js,12
+09-02-99,chrome,Part-wide chrome / strings not tied to one screen,chrome,methodica-science-mass-gas-01-02/index.html + js,7
+09-03-00,intro,אפשר להתחיל!,transition,methodica-science-mass-gas-01-03/js/main.js,4
+09-03-01,q1,האם אוויר הוא חומר?,scq,methodica-science-mass-gas-01-03/js/main.js,10
+09-03-02,q2,ליאו מנפח כדור ים,scq,methodica-science-mass-gas-01-03/js/main.js,13
+09-03-03,q3,מדריך מנפח צמיג אופניים,scq,methodica-science-mass-gas-01-03/js/main.js,12
+09-03-04,q4,חני מחזיקה שקית אטומה,scq,methodica-science-mass-gas-01-03/js/main.js,11
+09-03-05,basic-end,נסו לשלב את כל מה שהבנתם מהתרגול הזה בהמשך היחידה!,transition,methodica-science-mass-gas-01-03/js/main.js,1
+09-03-06,stdb-intro,יופי של עבודה!,transition,methodica-science-mass-gas-01-03/js/main.js,3
+09-03-07,q5,איזו מהטענות הבאות נכונה?,scq,methodica-science-mass-gas-01-03/js/main.js,12
+09-03-08,q6,"לאדם, ירדן ומיקה יש ערוצי YouTube שעוסקים במדע. כל אחד מהם רוצה להעלות",scq,methodica-science-mass-gas-01-03/js/main.js,11
+09-03-99,chrome,Part-wide chrome / strings not tied to one screen,chrome,methodica-science-mass-gas-01-03/index.html + js,7
+09-04-00,intro,זמן ל-4 שאלות מתקדמות ועוד הפתעות מעניינות...,transition,methodica-science-mass-gas-01-04/js/main.js,2
+09-04-01,q1,מדריך מכניס כדור פינג-פונג מעוך לכוס מים חמים,scq,methodica-science-mass-gas-01-04/js/main.js,14
+09-04-02,q2,"במסגרת ניסוי במדעים תלמידה אחת מעכה בקבוק פלסטיק סגור , ותלמיד אחר מעך",scq,methodica-science-mass-gas-01-04/js/main.js,11
+09-04-03,q3,שני ואחיה הקטן החליטו למתוח את ההורים.,scq,methodica-science-mass-gas-01-04/js/main.js,12
+09-04-04,q4,שני כלים סגורים המחוברים בחלקם העליון בצינור עם ברז. בכלי הראשון מונח ,scq,methodica-science-mass-gas-01-04/js/main.js,14
+09-04-05,enrichment-intro,רגע להעשרה,transition,methodica-science-mass-gas-01-04/js/main.js,2
+09-04-06,enrichment,קראו את הכתבה הבאה משנת 1654,content,methodica-science-mass-gas-01-04/js/main.js,9
+09-04-99,chrome,Part-wide chrome / strings not tied to one screen,chrome,methodica-science-mass-gas-01-04/index.html + js,7
+09-05-00,intro,כל הכבוד!,transition,methodica-science-mass-gas-01-05/js/main.js,5
+09-05-01,scenario,"מיכל שואבת את האוויר מהשקית עם השמיכה בעזרת שואב אבק, והשקית מצטמצמת ל",content,methodica-science-mass-gas-01-05/js/main.js,11
+09-05-02,a,סעיף א:,scq,methodica-science-mass-gas-01-05/js/main.js,13
+09-05-03,b,סעיף ב:,scq,methodica-science-mass-gas-01-05/js/main.js,12
+09-05-04,c,מיכל ואורי ליד שקית השמיכה,scq,methodica-science-mass-gas-01-05/js/main.js,15
+09-05-05,d,סיימתי,scq,methodica-science-mass-gas-01-05/js/main.js,21
+09-05-99,chrome,Part-wide chrome / strings not tied to one screen,chrome,methodica-science-mass-gas-01-05/index.html + js,7
+09-06-00,intro,כל הכבוד!,transition,methodica-science-mass-gas-01-06/js/main.js,5
+09-06-01,scenario,אוגי האוגר שותה ממתקן השתייה האוטומטי,content,methodica-science-mass-gas-01-06/js/main.js,6
+09-06-02,a,סעיף א:,scq,methodica-science-mass-gas-01-06/js/main.js,12
+09-06-03,b,סעיף ב:,scq,methodica-science-mass-gas-01-06/js/main.js,12
+09-06-04,c,אוגי האוגר שותה מהמתקן,scq,methodica-science-mass-gas-01-06/js/main.js,16
+09-06-05,d,סיימתי,scq,methodica-science-mass-gas-01-06/js/main.js,14
+09-06-99,chrome,Part-wide chrome / strings not tied to one screen,chrome,methodica-science-mass-gas-01-06/index.html + js,8

@@ -1,0 +1,42 @@
+/* Part 02 — screen-specific rules only. Shared rules: css/engine.css (synced from shared/). */
+
+/* S0 intro — character stands on the bottom line (mirrors part 01 warmup-intro) */
+[data-key="intro"] .tr-content { justify-content: flex-start; padding-top: 111px; }
+[data-key="intro"] .tr-media-wrap { position: absolute; bottom: 12px; left: 0; right: 0; margin: 0 auto; height: 340px; }
+[data-key="intro"] .tr-media-clip { align-items: flex-end; }
+[data-key="intro"] .tr-media-clip .char-slot { align-items: flex-end; }
+
+/* Q1 — image box follows the photo's 5:4 ratio (no letterbox margins) and
+   is larger; one-paragraph stem, answers a little closer to the question. */
+[data-key="q1"] .scq-img--std { width: 500px; height: auto; }
+[data-key="q1"] .scq-img--std .scq-img-inner img { height: auto; }
+[data-key="q1"] .scq-textcol { gap: 16px; }
+[data-key="q1"] .scq-qtext { gap: 24px; }
+
+/* Q2 — every answer on a single line (widen the answers column to fit). */
+[data-key="q2"] .scq-answers { width: auto; min-width: 604px; }
+[data-key="q2"] .scq-opt-text { white-space: nowrap; }
+
+/* Q3 — the task line stays on one line; answers break only at the <br>s in main.js. */
+[data-key="q3"] .scq-qtext p:last-child { white-space: nowrap; }
+[data-key="q3"] .scq-opt-text { white-space: nowrap; }
+[data-key="q3"] .scq-answers { width: auto; }   /* pills hug the longest answer */
+[data-key="q3"] .scq-hint-popup { width: auto; }   /* grow to fit the 2-line hint */
+[data-key="q3"] .scq-hint-content { width: auto; }
+[data-key="q3"] .scq-hint-body p { white-space: nowrap; }
+
+/* Q5 — feedback popup hugs its lines: "מסה." and "הם נמצאים." stay on the line above. */
+[data-key="q5"] .scq-popup { width: auto; min-width: 426px; }   /* never narrower than the standard popup (short retry text) */
+[data-key="q5"] .scq-popup-body p { white-space: nowrap; }
+
+/* Q4 — larger text in the chips conversation bubbles (engine default 17px). */
+[data-key="q4"] .scq-img .bubble { font-size: 20px; }
+[data-key="q4"] .scq-img--bubbles { width: 520px; }   /* larger photo — pills below hug their text */
+[data-key="q4"] .scq-answers { width: auto; }
+
+/* Inline tooltip icon sized like a superscript */
+.tip-btn {
+  width: 16px; height: 16px; margin: 0 2px; border-width: 1.5px;
+  font-size: 11px; vertical-align: super;
+}
+.tip-pop { text-wrap: pretty; }   /* no single orphan word on the last line */

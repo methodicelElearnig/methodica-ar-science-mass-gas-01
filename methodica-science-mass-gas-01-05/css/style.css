@@ -1,0 +1,47 @@
+/* Part 05 — screen-specific rules only. Shared rules: css/engine.css (synced from shared/). */
+
+/* סעיפים א–ג — stem starts at the same height as סעיף ד (table screen, top 118px). */
+.q-wide .scq-question, .q-img-fit .scq-question { top: 118px; }
+
+/* סעיפים א–ב (slides 54–55) — wide stem on one line, each option on a single line. */
+.q-wide .scq-question--text { width: 1200px; }
+.q-wide .scq-answers { width: max-content; max-width: 100%; }
+.q-wide .scq-opt-text { white-space: nowrap; }
+/* סעיף ד (slide 57) — narrower answers (520px), wrapping to two lines, right-aligned. */
+.q-wide-media .scq-answers { width: 520px; max-width: 100%; align-self: flex-start; }   /* RTL column: flex-start = right edge */
+.q-wide-media .scq-opt-text { text-wrap: balance; }
+/* סעיף ד — data table in the 4.6 (methodica-math-percent-06) reference-table style, science palette:
+   solid subject header with white text, grey grid (#c9ced8, same as the engine table), rounded frame, 22px centred cells. */
+.q-table-screen .q-table {
+  border-collapse: separate; border-spacing: 0; table-layout: fixed;
+  border: 1px solid #c9ced8; border-radius: 10px; overflow: hidden;
+  height: 100%;
+}
+.q-table-screen .q-table th, .q-table-screen .q-table td {
+  border: none; border-bottom: 1px solid #c9ced8; border-left: 1px solid #c9ced8;
+  height: 56px; padding: 6px 12px; background: #fff;
+  font-size: 22px; font-weight: 400; color: #303030; text-align: center; line-height: 1.2;
+}
+.q-table-screen .q-table tr:last-child td { border-bottom: none; }
+.q-table-screen .q-table tr > :last-child { border-left: none; }
+.q-table-screen .q-table th {
+  background: var(--subject-500); color: #fff; font-weight: 600;   /* same blue as the stepper & options */
+  border-bottom-color: var(--subject-500); border-left-color: var(--subject-500);
+}
+/* Table column spans exactly the options block: bottom-aligned with it, same height as the 4 two-line options (measured 302px). */
+.q-table-screen .scq-img--table { align-self: flex-end; height: 302px; padding: 0; }
+/* סעיף ג (slide 56) — image fills the left column (answers start at x 636): 560×373 inner (3:2),
+   bottom-aligned with the options; big enough that the zoom button is dropped.
+   אורי's bubble stays inside the image, its tail (104px in) pointing up at his mouth; 3:2 source is 1120px wide (2× display). */
+.q-img-fit .scq-img--bubbles { width: 546px; margin-top: 82px; margin-left: -20px; margin-right: -127px; }   /* 20px left of the canvas margin; 546 - 20 - 127 keeps the text column's 399px slot; ends ~24px before the 650px options */
+.q-img-fit .scq-answers { width: 650px; }   /* wider than the 604px default so option c ends its 2nd line with "עצמה" */
+.q-img-fit .img-zoom-btn { display: none; }
+.q-img-fit .scq-img .bubble { font-size: 18px; }
+.q-img-fit .bubble--tail-top-left::after { top: -9px; bottom: auto; left: 104px; right: auto; transform: rotate(225deg); }
+/* סעיף ג — wider feedback popup so the bold sentence breaks where the script wants it. */
+.fb-wide .scq-popup { width: 530px; }
+/* Peak hints with a bold lead line (סעיפים א, ד) — bulb on its own row above the
+   text, right-aligned, same size/spacing as the icon-only hint of סעיף ב. */
+.scq-hint-popup--lead .scq-hint-title { padding-right: 0; padding-top: calc(34.3px + 24px); }
+.scq-hint-popup--lead .scq-hint-title::before { top: 0; transform: none; width: 40px; height: 34.3px; }
+.scq-hint-popup--lead .scq-hint-body { padding-right: 0; }

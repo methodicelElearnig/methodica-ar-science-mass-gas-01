@@ -1,0 +1,72 @@
+/* Part 04 — screen-specific rules only. Shared rules: css/engine.css (synced from shared/). */
+
+/* ── S0 intro — looping sunglasses clip; character stands on the bottom line (mirrors part 03 intro).
+   translateY absorbs the ~3% empty strip under the feet in the source video. ── */
+[data-key="intro"] .tr-content { justify-content: flex-start; padding-top: 111px; }
+[data-key="intro"] .tr-media-wrap { position: absolute; bottom: 0; left: 0; right: 0; margin: 0 auto; height: 340px; }
+[data-key="intro"] .tr-media-clip { align-items: flex-end; }
+[data-key="intro"] .tr-media-clip .char-slot { align-items: flex-end; }
+[data-key="intro"] .tr-media-clip .char-media { transform: translateY(10px); }
+
+/* ── S2 (Q2, slide 47): long stem — widen the text column ── */
+.q-wide .scq-question--text { width: 1040px; }
+
+/* ── S3 (Q3, slide 48): hint — the lead line is the whole hint: regular weight,
+   kept on one line; popup widens on this screen only to fit it (mirrors part 03 Q2). ── */
+[data-key="q3"] .scq-hint-popup { width: auto; max-width: none; }
+[data-key="q3"] .scq-hint-content { width: auto; }
+[data-key="q3"] .scq-hint-title { font-weight: 400; white-space: nowrap; }
+[data-key="q3"] .scq-qtext p:last-child { margin-top: 16px; }   /* stem → question gap, per review */
+
+/* ── S5 — enrichment item (slide 50): 1654 newspaper. No Figma template
+   (plan §6, CUSTOM); styling is a local placeholder pending design. ── */
+.np-wrap { position: absolute; inset: 26px 60px 90px 60px; display: flex; flex-direction: column; gap: 10px; direction: rtl; }
+.np-intro { font-size: 28px; font-weight: 700; color: #303030; text-align: right; }
+.np-paper {
+  flex: 1; min-height: 0; position: relative; overflow: hidden;
+  background-color: #efe3c8; background-size: cover; background-position: center;
+  border: 1px solid #b89f72; border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(80, 60, 20, 0.25), inset 0 0 60px rgba(120, 90, 40, 0.25);
+  padding: 18px 28px; display: flex; flex-direction: column; gap: 10px;
+  font-family: Calibri, Arial, sans-serif; color: #3a2a12;
+}
+.np-masthead { background: rgba(243, 233, 210, 0.94); padding: 4px 12px 6px; border-bottom: 3px double #6b5530; padding-bottom: 6px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.np-headline { font-family: Calibri, Arial, sans-serif; font-size: 34px; font-weight: 900; margin: 0; }
+.np-body { flex: 1; min-height: 0; display: flex; direction: ltr; gap: 24px; }
+.np-fig { position: relative; width: 430px; height: 300px; align-self: center; flex-shrink: 0; margin: 0; border: 2px solid #6b5530; background: #fff8e8; }
+.np-fig img { width: 100%; height: 100%; object-fit: contain; display: block; filter: sepia(0.35); }
+.np-text { flex: 1; direction: rtl; background: rgba(243, 233, 210, 0.94); border-radius: 4px; padding: 12px 16px; text-align: right; overflow-y: auto; display: flex; gap: 24px; }
+.np-col { flex: 1; min-width: 0; }
+.np-col + .np-col { border-right: 1px solid rgba(107, 85, 48, 0.5); padding-right: 24px; }
+.np-text p { font-size: 22px; line-height: 1.45; margin: 0 0 8px; text-wrap: pretty; }
+
+/* ── S3 (Q3, slide 48): script-length answers — keep each on one line. ── */
+[data-key="q3"] .scq-answers { width: max-content; min-width: 604px; }
+[data-key="q3"] .scq-opt-text { white-space: nowrap; }
+
+/* ── S4 (Q4, slide 49): gap before the question line; first answer on one line;
+   feedback — each sentence on a single line. ── */
+[data-key="q4"] .scq-qtext p:last-child { margin-top: 16px; }
+[data-key="q4"] .scq-answers { width: max-content; min-width: 604px; }
+[data-key="q4"] .scq-opt-text { white-space: nowrap; }
+[data-key="q4"] .scq-popup { width: auto; min-width: 426px; }   /* never narrower than the standard popup (short retry text) */
+[data-key="q4"] .scq-popup-body p { white-space: nowrap; }
+
+/* ── S1 (Q1, slide 46): larger image, narrow answers (short names);
+   bubble tails sit under each speaker's mouth (image %: Ayala ~55, Dor ~22, Michael ~79). ── */
+[data-key="q1"] .scq-img--bubbles { width: 500px; }
+[data-key="q1"] .scq-answers { width: 300px; }
+[data-key="q1"] .scq-img .bubble { font-size: 20px; padding: 10px 14px; }
+/* Tail = two stacked triangles (border colour + white fill), same as .icq-bubble */
+[data-key="q1"] .scq-img .bubble::before, [data-key="q1"] .scq-img .bubble::after {
+  content: ''; position: absolute; width: 0; height: 0; background: none;
+  border: solid transparent; transform: none;
+}
+[data-key="q1"] .scq-img .bubble::before { border-width: 14px 12px 0; border-top-color: var(--subject-500); bottom: -14px; top: auto; right: auto; left: var(--tail-x); margin-left: -12px; }
+[data-key="q1"] .scq-img .bubble::after  { border-width: 11px 9.5px 0; border-top-color: #fff; bottom: -11px; top: auto; right: auto; left: var(--tail-x); margin-left: -9.5px; }
+[data-key="q1"] .scq-img .bubble--tail-top::before { border-width: 0 12px 14px; border-bottom-color: var(--subject-500); top: -14px; bottom: auto; }
+[data-key="q1"] .scq-img .bubble--tail-top::after  { border-width: 0 9.5px 11px; border-bottom-color: #fff; top: -11px; bottom: auto; }
+[data-key="q1"] .scq-img .bubble:nth-child(2) { --tail-x: 175px; }  /* Ayala */
+[data-key="q1"] .scq-img .bubble:nth-child(3) { --tail-x: 140px; }  /* Dor */
+[data-key="q1"] .scq-img .bubble:nth-child(4) { --tail-x: 105px; }  /* Michael */
+[data-key="q1"] .scq-qtext p:first-child { white-space: nowrap; }  /* keep "חמים." on the first line; the <br> sets the break */
