@@ -17,10 +17,10 @@ const SELECT_MEDIA = { 'character-1': 'assets/img/character/character-1-select.m
 const PATH_START = { video: 'video', 'hands-on': 'obs-intro' };
 const seen = new Set();          // screens whose timed reveals already played this session
 
-/* Instructional video (slide 11) — YouTube https://youtu.be/lXBGIz2y78A.
+/* Instructional video (slide 11) — YouTube https://youtu.be/l3KqVtKepxA (Arabic).
    Embedded via the IFrame API so "ended" still gates המשך; if the API
    script can't load, המשך unlocks rather than trapping the learner. */
-const VIDEO_YT = 'lXBGIz2y78A';
+const VIDEO_YT = 'l3KqVtKepxA';
 /* Open-question stops (post-production request). t = seconds, just after the
    narrator's line ends (YouTube transcript: 0:23–0:32, 0:56–1:02, 1:21–1:28).
    The last stop ends the video — the flip cards cover the rest of it. */
