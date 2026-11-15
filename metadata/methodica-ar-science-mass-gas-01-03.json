@@ -1,11 +1,11 @@
 {
-  "id": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/",
-  "title": "זמן תרגול 2",
-  "learningUnitId": "methodica-science-mass-gas-01",
+  "id": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/",
+  "title": "وقت التدريب 2",
+  "learningUnitId": "methodica-ar-science-mass-gas-01",
   "componentPurpose": "practice",
   "isAssessment": false,
   "recommendedAfterFail": [
-    "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-02/"
+    "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-02/"
   ],
   "isRequired": false,
   "relativeDifficulty": 2,
@@ -16,146 +16,146 @@
     "applying-a-model-or-procedure"
   ],
   "languages": [
-    "Hebrew"
+    "Arabic"
   ],
   "skills": [],
   "estimatedTimeInMinutes": 12,
-  "createdAt": "2026-10-29T00:00:00.000Z",
-  "updatedAt": "2026-10-29T00:00:00.000Z",
+  "createdAt": "2026-11-15T00:00:00.000Z",
+  "updatedAt": "2026-11-15T00:00:00.000Z",
   "subContent": [
     {
-      "id": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-001/",
-      "title": "האם אוויר הוא חומר?",
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-001/",
+      "title": "هل الهواء مادة؟",
       "informationToBot": "מטרת הפריט: תרגול בסיסי: אוויר הוא חומר, בעל נפח, התופס מקום.\nכיווני חשיבה ואסטרטגיות: לחשוב: משהו שתופס מקום ויש לו נפח – האם הוא חומר?\nטעויות נפוצות: סברה שאוויר אינו חומר אלא \"כלום\", או שהוא חומר רק בתנאים מסוימים.\nמידע נוסף: מסך פתיחה: \"אין כמו תרגול לחיזוק הלמידה – 4 שאלות, וכבר בהתחלה יש רמז! ענו נכון על 3 שאלות ומעלה (75%) כדי להתקדם.\" הדמות מרימה משקולות קטנות. הרמז תמיד זמין: \"לאוויר יש נפח והוא תופס מקום. האם משהו שתופס מקום הוא חומר?\" שני ניסיונות. משוב: גם אם לא רואים את האוויר, הוא חומר בעל נפח התופס מקום בחלל, כמו שנראה בתצפיות. צילום מסך: לא צורף.",
       "contentType": "practice",
       "mediaFormat": "interactive-content",
       "questions": [
         {
-          "questionId": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-001/q1",
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-001/q1",
           "questionType": "choice",
-          "questionText": "האם אוויר הוא חומר?",
+          "questionText": "هل الهواء مادة؟",
           "answers": [
-            "כן, אוויר הוא חומר",
-            "לא, אוויר אינו חומר",
-            "רק אם הוא נמצא בתוך כלי",
-            "רק אם הוא מעורבב עם גז אחר"
+            "نعم، الهواء مادة",
+            "لا، الهواء ليس مادة",
+            "فقط إذا كان موجودًا داخل وعاء",
+            "فقط إذا كان مخلوطًا بغاز آخر"
           ],
           "correctAnswers": [
-            "כן, אוויר הוא חומר"
+            "نعم، الهواء مادة"
           ]
         }
       ]
     },
     {
-      "id": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-002/",
-      "title": "ליאו מנפח כדור ים",
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-002/",
+      "title": "ليث ينفخ كرة بحر",
       "informationToBot": "מטרת הפריט: תרגול בסיסי: אוויר תופס מקום ולכן כשכדור כמעט מלא קשה להכניס אליו אוויר נוסף.\nכיווני חשיבה ואסטרטגיות: לחשוב מה יש בתוך הכדור וכמה מקום נשאר בו.\nטעויות נפוצות: הסבר שהאוויר \"כבד\" או שהכדור מלא במים.\nמידע נוסף: שני ניסיונות; רמז תמיד זמין: \"האם יש משהו בתוך הכדור שמונע מהאוויר להיכנס?\" משוב: האוויר הוא חומר בעל נפח ולכן תופס מקום בכדור; כשהכדור מלא כמעט שלא נשאר מקום לאוויר נוסף. צילום מסך: לא צורף.",
       "contentType": "practice",
       "mediaFormat": "interactive-content",
       "questions": [
         {
-          "questionId": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-002/q1",
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-002/q1",
           "questionType": "choice",
-          "questionText": "ליאו מנפח כדור ים. הכדור כבר כמעט מלא וליאו רוצה שהוא יהיה כמה שיותר גדול אבל הוא מרגיש שכבר קשה לו מאוד להכניס אוויר לכדור. מדוע קשה כל כך לליאו להכניס אוויר לכדור?",
+          "questionText": "ليث ينفخ كرة بحر. الكرة أصبحت تقريبًا ممتلئة وليث يريدها أن تكون كبيرة قدر الإمكان، لكنه يشعر أنه أصبح من الصعب جدًا عليه إدخال الهواء إلى الكرة. لماذا يَصعُب على ليث إدخال الهواء إلى الكرة؟",
           "answers": [
-            "האוויר בכדור כבד מדי וקשה לאחוז בכדור ולנפח אותו",
-            "ליאו צעיר מדי בשביל לנפח כדור ים גדול כל כך",
-            "יש כבר הרבה אוויר בכדור ואין בו כמעט מקום לאוויר נוסף",
-            "הכדור מלא במי ים ואין בו מקום לאוויר"
+            "الهواء في الكرة ثقيل جدًا، ومن الصعب الإمساك بالكرة ونفخها",
+            "ليث صغير جدًا على نفخ كرة بحر كبيرة إلى هذا الحد",
+            "يوجد بالفعل الكثير من الهواء داخل البالون ولا يوجد فيه تقريبًا مكان لهواء إضافي",
+            "الكرة ممتلئة بمياه البحر ولا يوجد فيها مكان للهواء"
           ],
           "correctAnswers": [
-            "יש כבר הרבה אוויר בכדור ואין בו כמעט מקום לאוויר נוסף"
+            "يوجد بالفعل الكثير من الهواء داخل البالون ولا يوجد فيه تقريبًا مكان لهواء إضافي"
           ]
         }
       ]
     },
     {
-      "id": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-003/",
-      "title": "צמיג אופניים וחוג הרכיבה",
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-003/",
+      "title": "إطار الدراجة ونادي ركوب الدراجات",
       "informationToBot": "מטרת הפריט: תרגול בסיסי: מסת הצמיג עולה כשמנפחים אותו – לאוויר יש גם נפח וגם מסה.\nכיווני חשיבה ואסטרטגיות: לשאול מה נוסף לצמיג בזמן הניפוח ומה זה מלמד על מסה.\nטעויות נפוצות: סברה שלאוויר אין מסה, או שהאוויר \"נספג\" בגומי.\nמידע נוסף: שני ניסיונות; רמז תמיד זמין: \"אם המסה של הצמיג עלתה – מה נוסף לו בזמן הניפוח באוויר?\" משוב: העובדה שהצמיג התנפח ומסתו עלתה מעידה על כך שלאוויר יש גם נפח וגם מסה. צילום מסך: לא צורף.",
       "contentType": "practice",
       "mediaFormat": "interactive-content",
       "questions": [
         {
-          "questionId": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-003/q1",
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-003/q1",
           "questionType": "choice",
-          "questionText": "בחוג רכיבה על אופניים, המדריך לימד את הילדים כיצד מנפחים צמיג. הוא הסביר שלאחר הניפוח הצמיג נעשה קשיח, והוסיף שאם היו מודדים את מסתו היו מגלים שהמסה שלו עלתה מעט. מה מלמדת התופעה?",
+          "questionText": "في نادٍ لركوب الدراجات، علّم المدرّب الأطفال كيف يتم نفخ الإطار. وأوضح أنه بعد النفخ يصبح الإطار صلبًا، وأضاف أنه لو قاموا بقياس كتلته لاكتشفوا أن كتلته ازدادت قليلًا. ماذا تُعلّمنا هذه الظاهرة؟",
           "answers": [
-            "לאוויר יש נפח, אבל אין לו מסה בכלל",
-            "האוויר נספג בתוך הגומי של הצמיג ולכן הוא מתקשה",
-            "לאוויר יש גם נפח וגם מסה",
-            "המשאבה כנראה מוסיפה חומר כלשהו לצמיג בנוסף לאוויר"
+            "للهواء حجم، لكن ليست له كتلة على الإطلاق",
+            "الهواء يُمتص داخل مطاط الإطار ولذلك يصبح صلبًا",
+            "للهواء حجم وكتلة أيضًا",
+            "من المحتمل أن تضيف المضخة مادة ما إلى الإطار بالإضافة إلى الهواء"
           ],
           "correctAnswers": [
-            "לאוויר יש גם נפח וגם מסה"
+            "للهواء حجم وكتلة أيضًا"
           ]
         }
       ]
     },
     {
-      "id": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-004/",
-      "title": "חני ושקית אוויר הרים",
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-004/",
+      "title": "هنادي وكيس هواء الجبال",
       "informationToBot": "מטרת הפריט: תרגול בסיסי: נפח הגז מושפע מטמפרטורה – גז מתפשט כשהטמפרטורה סביבו גבוהה.\nכיווני חשיבה ואסטרטגיות: להיזכר מה משפיע על נפח של גזים.\nטעויות נפוצות: סברה שחום \"הופך\" את האוויר לחומר חדש או שנפח האוויר קבוע תמיד.\nמידע נוסף: שני ניסיונות; רמז תמיד זמין: \"מה משפיע על נפח של גזים?\" משוב: גזים מתפשטים בטמפרטורות גבוהות, ולכן השקית תתנפח מעט אם תשהה בחוץ ביום חם. בסיום הסדרה מוצג מסך עם הדמות והכיתוב: \"נסו לשלב את כל מה שהבנתם מהתרגול הזה בהמשך היחידה!\" צילום מסך: לא צורף.",
       "contentType": "practice",
       "mediaFormat": "interactive-content",
       "questions": [
         {
-          "questionId": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-004/q1",
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-004/q1",
           "questionType": "choice",
-          "questionText": "חני חזרה מביקור בירושלים והביאה איתה בתוך שקית אטומה \"אוויר הרים צלול כיין\". אח שלה אמר לה: \"אם תניחי את השקית בחוץ ביום חם היא תתנפח קצת\"! האם אח של חני צודק?",
+          "questionText": "عادت هنادي من زيارة إلى القدس وأحضرت معها داخل كيس محكم الإغلاق \"هواء جبال صافٍ كالنبيذ\". قال لها أخوها: \"إذا وضعتِ الكيس في الخارج في يوم حار، فسينتفخ قليلًا\"! هل أخو هنادي محق؟",
           "answers": [
-            "כן, כי חום הופך את האוויר לחומר חדש שתופס יותר מקום",
-            "כן, כי גז מתפשט כשהטמפרטורות סביבו גבוהות",
-            "לא, כי נפח האוויר נשאר תמיד קבוע",
-            "לא, כי גז יכול רק להידחס אם הטמפרטורות סביבו נמוכות"
+            "نعم، لأن الحرارة تحوّل الهواء إلى مادة جديدة تشغل حيزًا أكبر",
+            "نعم، لأن الغاز يتمدد عندما تكون درجات الحرارة المحيطة به مرتفعة",
+            "لا، لأن حجم الهواء يبقى دائمًا ثابتًا",
+            "لا، لأن الغاز لا يمكن ضغطه إلا إذا كانت درجات الحرارة المحيطة به منخفضة"
           ],
           "correctAnswers": [
-            "כן, כי גז מתפשט כשהטמפרטורות סביבו גבוהות"
+            "نعم، لأن الغاز يتمدد عندما تكون درجات الحرارة المحيطة به مرتفعة"
           ]
         }
       ]
     },
     {
-      "id": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-005/",
-      "title": "השוואת נפח של מוצק, נוזל וגז",
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-005/",
+      "title": "مقارنة حجم المادة الصلبة والسائلة والغازية",
       "informationToBot": "מטרת הפריט: תרגול סטנדרטי ב: מוצק ונוזל בעלי נפח קבוע, ואילו נפח הגז הוא כנפח הכלי שבו הוא נמצא.\nכיווני חשיבה ואסטרטגיות: להשוות בין שלושת מצבי הצבירה: מי שומר על נפח קבוע ומי מקבל את נפח הכלי.\nטעויות נפוצות: הכללה: \"לכולם יש נפח קבוע\" או \"לכולם נפח המשתנה לפי הכלי\".\nמידע נוסף: מסך פתיחה (נקודת כניסה למי שעבר את התרגול הסטנדרטי): \"יופי של עבודה! הנה עוד 2 תרגילים ברמת קושי גבוהה יותר.\" הדמות מוסיפה: \"ברור לי שתצליחו!\" שני ניסיונות; רמז לאחר טעות ראשונה: השוו בין שלושת מצבי הצבירה – מי מהם שומר על נפח קבוע ומי מקבל את נפח הכלי. משוב: למוצק ולנוזל יש נפח קבוע; לגז אין נפח קבוע, הוא מתפשט או ניתן לדחיסה ונפחו כנפח הכלי שבו הוא נמצא. צילום מסך: לא צורף.",
       "contentType": "practice",
       "mediaFormat": "interactive-content",
       "questions": [
         {
-          "questionId": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-005/q1",
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-005/q1",
           "questionType": "choice",
-          "questionText": "איזו מהטענות הבאות נכונה?",
+          "questionText": "أي من الادعاءات التالية صحيحة؟",
           "answers": [
-            "למוצק ולנוזל יש נפח קבוע, נפחו של הגז הוא כנפח הכלי שבו הוא נמצא",
-            "למוצק, לנוזל ולגז יש נפח קבוע שאינו משתנה",
-            "למוצק יש נפח קבוע, ואילו נוזל וגז ממלאים את כל נפח הכלי שבו הם נמצאים",
-            "למוצק, לנוזל ולגז יש נפח המשתנה לפי גודל הכלי שבו הם נמצאים"
+            "للمادة الصلبة والسائل حجم ثابت، أما حجم الغاز فهو كحجم الوعاء الذي يوجد فيه",
+            "للمادة الصلبة والسائل والغاز حجم ثابت لا يتغيّر",
+            "للمادة الصلبة حجم ثابت، أما السائل والغاز فيملآن كل حجم الوعاء الذي يوجدان فيه",
+            "للمادة الصلبة والسائلة والغازية حجم يتغير حسب حجم الوعاء الذي توجد فيه"
           ],
           "correctAnswers": [
-            "למוצק ולנוזל יש נפח קבוע, נפחו של הגז הוא כנפח הכלי שבו הוא נמצא"
+            "للمادة الصلبة والسائل حجم ثابت، أما حجم الغاز فهو كحجم الوعاء الذي يوجد فيه"
           ]
         }
       ]
     },
     {
-      "id": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-006/",
-      "title": "ערוצי היוטיוב של אדם, ירדן ומיקה",
+      "id": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-006/",
+      "title": "قنوات YouTube لآدم وريم وميرا",
       "informationToBot": "מטרת הפריט: תרגול סטנדרטי ב: זיהוי שאלה מדעית – שאלה שאפשר לבדוק באמצעות תצפית או ניסוי.\nכיווני חשיבה ואסטרטגיות: לבדוק לגבי כל שאלה אם אפשר לענות עליה בניסוי או בתצפית, או שמדובר בהעדפה אישית.\nטעויות נפוצות: בחירה בשאלה של דעה או העדפה (\"הצבע הכי יפה\", \"בעל החיים הכי חכם\").\nמידע נוסף: נתוני השאלה: שלוש כרטיסיות (תמונה ובועת דיבור) משמאל לימין – אדם: \"שלום חברים שלי, היום ננסה לברר: איזה צבע הוא הכי יפה בעולם?\"; מיקה: \"היום ננסה לברר: האם לגז יש נפח? אל תשכחו לתת לייק וסאב!\"; ירדן: \"עוקבים יקרים, היום ננסה לברר: איזה בעל חיים הוא הכי חכם בעולם?\". התשובה הנכונה: מיקה. שני ניסיונות; רמז לאחר טעות ראשונה: \"כיצד ניתן לענות על השאלה?\" משוב: שאלה מדעית היא שאלה שאפשר לבדוק באמצעות תצפית או ניסוי; במדע לא מסתפקים בדעות או בהעדפות אישיות אלא מחפשים תשובות המבוססות על ראיות. צילום מסך: לא צורף.",
       "contentType": "practice",
       "mediaFormat": "interactive-content",
       "questions": [
         {
-          "questionId": "https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/methodica-science-mass-gas-01-03/methodica-science-mass-gas-01-03-006/q1",
+          "questionId": "https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-03/methodica-ar-science-mass-gas-01-03-006/q1",
           "questionType": "choice",
-          "questionText": "לאדם, ירדן ומיקה יש ערוצי YouTube שעוסקים במדע. כל אחד מהם רוצה להעלות סרטון שיפתור שאלה מדעית - כזאת שאפשר לבדוק בניסוי. מי מהילדים מעלה את הסרטון המתאים ביותר?",
+          "questionText": "لآدم وريم وميرا قنوات YouTube تهتم بالعلوم. كل واحد منهم يريد أن يرفع فيديو يحل سؤالًا علميًا - سؤالًا يمكن فحصه بتجربة. من من الأطفال يرفع الفيديو الأنسب؟",
           "answers": [
-            "שלום חברים שלי, היום ננסה לברר: איזה צבע הוא הכי יפה בעולם?",
-            "היום ננסה לברר: האם לגז יש נפח? אל תשכחו לתת לייק וסאב!",
-            "עוקבים יקרים, היום ננסה לברר: איזה בעל חיים הוא הכי חכם בעולם?"
+            "أهلًا يا أصدقائي، اليوم سنحاول أن نكتشف: ما هو أجمل لون في العالم؟",
+            "اليوم سنحاول أن نتأكد: هل للغاز حجم؟ لا تنسوا الإعجاب بالفيديو والاشتراك في القناة!",
+            "متابعين أعزاء، سنحاول اليوم أن نكتشف: أي حيوان هو الأذكى في العالم؟"
           ],
           "correctAnswers": [
-            "היום ננסה לברר: האם לגז יש נפח? אל תשכחו לתת לייק וסאב!"
+            "اليوم سنحاول أن نتأكد: هل للغاز حجم؟ لا تنسوا الإعجاب بالفيديو والاشتراك في القناة!"
           ]
         }
       ]

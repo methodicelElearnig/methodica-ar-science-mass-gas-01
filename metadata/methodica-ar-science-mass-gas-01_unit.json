@@ -1,6 +1,6 @@
 {
-  "id": "methodica-science-mass-gas-01",
-  "title": "נפח של גז",
+  "id": "methodica-ar-science-mass-gas-01",
+  "title": "حجم الغاز",
   "subTopic": "MOE.SCI.G7.CHEM.BODY-MAT-PROP.VOLUME",
   "learningObjective": "MOE.SCI.G7.CHEM.BODY-MAT-PROP.VOLUME.DEFINE-VOLUME",
   "targetSectors": [
@@ -8,5 +8,8 @@
     "state-religious"
   ],
   "targetAudience": "general",
-  "manufacturer": "מתודיקה"
+  "manufacturer": "310",
+  "languages": [
+    "Arabic"
+  ]
 }
