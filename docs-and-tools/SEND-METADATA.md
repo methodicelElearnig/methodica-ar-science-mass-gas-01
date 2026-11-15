@@ -18,7 +18,7 @@
 - **Component ids** look like `https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-0N/`.
 - **`ContentBaseUrl`** is `https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01`.
   - `hostedContentRef` = `<base>/<component>/index.html`.
-  - **The hosting path must be confirmed by the unit owner before the first live run.** `hostedContentRef` is effectively one-way.
+  - **Hosting path confirmed by the unit owner on 2026-11-15.** `hostedContentRef` is effectively one-way.
 - **Title key** is `ar` (`KATA-API.md`, rule of 2026-10-19).
 - **`recommendedAfterFail`:** 03 → 02, as in the Hebrew unit.
 
