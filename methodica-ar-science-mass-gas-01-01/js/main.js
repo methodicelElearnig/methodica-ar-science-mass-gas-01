@@ -241,12 +241,17 @@ window.PART = {
            fs=0 — the question popup can't show over YouTube's own fullscreen. */
         const host = /^https?:/.test(location.protocol);
         el.querySelector('#vd-yt').innerHTML = '<iframe id="vd-yt-frame" title="' + el.querySelector('.select-title').textContent + '" src="https://www.youtube-nocookie.com/embed/' + VIDEO_YT +
-          '?enablejsapi=1&rel=0&playsinline=1&hl=he&fs=0&modestbranding=1' + (host ? '&origin=' + encodeURIComponent(location.origin) : '') +
+          '?enablejsapi=1&rel=0&playsinline=1&hl=ar&fs=0&modestbranding=1' + (host ? '&origin=' + encodeURIComponent(location.origin) : '') +
           '" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+        /* Arabic build (guide §6.9.3): the YouTube API may rewrite the iframe title in its own
+           language; put the Arabic screen title back on ready and on every state change. */
+        const frameTitle = el.querySelector('.select-title').textContent;
+        const keepTitle = () => { const f = el.querySelector('#vd-yt-frame'); if (f && f.title !== frameTitle) f.title = frameTitle; };
         const make = () => player = new YT.Player(el.querySelector('#vd-yt-frame'), {
           events: {
-            onReady: () => setInterval(check, 200),
+            onReady: () => { keepTitle(); setInterval(check, 200); },
             onStateChange: e => {
+              keepTitle();
               if (window.LOMDA_LMS) window.LOMDA_LMS.youtubeState(e, 'video');   // played / paused on item 006
               if (e.data !== YT.PlayerState.ENDED) return;
               /* scrubbed to the end: unanswered stops still have to be asked */

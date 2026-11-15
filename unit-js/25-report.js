@@ -64,6 +64,15 @@ var REPORT_TYPE_LABELS = {
   'other':     'אחר'
 };
 
+/* Arabic build: what the learner SEES in the type dropdown. REPORT_TYPE_LABELS above stays Hebrew on purpose:
+   it is the value submitted to the shared Google form used by every 720 unit, so the sheet stays filterable.
+   (As methodica-ar-science-volume-liquid-01; the wording matches this unit's markup.) */
+var REPORT_TYPE_DISPLAY = {
+  'technical': 'عطل تقني أو شيء ما لا يعمل',
+  'unclear':   'شيء غير واضح لي',
+  'other':     'آخر'
+};
+
 function openReportModal() {
   resetReportForm();
   var m = document.getElementById('report-modal');
@@ -223,7 +232,7 @@ function initReportModal() {
   /* ה-select המותאם */
   (function () {
     var LABELS = REPORT_TYPE_LABELS;
-    var PLACEHOLDER = 'בחרו סוג בעיה';
+    var PLACEHOLDER = 'اختاروا نوع المشكلة';
     var wrapper = document.getElementById('report-type-wrapper');
     if (!wrapper) return;
     var btn        = wrapper.querySelector('.report-select-btn');
@@ -270,7 +279,7 @@ function initReportModal() {
     wrapper.querySelectorAll('.report-select-option').forEach(function (opt) {
       opt.addEventListener('click', function () {
         hidden.value = opt.getAttribute('data-value');
-        valSpan.textContent = LABELS[hidden.value] || PLACEHOLDER;
+        valSpan.textContent = REPORT_TYPE_DISPLAY[hidden.value] || PLACEHOLDER;
         btn.classList.remove('is-placeholder');
         clearError();
         wasOpened = false;
