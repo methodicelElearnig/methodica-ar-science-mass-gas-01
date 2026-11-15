@@ -22,12 +22,12 @@ const seen = new Set();          // screens whose timed reveals already played t
    script can't load, המשך unlocks rather than trapping the learner. */
 const VIDEO_YT = 'l3KqVtKepxA';
 /* Open-question stops (post-production request). t = seconds, just after the
-   narrator's line ends (YouTube transcript: 0:23–0:32, 0:56–1:02, 1:21–1:28).
+   narrator's line ends (Arabic video: 0:43, 1:26, 1:59).
    The last stop ends the video — the flip cards cover the rest of it. */
 const VIDEO_QS = [
-  { t: 32, q: 'في رأيكم، ما هي المادة التي شغلت مكانًا في الكوب ولم تسمح للماء بالدخول؟', btn: 'لمتابعة الفيديو' },
-  { t: 62, q: 'ما هو برأيكم الشيء الذي يميّز حجم الغاز؟', btn: 'لمتابعة الفيديو' },
-  { t: 86, q: 'اكتبوا ظاهرة واحدة في حياتنا اليومية ترتبط باستخدام الغاز:', btn: 'لإنهاء الفيديو', end: true }
+  { t: 43, q: 'في رأيكم، ما هي المادة التي شغلت مكانًا في الكوب ولم تسمح للماء بالدخول؟', btn: 'لمتابعة الفيديو' },
+  { t: 86, q: 'ما هو برأيكم الشيء الذي يميّز حجم الغاز؟', btn: 'لمتابعة الفيديو' },
+  { t: 119, q: 'اكتبوا ظاهرة واحدة في حياتنا اليومية ترتبط باستخدام الغاز:', btn: 'لإنهاء الفيديو', end: true }
 ];
 
 /* Thought bubble (PPTX cloudCallout, slides 7–8): cloud outline + three
