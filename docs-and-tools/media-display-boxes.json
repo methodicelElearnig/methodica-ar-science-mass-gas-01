@@ -1,0 +1,405 @@
+{
+ "_comment": "Largest boxes (CSS px on the 1280x710 canvas) each raster/clip is drawn in, measured 2026-11-01 in the real pages (img/video offsetWidth/Height on every screen; SVG <image> boxes of the part-01 widgets from getBoundingClientRect / canvas scale). character-2 clips mirror their character-1 twin (same slot). Zoomable images (data-zoom-src) also get the zoom-modal stage (660x660 panel -> ~620x600). Files not listed are re-encoded at native size.",
+ "boxes": {
+  "bbq.jpg": [
+   [
+    718,
+    372
+   ]
+  ],
+  "bike-tire.jpg": [
+   [
+    363,
+    363
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "card-adam.jpg": [
+   [
+    252,
+    254
+   ]
+  ],
+  "card-mika.jpg": [
+   [
+    252,
+    254
+   ]
+  ],
+  "card-yarden.jpg": [
+   [
+    252,
+    254
+   ]
+  ],
+  "character-1-balloon-uninflated.mp4": [
+   [
+    230,
+    255
+   ]
+  ],
+  "character-1-cheer.mp4": [
+   [
+    467,
+    330
+   ]
+  ],
+  "character-1-holding.mp4": [
+   [
+    363,
+    380
+   ]
+  ],
+  "character-1-lab-coat-goggles.mp4": [
+   [
+    224,
+    211
+   ],
+   [
+    420,
+    436
+   ]
+  ],
+  "character-1-point-head.mp4": [
+   [
+    320,
+    332
+   ]
+  ],
+  "character-1-popcorn.mp4": [
+   [
+    224,
+    211
+   ]
+  ],
+  "character-1-reading.mp4": [
+   [
+    300,
+    300
+   ]
+  ],
+  "character-1-running.mp4": [
+   [
+    600,
+    300
+   ]
+  ],
+  "character-1-select.mp4": [
+   [
+    154,
+    224
+   ]
+  ],
+  "character-1-stretch-side.mp4": [
+   [
+    187,
+    340
+   ]
+  ],
+  "character-1-sunglasses.mp4": [
+   [
+    340,
+    340
+   ]
+  ],
+  "character-1-weights.mp4": [
+   [
+    403,
+    340
+   ]
+  ],
+  "character-2-balloon-uninflated.mp4": [
+   [
+    230,
+    255
+   ]
+  ],
+  "character-2-cheer.mp4": [
+   [
+    467,
+    330
+   ]
+  ],
+  "character-2-holding.mp4": [
+   [
+    363,
+    380
+   ]
+  ],
+  "character-2-lab-coat-goggles.mp4": [
+   [
+    224,
+    211
+   ],
+   [
+    420,
+    436
+   ]
+  ],
+  "character-2-point-head.mp4": [
+   [
+    320,
+    332
+   ]
+  ],
+  "character-2-popcorn.mp4": [
+   [
+    224,
+    211
+   ]
+  ],
+  "character-2-reading.mp4": [
+   [
+    300,
+    300
+   ]
+  ],
+  "character-2-running.mp4": [
+   [
+    600,
+    300
+   ]
+  ],
+  "character-2-select.mp4": [
+   [
+    154,
+    224
+   ],
+   [
+    163,
+    224
+   ]
+  ],
+  "character-2-stretch-side.mp4": [
+   [
+    187,
+    340
+   ]
+  ],
+  "character-2-sunglasses.mp4": [
+   [
+    340,
+    340
+   ]
+  ],
+  "character-2-weights.mp4": [
+   [
+    403,
+    340
+   ]
+  ],
+  "chips.jpg": [
+   [
+    503,
+    377
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "dnd-balloon-empty.png": [
+   [
+    88,
+    157
+   ]
+  ],
+  "dnd-balloon-full.png": [
+   [
+    88,
+    157
+   ]
+  ],
+  "dnd-ron-1.jpg": [
+   [
+    177,
+    157
+   ]
+  ],
+  "dnd-syringe.jpg": [
+   [
+    177,
+    157
+   ]
+  ],
+  "fc-balloon.jpg": [
+   [
+    290,
+    275
+   ]
+  ],
+  "fc-straw.jpg": [
+   [
+    290,
+    275
+   ]
+  ],
+  "fc-vacuum.jpg": [
+   [
+    290,
+    275
+   ]
+  ],
+  "hamster-drinker-trimmed-poster.jpg": [
+   [
+    579,
+    325
+   ]
+  ],
+  "hamster-drinker-trimmed.mp4": [
+   [
+    579,
+    325
+   ],
+   [
+    539,
+    303
+   ]
+  ],
+  "hani.jpg": [
+   [
+    363,
+    363
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "leo.jpg": [
+   [
+    363,
+    363
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "magdeburg.png": [
+   [
+    427,
+    297
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "michal-ori.jpg": [
+   [
+    529,
+    353
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "michal-vacuum-bag.gif": [
+   [
+    560,
+    418
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "newspaper-paper.png": [
+   [
+    1160,
+    547
+   ]
+  ],
+  "ogi-hamster-2.jpg": [
+   [
+    381,
+    316
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "ping-pong.jpg": [
+   [
+    483,
+    322
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "ron-1.jpg": [
+   [
+    339,
+    424
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "sarah-sister.gif": [
+   [
+    363,
+    363
+   ],
+   [
+    620,
+    600
+   ]
+  ],
+  "twins-dad-neta.webp": [
+   [
+    200,
+    356
+   ]
+  ],
+  "twins-mom-saar.webp": [
+   [
+    200,
+    356
+   ]
+  ],
+  "w1-cork.png": [
+   [
+    44,
+    44
+   ]
+  ],
+  "w1-flask-empty.png": [
+   [
+    120,
+    149
+   ]
+  ],
+  "w1-flask-full.png": [
+   [
+    120,
+    149
+   ]
+  ],
+  "w1-scene.jpg": [
+   [
+    1335,
+    701
+   ]
+  ],
+  "yahali.jpg": [
+   [
+    483,
+    386
+   ],
+   [
+    620,
+    600
+   ]
+  ]
+ }
+}

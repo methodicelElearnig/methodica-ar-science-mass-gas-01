@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>DEV — לומדה מדעים מסה ונוזל · חלק 06</title>
+  <title>DEV — حجم الغاز · الجزء 06</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #1a1a2e; font-family: monospace; }
@@ -57,7 +57,7 @@
   <span style="margin-right:auto; font-size:11px; font-weight:400;">Ctrl+← קדימה &nbsp;|&nbsp; Ctrl+→ אחורה</span>
 </div>
 
-<iframe id="lomda-frame" src="index.html"></iframe>
+<iframe id="lomda-frame" src="index.html?dev=1"></iframe>
 
 <script>
   let cur = 0;
@@ -69,11 +69,11 @@
   const partSel = document.getElementById('part-select');
 
   /* Part switcher: each part is its own folder (…-01 … -06) with its own index_dev.html. */
-  const PART_RE = /methodica-science-mass-gas-01-(\d\d)\//;
+  const PART_RE = /methodica-ar-science-mass-gas-01-(\d\d)\//;
   const thisPart = (PART_RE.exec(location.pathname) || [])[1] || '01';
   partSel.value = thisPart;
   function goPart(n) {
-    location.href = location.pathname.replace(PART_RE, 'methodica-science-mass-gas-01-' + n + '/');
+    location.href = location.pathname.replace(PART_RE, 'methodica-ar-science-mass-gas-01-' + n + '/');
   }
   /* The lomda can cross into another part inside the frame — keep the selector in sync. */
   frame.addEventListener('load', () => {
@@ -104,11 +104,11 @@
 
   /* Clears everything the unit persisted (answers, character, nav stack) and reloads from screen 0. */
   function resetUnit() {
-    const P = 'methodica-science-mass-gas-01:';
+    const P = 'methodica-ar-science-mass-gas-01:';
     frame.onload = () => {   // unload first: the lomda re-saves its state on pagehide
       frame.onload = null;
       [sessionStorage, localStorage].forEach(s => Object.keys(s).filter(k => k.startsWith(P)).forEach(k => s.removeItem(k)));
-      frame.src = 'index.html'; cur = 0; input.value = 0; updateLabel();
+      frame.src = 'index.html?dev=1'; cur = 0; input.value = 0; updateLabel();
     };
     frame.src = 'about:blank';
   }

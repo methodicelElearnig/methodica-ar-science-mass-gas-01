@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   shared/engine.css — methodica-science-mass-gas-01 (Target 9, נפח של גז)
+   shared/engine.css — methodica-ar-science-mass-gas-01 (Target 9, נפח של גז)
    SOURCE OF TRUTH for every part's css/engine.css — edit here, then run
    scripts/sync-shared.sh. Never edit a part's copy directly.
    Base blocks ported from Target 6 (methodica-science-volume-liquid-01,
@@ -132,11 +132,11 @@ html, body {
 }
 .flag-btn-icon {
   width: 38px; height: 38px; flex-shrink: 0;
-  background: url('../assets/img/btn-flag-default.png') no-repeat center / contain;
+  background: url('../../unit-assets/img/btn-flag-default.png') no-repeat center / contain;
 }
 .flag-btn:hover .flag-btn-icon,
 .flag-btn:focus-visible .flag-btn-icon {
-  background-image: url('../assets/img/btn-flag-hover.png');
+  background-image: url('../../unit-assets/img/btn-flag-hover.png');
 }
 .flag-btn-label {
   font-family: Calibri, Arial, sans-serif;
@@ -362,7 +362,7 @@ html, body {
 .scq-hint-title::before {
   content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
   width: 40px; height: 34.3px;
-  background: url("../assets/img/icon-idea-blue.svg") no-repeat center / contain;
+  background: url("../../unit-assets/img/icon-idea-blue.svg") no-repeat center / contain;
   filter: brightness(0) invert(1);
 }
 /* No authored title: the bulb stands alone in the title row (no "רמז" word). */
@@ -379,7 +379,7 @@ html, body {
 .scq-hint-popup--lead .scq-hint-title { font-size: 24px; padding-right: 38px; text-wrap: pretty; }
 .scq-hint-popup--lead .scq-hint-title::before { width: 28px; height: 24px; }
 .scq-hint-popup--lead .scq-hint-body { padding-right: 38px; box-sizing: border-box; }
-/* Script asks for a regular-weight lead line (no bold). */
+/* One-line hint (title only, or script asks for it): regular weight, no bold. */
 .scq-hint-popup--plain .scq-hint-title { font-weight: 400; }
 .scq-hint-close {
   align-self: center;

@@ -1,0 +1,6 @@
+kata-api-key.txt
+
+# Kata tool logs and read-backs
+*.log
+metadata-from/
+docs-and-tools/kata-api-key.txt

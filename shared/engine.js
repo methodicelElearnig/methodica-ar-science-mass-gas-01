@@ -1,6 +1,6 @@
 'use strict';
 /* ═══════════════════════════════════════════════════════════
-   shared/engine.js — methodica-science-mass-gas-01 (Target 9, נפח של גז)
+   shared/engine.js — methodica-ar-science-mass-gas-01 (Target 9, נפח של גז)
    SOURCE OF TRUTH for every part's js/engine.js — edit here, then run
    scripts/sync-shared.sh. Never edit a part's copy directly.
 
@@ -24,7 +24,7 @@
    for decorative video (no seek-to-0).
    ═══════════════════════════════════════════════════════════ */
 (function () {
-  const LOMDA_ID = 'methodica-science-mass-gas-01';
+  const LOMDA_ID = 'methodica-ar-science-mass-gas-01';
   const NS = LOMDA_ID + ':';
   const PART = window.PART;
   const THIS_PART = LOMDA_ID + '-' + PART.part;
@@ -39,14 +39,31 @@
     del(area, k)       { try { window[area].removeItem(NS + k); } catch (e) {} }
   };
 
+  /* ─── 720 platform layer (../unit-js/70-engine-bridge.js) ───
+     window.LOMDA_LMS, when the page loads it, is told about screen changes,
+     answers, hints, the learning path and the part's last click, and owns the
+     learner state in a platform launch (Kata State API). Without it every
+     call below is a no-op and the engine behaves exactly as before. */
+  function lms(name, ...args) {
+    const L = window.LOMDA_LMS;
+    return L && typeof L[name] === 'function' ? L[name](...args) : undefined;
+  }
+
   /* ─── Companion character (cross-part, localStorage) ─────── */
   const CHARACTERS = ['character-1', 'character-2'];
+  /* With the platform layer the character lives in the component's state
+     document (getUnitCharacter / setUnitCharacter, unit-js/40-resume.js);
+     the namespaced localStorage key stays the fallback. */
   function getCharacter() {
-    const v = store.get('localStorage', 'selectedCharacter', null);
+    const u = typeof window.getUnitCharacter === 'function' ? window.getUnitCharacter() : null;
+    const v = u || store.get('localStorage', 'selectedCharacter', null);
     return CHARACTERS.includes(v) ? v : 'character-1';
   }
   function setCharacter(id) {
-    if (CHARACTERS.includes(id)) store.set('localStorage', 'selectedCharacter', id);
+    if (CHARACTERS.includes(id)) {
+      store.set('localStorage', 'selectedCharacter', id);
+      if (typeof window.setUnitCharacter === 'function') window.setUnitCharacter(id);
+    }
     window.lomdaState.selectedCharacter = getCharacter();
   }
   function charSrc(pose) {
@@ -93,7 +110,11 @@
   function partUrl(slug, screenKey) {
     return '../' + slug + '/index.html' + window.location.search + (screenKey ? '#screen=' + screenKey : '');
   }
+  /* Cross-part hops belong to the platform: in a platform launch the layer
+     answers false (DEV_NAV off) and the engine stays on the part. */
+  const partNavAllowed = () => lms('partNavAllowed') !== false;
   function goToPart(partNum, screenKey) {
+    if (!partNavAllowed()) return;
     const st = stackRead();
     st.push({ part: THIS_PART, key: SCREENS[currentScreen].key });
     stackWrite(st);
@@ -102,8 +123,9 @@
     saveState();
     window.location.href = partUrl(LOMDA_ID + '-' + partNum, screenKey);
   }
-  function hasPrevPart() { return stackRead().length > 0; }
+  function hasPrevPart() { return partNavAllowed() && stackRead().length > 0; }
   function goToPrevPart() {
+    if (!partNavAllowed()) return;
     const st = stackRead();
     const prev = st.pop();
     if (!prev) return;
@@ -256,7 +278,7 @@
   function renderBar(cfg, i) {
     const hint = cfg.hint
       ? '<button class="scq-hint" type="button" data-act="hint" id="s' + i + '-hint"><span>هل يمكنني الحصول على تلميح؟</span>' +
-        '<img class="scq-hint-ico" src="assets/img/icon-idea-blue.svg" alt=""></button>' : '';
+        '<img class="scq-hint-ico" src="../unit-assets/img/icon-idea-blue.svg" alt=""></button>' : '';
     return '<div class="scq-bar"><div class="scq-bar-main">' +
       '<button class="scq-check" type="button" data-act="check" id="s' + i + '-check" disabled>هل إجابتي صحيحة؟</button>' + hint +
       '</div>' + backBtn(i) + '</div>';
@@ -314,7 +336,28 @@
       sec.dataset.screen = i;
       sec.dataset.key = cfg.key;
       sec.innerHTML = (RENDER[cfg.type] || renderContent)(cfg, i);
+      deferMedia(sec);
       app.insertBefore(sec, anchor);
+    });
+  }
+
+  /* Lazy media (optimization, 2026-11-01): every screen is built at boot, so
+     without this each <img> and autoplay <video> of the part loads at once
+     (part 06 had its hamster clip three times). Images get loading="lazy" —
+     a hidden screen's images wait until it is shown; a decorative autoplay
+     video keeps its src in data-lazy-src until its screen is entered
+     (wakeMedia, from enterScreen, before the screen's own enter hook). */
+  function deferMedia(sec) {
+    sec.querySelectorAll('img:not([loading])').forEach(im => { im.loading = 'lazy'; });
+    sec.querySelectorAll('video[autoplay][src]').forEach(v => {
+      v.dataset.lazySrc = v.getAttribute('src');
+      v.removeAttribute('src'); v.removeAttribute('autoplay'); v.preload = 'none';
+    });
+  }
+  function wakeMedia(el) {
+    el.querySelectorAll('video[data-lazy-src]').forEach(v => {
+      v.src = v.dataset.lazySrc; delete v.dataset.lazySrc;
+      v.autoplay = true; v.play().catch(() => {});
     });
   }
 
@@ -417,6 +460,9 @@
     qPaint(i);
     syncProgress(i);
     saveState();
+    /* Every attempt is reported; the resolving one (right, or out of
+       attempts) is the question's last answer. */
+    lms('onAnswered', i, ok, st.done);
   }
 
   function qEnter(i) {
@@ -476,7 +522,10 @@
   function openHint(i) {
     const cfg = SCREENS[i], st = qState(cfg.key);
     if (st.done) return;
-    document.getElementById('s' + i + '-hint-overlay')?.classList.remove('hidden');
+    const ov = document.getElementById('s' + i + '-hint-overlay');
+    if (!ov) return;
+    ov.classList.remove('hidden');
+    lms('onHint', i);   // the hint is open now; the layer reports it once per question
   }
   function closeHint(i) { document.getElementById('s' + i + '-hint-overlay')?.classList.add('hidden'); }
 
@@ -580,19 +629,33 @@
      part adds via PART.saveState()/loadState() (part-01 widgets). Restored
      on load → answered questions re-render resolved and locked. */
   const STATE_K = 'state:' + PART.part;
-  function saveState() {
-    store.set('sessionStorage', STATE_K, {
+  /* The same snapshot is the platform layer's resume payload (the layer adds
+     the screen); `path` is the learning path, otherwise kept by its own key. */
+  function snapshot() {
+    return {
       q: Q, peak: window.lomdaState.peak || null, history: history.slice(),
-      extra: typeof PART.saveState === 'function' ? PART.saveState(api) : null
-    });
+      extra: typeof PART.saveState === 'function' ? PART.saveState(api) : null,
+      path: window.lomdaState.learningPath || null
+    };
   }
-  function loadState() {
-    const s = store.get('sessionStorage', STATE_K, null);
+  function applySnapshot(s) {
     if (!s || typeof s !== 'object') return;
     if (s.q) Object.keys(s.q).forEach(k => { Object.assign(qState(k), s.q[k]); });
     if (s.peak) window.lomdaState.peak = s.peak;
     if (Array.isArray(s.history)) s.history.forEach(n => { if (n >= 0 && n < SCREENS.length) history.push(n); });
     if (s.extra && typeof PART.loadState === 'function') PART.loadState(s.extra, api);
+    if (s.path) { window.lomdaState.learningPath = s.path; store.set('sessionStorage', 'learningPath', s.path); }
+  }
+  function saveState() {
+    store.set('sessionStorage', STATE_K, snapshot());
+    lms('onSave');
+  }
+  function loadState() { applySnapshot(store.get('sessionStorage', STATE_K, null)); }
+  /* Resume restore (platform layer): replaces whatever this page load holds. */
+  function restoreSnapshot(s) {
+    Object.keys(Q).forEach(k => { delete Q[k]; });
+    history.length = 0;
+    applySnapshot(s);
   }
 
   function goTo(n, opts) {
@@ -610,11 +673,13 @@
     if (window.Motion) Motion.reveal(next);
     enterScreen(n);
     saveState();
+    lms('onScreen', n);
   }
 
   function enterScreen(n) {
     const cfg = SCREENS[n], el = qEl(n);
     fillCharSlots(el);
+    wakeMedia(el);
     if (cfg.type === 'scq') qEnter(n);
     if (cfg.type === 'peak-feedback') enterPeakFeedback(n);
     const hook = PART.hooks && PART.hooks[cfg.key];
@@ -677,6 +742,10 @@
     }
     const t = resolveTarget(cfg);
     if (!t) return;
+    /* A target outside this part is the part's last click: the platform layer
+       reports the component's 'completed' and, in a platform launch, ends the
+       part here — the platform, not the part, decides what comes next. */
+    if ((t.part || t.complete || t.finish) && lms('onPartEnd', currentScreen, t) === false) return;
     /* Last peak section: its feedback screen ends the unit in place */
     if (t.complete || t.finish) {
       const chk = document.getElementById('s' + currentScreen + '-check');
@@ -836,8 +905,10 @@
     getCharacter, setCharacter, charSrc, fillCharSlots, store,
     qState, seriesScore, peakState, indexOf: k => KEY_TO_INDEX[k],
     get current() { return currentScreen; },
-    saveState,
-    setLearningPath(p) { window.lomdaState.learningPath = p; store.set('sessionStorage', 'learningPath', p); },
+    saveState, snapshot, restoreSnapshot, screens: SCREENS,
+    /* The learner's own path choice (part 01 path-select and the in-path
+       toggle) — the layer reports it as 'selected' (learning-type). */
+    setLearningPath(p) { window.lomdaState.learningPath = p; store.set('sessionStorage', 'learningPath', p); lms('onPath', p); },
     enableContinue(el, on) { const b = el.querySelector('.btn-continue'); if (b) b.disabled = !on; },
     toCanvas
   };
@@ -856,7 +927,9 @@
        — Back from the entry screen must return to the previous part. */
     const arrival = store.get('sessionStorage', 'arrival', null);
     store.del('sessionStorage', 'arrival');
-    loadState();
+    /* In a platform launch the layer restores from the component's state
+       document instead (unit-js/50-loader.js -> applyExecutionState). */
+    if (lms('ownsState') !== true) loadState();
     if (arrival === 'forward') history.length = 0;
     window.addEventListener('pagehide', saveState);
     initNavLabels();

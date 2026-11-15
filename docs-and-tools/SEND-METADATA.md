@@ -1,0 +1,47 @@
+# Sending the Arabic metadata to Kata — `methodica-ar-science-mass-gas-01`
+
+`send-metadata.ps1` is the `methodica-ar-science-mass-liquid-02` copy (2026-11-02), retargeted to this unit.
+
+> ⚠️ **No `-Publish` without MOE's written approval of the Arabic version.**
+> The Arabic components join the already-approved Hebrew unit. Publishing them there approves them
+> automatically, without MOE ever testing them (`Documentation/KATA/KATA-API.md`, "Arabic components
+> in a Hebrew unit", rule of 2026-11-02). Record the approval (who, when, where) in the log table
+> below **before** any `-Publish`.
+
+## Parent-unit mode
+
+- **There is no Arabic unit in Kata.** Kata binds a learning objective to exactly one unit, so the six
+  Arabic components are created inside the Hebrew unit `methodica-science-mass-gas-01`.
+- `-ParentUnitKey` defaults to `methodica-science-mass-gas-01`.
+- **The parent unit is GET-only:** `*_unit.json` is not sent, and nothing is PATCHed on the unit.
+- `-ParentUnitKey ''` would restore the own-unit upsert. **Do not use it for this unit.**
+- **Component ids** look like `https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/methodica-ar-science-mass-gas-01-0N/`.
+- **`ContentBaseUrl`** is `https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01`.
+  - `hostedContentRef` = `<base>/<component>/index.html`.
+  - **Hosting path confirmed by the unit owner on 2026-11-15.** `hostedContentRef` is effectively one-way.
+- **Title key** is `ar` (`KATA-API.md`, rule of 2026-10-19).
+- **`recommendedAfterFail`:** 03 → 02, as in the Hebrew unit.
+
+## Order
+
+Each step needs Vadim's go:
+
+1. `pwsh -File send-metadata.ps1 -DryRun`. Writes nothing to Kata.
+2. `pwsh -File send-metadata.ps1 -Preflight`. Read-only. The parent unit must exist, and each Arabic component is expected to be absent (404).
+3. **Live create.** The components arrive as `draft`.
+4. Read-back: `pwsh -File retrieve-metadata.ps1 -OutDir <scratch>`. Then a semantic diff against `metadata/` that ignores timestamps, slug vs IRI, a trailing `/` and order. Kata's `correctXapiResponsesPattern` goes into `_test/kata-patterns.json`.
+5. `pwsh -File send-metadata.ps1 -Status`. Read-only; expect 6 × `draft`.
+6. `-Publish`. **Only after MOE's written approval** (see the top of this file).
+
+The API key is read from `docs-and-tools/kata-api-key.txt` or `kata-api-key.txt`. Both are git-ignored and never shipped. The key is never printed.
+
+## Log
+
+| Date | Step | Result |
+|---|---|---|
+| 2026-11-15 | `-DryRun` (`send-metadata-2026-11-15-dryrun.log`) | No network. Parent `methodica-science-mass-gas-01` read-only; 6 components + 32 items would be created under it (created=38), 03 → 02 linked (updated=1), failed=0. Bodies checked in UTF-8: Arabic titles, `languages: ["Arabic"]`, `hostedContentRef` = `…/720/ar/science/mass-gas/01/<component>/index.html`. |
+| 2026-11-15 | `-Preflight` (`preflight-metadata-2026-11-15.log`) | Read-only. Parent unit `methodica-science-mass-gas-01` EXISTS (200); the 6 Arabic components ABSENT (404). Nothing written. Key from `$env:KATA_API_KEY` for the run only (no key file in this repo). |
+| 2026-11-15 | **live create** (`send-metadata-2026-11-15-create.log`) | **6 components + 32 items created as `draft` under the Hebrew unit (HTTP 201 ×38), 03 → 02 linked (HTTP 200), failed=0.** |
+| 2026-11-15 | read-back (`retrieve-metadata-2026-11-15-after-create.log`, to scratch) | Semantic diff vs `metadata/`: the only difference is `learningUnitId` = the parent `methodica-science-mass-gas-01` (expected). Kata's patterns → `_test/kata-patterns.json`; all 32 questions match the Hebrew components in type and pattern count; 4 empty = the ungraded open questions (01-002 q2, 01-006 q1–q3); the 28 graded ones equal what `20-xapi.js` builds (`verify-report.js`). |
+| 2026-11-15 | `-Status` (`publish-metadata-2026-11-15-status.log`) | 6 × `draft`, 0 published. **Not published — waits for MOE's written approval.** |
+| 2026-11-15 | parent unit **PATCH** (Vadim approved) | Hebrew unit `methodica-science-mass-gas-01`, after a GET: full `title` `{he, ar: "حجم الغاز"}`; `targetSectors` + `arab-sector`, `druze-sector`, `bedouin-sector` (MOE checker critical: Arabic components without Arab sectors). HTTP 200; read-back: exactly those 4 paths changed. Checker: critical 0, low 2. See `LIVE-VERIFICATION-2026-11-15.md`. |
