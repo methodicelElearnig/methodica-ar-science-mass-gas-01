@@ -1,0 +1,13 @@
+=== retrieve-metadata ===
+[INFO] Base URL   : https://kata.cet.ac.il
+[INFO] Output dir : C:\Users\Vadim\OneDrive - methodic.co.il\Projects_ACTIVE\MOE\720\2026\methodica-science-mass-gas-01\git-repo\methodica-science-mass-gas-01\metadata-from
+[INFO] Unit key   : methodica-science-mass-gas-01 (-UnitKey)
+[INFO] Auditing against C:\Users\Vadim\OneDrive - methodic.co.il\Projects_ACTIVE\MOE\720\2026\methodica-science-mass-gas-01\git-repo\methodica-science-mass-gas-01\metadata (6 components, 32 items)
+[INFO] WROTE   methodica-science-mass-gas-01_unit.json
+[INFO] WROTE   methodica-science-mass-gas-01-01.json (14 items)
+[INFO] WROTE   methodica-science-mass-gas-01-02.json (5 items)
+[INFO] WROTE   methodica-science-mass-gas-01-03.json (6 items)
+[INFO] WROTE   methodica-science-mass-gas-01-04.json (5 items)
+[INFO] WROTE   methodica-science-mass-gas-01-05.json (1 items)
+[INFO] WROTE   methodica-science-mass-gas-01-06.json (1 items)
+[INFO] Done. unit=1 components=6 items=32 warnings=0

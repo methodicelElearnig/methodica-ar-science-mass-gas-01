@@ -70,3 +70,7 @@
 [data-key="q1"] .scq-img .bubble:nth-child(3) { --tail-x: 140px; }  /* Dor */
 [data-key="q1"] .scq-img .bubble:nth-child(4) { --tail-x: 105px; }  /* Michael */
 [data-key="q1"] .scq-qtext p:first-child { white-space: nowrap; }  /* keep "חמים." on the first line; the <br> sets the break */
+
+/* Moved from this part's engine.css copy (engine drift fix): plain top-tail bubbles on S1 q1. */
+.bubble--tail-top::after, .bubble--tail-top-left::after { bottom: auto; top: -9px; transform: rotate(-135deg); }
+.bubble--tail-top-left::after { right: auto; left: 36px; }

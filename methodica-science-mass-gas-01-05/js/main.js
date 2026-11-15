@@ -19,9 +19,9 @@ window.PART = {
   part: '05',
   media: {
     characters: {
-      default: { 'character-1': 'assets/img/character/character-1-default.gif', 'character-2': 'assets/img/character/character-2-default.png' },
+      default: { 'character-1': '../unit-assets/img/character/character-1-default.gif', 'character-2': '../unit-assets/img/character/character-2-default.png' },
       /* slide 52 — running toward the finish line (green_/purple_running.mp4), looping */
-      'running-finish': { 'character-1': 'assets/img/character/character-1-running.mp4', 'character-2': 'assets/img/character/character-2-running.mp4' }
+      'running-finish': { 'character-1': '../unit-assets/img/character/character-1-running.mp4', 'character-2': '../unit-assets/img/character/character-2-running.mp4' }
     }
   },
   series: {
@@ -141,4 +141,19 @@ window.PART = {
       },
       next: score => score >= 3 ? { complete: true } : { part: '06' } },
   ]
+};
+
+/* ─── 720 platform layer: this part in the catalogue (metadata/methodica-science-mass-gas-01-05.json).
+   Read by ../unit-js/70-engine-bridge.js — every screen key -> its item suffix (null = no item),
+   the engine-graded questions, and the part's success threshold. Ids are never invented: each
+   suffix / qN below is in the metadata file (docs-and-tools/check-labels.js checks the labels). */
+window.PART.xapi = {
+  /* one catalogue item: the scenario and its four sections */
+  items: { intro: null, scenario: '001', a: '001', b: '001', c: '001', d: '001' },
+  questions: {
+    a: { item: '001', q: 'q1' }, b: { item: '001', q: 'q2' },
+    c: { item: '001', q: 'q3' }, d: { item: '001', q: 'q4' }
+  },
+  pass: 0.75,                                               // 3 of 4 — the score the part routes on
+  itemMirrorsPart: '001'
 };

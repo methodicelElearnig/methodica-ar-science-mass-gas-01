@@ -95,6 +95,7 @@ window.P01 = (function () {
       const b = e.target.closest('.path-toggle__opt'); if (!b) return;
       const p = b.dataset.path; if (p === window.lomdaState.learningPath) return;
       api.setLearningPath(p); t.dataset.active = p;
+      if (window.LOMDA_LMS && window.LOMDA_LMS.pathChosen) window.LOMDA_LMS.pathChosen(p);   // switching path is a choice too
       setTimeout(() => api.goTo(api.indexOf(starts[p])), 260);
     });
   }
@@ -883,6 +884,7 @@ window.P01 = (function () {
       dndState.placed[tile.dataset.tile] = tile.dataset.target;
       select(null);
       dndPaint(el, cfg, api); api.saveState();
+      if (dndState.submitted && cfg.onComplete) cfg.onComplete(dndState);   // the board is the answer
       announce(dndState.submitted ? 'جميع الصور في المكان المناسب. يمكن المتابعة.' : 'الصورة في المكان المناسب.');
     }
     el.querySelectorAll('.dnd-tile, .dnd-target').forEach(control => {

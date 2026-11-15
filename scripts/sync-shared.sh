@@ -1,17 +1,17 @@
 #!/bin/sh
-# Copies the shared engine, fonts, UI icons and the canonical motion engine
-# into every part. Source of truth: shared/ (engine) and the installed
-# system-animation skill (motion). Run after editing anything in shared/.
+# Copies the shared engine and the canonical motion engine into every part.
+# Source of truth: shared/ (engine) and the installed system-animation skill
+# (motion). Run after editing anything in shared/.
+# Fonts, UI icons and the character media every part shares are NOT copied:
+# they live once in unit-assets/ and the parts reference ../unit-assets/…
 set -e
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 MOTION="${MOTION_ENGINE:-$HOME/.claude/skills/system-animation/engine}"
 for P in "$ROOT"/methodica-science-mass-gas-01-*/; do
   P="${P%/}"; N="${P##*-}"
-  mkdir -p "$P/css" "$P/js" "$P/assets/fonts" "$P/assets/img"
+  mkdir -p "$P/css" "$P/js"
   cp "$ROOT/shared/engine.css" "$P/css/engine.css"
   cp "$ROOT/shared/engine.js"  "$P/js/engine.js"
-  cp "$ROOT"/shared/fonts/*.ttf "$P/assets/fonts/"
-  cp "$ROOT"/shared/ui/*        "$P/assets/img/"
   if [ -d "$MOTION" ]; then
     cp "$MOTION/motion.css" "$P/css/motion.css"
     cp "$MOTION/motion.js"  "$P/js/motion.js"

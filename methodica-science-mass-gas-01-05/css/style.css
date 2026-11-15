@@ -45,3 +45,7 @@
 .scq-hint-popup--lead .scq-hint-title { padding-right: 0; padding-top: calc(34.3px + 24px); }
 .scq-hint-popup--lead .scq-hint-title::before { top: 0; transform: none; width: 40px; height: 34.3px; }
 .scq-hint-popup--lead .scq-hint-body { padding-right: 0; }
+
+/* Moved from this part's engine.css copy (engine drift fix): scenario block height = media block, so text centers on the images. */
+.ct-wrap { inset: 108px 48px auto 48px; }
+.ct-text { align-self: center; }

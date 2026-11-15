@@ -5,7 +5,9 @@
    Entry (decision B9): from part 02 fail → Basic intro (S0);
                         from part 02 pass → Standard-B intro ('stdb-intro').
    Basic: 4 Q, hint always (slide 35), 2 attempts, "X מתוך 4".
-          Pass ≥3 stated on slide 35, but no fail path exists → no gate (B1).
+          Pass ≥3 stated on slide 35 ("כדי להתקדם"). Until 2026-11-09 no fail path existed (B1);
+          since then below 3/4 the part ends at Q4 (08.11 sheet, fix 5 — the gate pattern of
+          16.09.26): component 'completed' success:false, the harder questions are not shown.
    Standard B: 2 Q, hint after 1 wrong, no threshold → part 04.
    Slide 43 note says "שאלה 4 מתוך 6 תרגול סטנדרטי 1" — it is Std-B Q2 of 2
    (plan §13 C3). Answer keys from the PPTX feedback text (§13 C1).
@@ -16,7 +18,7 @@ window.PART = {
   part: '03',
   media: {
     characters: {
-      default: { 'character-1': 'assets/img/character/character-1-default.gif', 'character-2': 'assets/img/character/character-2-default.png' },
+      default: { 'character-1': '../unit-assets/img/character/character-1-default.gif', 'character-2': '../unit-assets/img/character/character-2-default.png' },
       /* slide 35 — lifting small weights (from green_lift.mp4 / purple_lift.mp4, cropped to the feet, audio removed) */
       weights: { 'character-1': 'assets/img/character/character-1-weights.mp4', 'character-2': 'assets/img/character/character-2-weights.mp4' },
       /* slide 40 — holding the air bag, bike tire and beach ball (from green_/purple_holding3items.mp4, cropped, audio removed) */
@@ -111,7 +113,11 @@ window.PART = {
       feedback: {
         correct: { title: ['صحيح جدًا‎!'], body: ['تعلمنا أن الغازات تتمدد في درجات الحرارة المرتفعة،<br>لذلك سينتفخ الكيس قليلًا إذا بقي في الخارج في يوم حار.'] },
         final:   { title: WRONG_FINAL,   body: ['تعلمنا أن الغازات تتمدد في درجات الحرارة المرتفعة،<br>لذلك سينتفخ الكيس قليلًا إذا بقي في الخارج في يوم حار.'] }
-      } },
+      },
+      /* the gate (fix 5): below 3/4 the part's last click is here — {finish} makes the bridge's
+         onPartEnd send the component 'completed' and disable this button; no new text is shown.
+         The count is the bridge's (XAPI_Q_RESULTS, restored on resume), the one that feeds success. */
+      next: () => (typeof xapiGateStopped === 'function' && xapiGateStopped()) ? { finish: true } : { screen: 'basic-end' } },
 
     /* S5 — slide 40 · מסך ללא תבנית → TransitionScreen bubble variant.
        GIF: holding the air bag, bike tire and beach ball. */
@@ -166,4 +172,21 @@ window.PART = {
       },
       next: { part: '04' } }
   ]
+};
+
+/* ─── 720 platform layer: this part in the catalogue (metadata/methodica-science-mass-gas-01-03.json).
+   Read by ../unit-js/70-engine-bridge.js — every screen key -> its item suffix (null = no item),
+   the engine-graded questions, and the part's success threshold. Ids are never invented: each
+   suffix / qN below is in the metadata file (docs-and-tools/check-labels.js checks the labels). */
+window.PART.xapi = {
+  items: { intro: null, q1: '001', q2: '002', q3: '003', q4: '004', 'basic-end': null, 'stdb-intro': null, q5: '005', q6: '006' },
+  questions: {
+    q1: { item: '001', q: 'q1' }, q2: { item: '002', q: 'q1' }, q3: { item: '003', q: 'q1' },
+    q4: { item: '004', q: 'q1' }, q5: { item: '005', q: 'q1' }, q6: { item: '006', q: 'q1' }
+  },
+  /* 2026-11-09 (08.11 sheet fixes 1, 2, 4): the intro promises 3 of the 4 basic questions; the part
+     result is that count only (scaled = correct / 4). Q5–Q6, "ברמת קושי גבוהה יותר", keep their
+     'answered' and stay out of it. Until then: correct / all 6 at 0.6. pass = K / N. */
+  threshold: { K: 3, questions: [['001/q1'], ['002/q1'], ['003/q1'], ['004/q1']] },
+  pass: 0.75
 };

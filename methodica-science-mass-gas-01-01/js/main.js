@@ -10,7 +10,7 @@
    Custom components: js/widgets.js (window.P01).
    ═══════════════════════════════════════════════════════════ */
 const WRONG_FINAL = ['الإجابة غير صحيحة.', 'الإجابة الصحيحة معروضة.'];
-const CH = (pose) => ({ 'character-1': 'assets/img/character/character-1-default.gif', 'character-2': 'assets/img/character/character-2-default.png' });
+const CH = (pose) => ({ 'character-1': '../unit-assets/img/character/character-1-default.gif', 'character-2': '../unit-assets/img/character/character-2-default.png' });
 /* Character-select cards (slide 3): muted loop that plays like a GIF only
    while the card is hovered / keyboard-focused; rests on its first frame. */
 const SELECT_MEDIA = { 'character-1': 'assets/img/character/character-1-select.mp4', 'character-2': 'assets/img/character/character-2-select.mp4' };
@@ -67,7 +67,7 @@ window.PART = {
     'point-head': { 'character-1': 'assets/img/character/character-1-point-head.mp4', 'character-2': 'assets/img/character/character-2-point-head.mp4' },   /* slide 9 */
     'popcorn': { 'character-1': 'assets/img/character/character-1-popcorn.mp4', 'character-2': 'assets/img/character/character-2-popcorn.mp4' },   /* slide 10 — לצפות בסרטון */
     'lab-coat-goggles': { 'character-1': 'assets/img/character/character-1-lab-coat-goggles.mp4', 'character-2': 'assets/img/character/character-2-lab-coat-goggles.mp4' },   /* slide 10 — לנסות בעצמי; slide 15 obs-intro */
-    'stretch-side': { 'character-1': 'assets/img/character/character-1-stretch-side.mp4', 'character-2': 'assets/img/character/character-2-stretch-side.mp4' }   /* slide 24 */
+    'stretch-side': { 'character-1': '../unit-assets/img/character/character-1-stretch-side.mp4', 'character-2': '../unit-assets/img/character/character-2-stretch-side.mp4' }   /* slide 24 */
   } },
   series: {},
   hooks: {
@@ -176,7 +176,11 @@ window.PART = {
           v => { window.lomdaState.pathPicked = true; api.setLearningPath(v); });
       },
       canAdvance: () => !!window.lomdaState.pathPicked,
-      onNext(api) { api.goTo(api.indexOf(PATH_START[window.lomdaState.learningPath])); return false; }
+      onNext(api) {
+        /* the confirmed choice reports 'selected' / learning-type (../unit-js/70-engine-bridge.js), the card click does not */
+        if (window.LOMDA_LMS && window.LOMDA_LMS.pathChosen) window.LOMDA_LMS.pathChosen(window.lomdaState.learningPath);
+        api.goTo(api.indexOf(PATH_START[window.lomdaState.learningPath])); return false;
+      }
     },
 
     /* ─── Video path ─── */
@@ -230,13 +234,20 @@ window.PART = {
           if (now > VIDEO_QS[n].t + 1) { player.seekTo(VIDEO_QS[n].t, true); player.pauseVideo(); }   // seekTo from ENDED can auto-play
           ask(n);
         };
-        const make = () => player = new YT.Player('vd-yt', {
-          videoId: VIDEO_YT,
-          /* fs: 0 — the question popup can't show over YouTube's own fullscreen */
-          playerVars: Object.assign({ rel: 0, playsinline: 1, hl: 'he', fs: 0 }, /^https?:/.test(location.protocol) ? { origin: location.origin } : {}),
+        /* D-1 (KNOWN-ISSUE-youtube-forigin-token-leak): the iframe is built here, never by
+           YT.Player — a player built on a placeholder appends `forigin` = location.href, which
+           would ship the launch URL (?slxapi with its Bearer token) to YouTube. The player is then
+           attached to the existing iframe, with events only (no videoId / playerVars).
+           fs=0 — the question popup can't show over YouTube's own fullscreen. */
+        const host = /^https?:/.test(location.protocol);
+        el.querySelector('#vd-yt').innerHTML = '<iframe id="vd-yt-frame" title="' + el.querySelector('.select-title').textContent + '" src="https://www.youtube-nocookie.com/embed/' + VIDEO_YT +
+          '?enablejsapi=1&rel=0&playsinline=1&hl=he&fs=0&modestbranding=1' + (host ? '&origin=' + encodeURIComponent(location.origin) : '') +
+          '" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+        const make = () => player = new YT.Player(el.querySelector('#vd-yt-frame'), {
           events: {
             onReady: () => setInterval(check, 200),
             onStateChange: e => {
+              if (window.LOMDA_LMS) window.LOMDA_LMS.youtubeState(e, 'video');   // played / paused on item 006
               if (e.data !== YT.PlayerState.ENDED) return;
               /* scrubbed to the end: unanswered stops still have to be asked */
               if (qs.done.length < VIDEO_QS.length) check(); else watched();
@@ -329,7 +340,15 @@ window.PART = {
           { id: 't1', text: ['الهواء غاز يشغل حيزًا، وله حجم<br>مثل جميع الغازات.', 'هو يمنع مادة أخرى من الدخول إلى الوعاء طالما<br>ليس لديها طريقة للخروج.'] },
           { id: 't2', text: ['على عكس المواد الصلبة والسوائل، ليس للغازات شكل أو حجم ثابت؛ فهي تتمدد ويمكن ضغطها،', 'وتأخذ دائمًا حجم الوعاء<br>الذي تتواجد فيه.'] },
           { id: 't3', text: ['الحرارة المحيطة بالغازات تؤثر<br>على حجمها؛', 'يؤدي التسخين إلى تمدد الغازات، بينما يؤدي التبريد إلى انكماشها (أو تقليص حجمها).'] }
-        ]
+        ],
+        /* 720 platform layer: the completed board is item 011's answer. Wrong drops snap back,
+           so it is always right; reported once, as the last answer (matching: tile alt = the
+           metadata source, box = the metadata target at the same position). */
+        onComplete(st) {
+          const c = window.PART.hooks['summary-dnd'].cfg;
+          if (window.LOMDA_LMS) window.LOMDA_LMS.answered('summary-dnd', true, true,
+            { pairs: c.tiles.map(t => ({ source: t.alt, target: c.targets.findIndex(g => g.id === st.placed[t.id]) })) });
+        }
       },
       render(cfg) { return P01.dnd(this.cfg); },
       enter(el, api) { P01.dndWire(el, this.cfg, api); },
@@ -462,4 +481,40 @@ window.PART = {
       extraHtml: '<div class="def-char"><div class="bubble">حتى لو أخطأت، لا داعي للقلق، التعلّم الجيد يتضمّن أخطاء!</div><div class="char-slot" data-pose="shrug-smile"></div></div>',
       next: { part: '02' } }
   ]
+};
+
+/* ─── 720 platform layer: this part in the catalogue (metadata/methodica-science-mass-gas-01-01.json).
+   Read by ../unit-js/70-engine-bridge.js — every screen key -> its item suffix (null = no item),
+   the engine-graded questions, and the part's success threshold. Ids are never invented: each
+   suffix / qN below is in the metadata file (docs-and-tools/check-labels.js checks the labels). */
+window.PART.xapi = {
+  items: {
+    'char-select': '001',
+    'hook-balloon': '002', hypothesis: '002',
+    bbq: '003',
+    twins: '004', 'lets-start': '004',
+    'path-select': '005',                                   // the learning-path choice (QA 2026-10-26 split)
+    video: '006',                                           // video path
+    'obs-intro': '007', obs1: '007', 'obs1-sum': '007',     // hands-on path: the three simulations
+    obs2: '008', 'obs2-sum': '008',
+    obs3: '009', 'obs3-sum': '009',
+    flipcards: '010',                                       // shared by both paths
+    'summary-dnd': '011',
+    dropdown: '012',
+    'warmup-intro': null,
+    tf: '013',
+    'def-scq': '014'
+  },
+  /* 002/q2 (the hypothesis) and 006/q1-q3 (the video stops) are ungraded open questions
+     ("other", no correct answer): no 'answered' (20-xapi.js, D-9 exception). */
+  questions: {
+    'hook-balloon': { item: '002', q: 'q1' },
+    'summary-dnd':  { item: '011', q: 'q1' },               // reported by the DnD widget (onComplete)
+    dropdown:       { item: '012', q: 'q1' },
+    tf:             { item: '013', q: 'q1' },
+    'def-scq':      { item: '014', q: 'q1' }
+  },
+  pass: 0.6,
+  /* the path-select choice ('selected', learning-type): each path's first item and its catalogue mediaFormat */
+  paths: { video: { item: '006', mediaFormat: 'video' }, 'hands-on': { item: '007', mediaFormat: 'interactive-content' } }
 };

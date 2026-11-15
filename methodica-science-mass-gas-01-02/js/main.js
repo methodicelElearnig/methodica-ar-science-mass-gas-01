@@ -17,9 +17,9 @@ window.PART = {
     characters: {
       /* Placeholders from the PPTX until the character repository poses
          arrive. Pose ids: plan §7. */
-      default: { 'character-1': 'assets/img/character/character-1-default.gif', 'character-2': 'assets/img/character/character-2-default.png' },
+      default: { 'character-1': '../unit-assets/img/character/character-1-default.gif', 'character-2': '../unit-assets/img/character/character-2-default.png' },
       /* slide 28 — stretching (same clips as part 01 slide 24) */
-      'interlock-stretch': { 'character-1': 'assets/img/character/character-1-stretch-side.mp4', 'character-2': 'assets/img/character/character-2-stretch-side.mp4' }
+      'interlock-stretch': { 'character-1': '../unit-assets/img/character/character-1-stretch-side.mp4', 'character-2': '../unit-assets/img/character/character-2-stretch-side.mp4' }
     }
   },
   series: {
@@ -140,4 +140,17 @@ window.PART = {
       /* B9: ≥4/5 → Standard B intro in part 03 (skip Basic); else Basic. */
       next: score => score >= 4 ? { part: '03', screen: 'stdb-intro' } : { part: '03' } }
   ]
+};
+
+/* ─── 720 platform layer: this part in the catalogue (metadata/methodica-science-mass-gas-01-02.json).
+   Read by ../unit-js/70-engine-bridge.js — every screen key -> its item suffix (null = no item),
+   the engine-graded questions, and the part's success threshold. Ids are never invented: each
+   suffix / qN below is in the metadata file (docs-and-tools/check-labels.js checks the labels). */
+window.PART.xapi = {
+  items: { intro: null, q1: '001', q2: '002', q3: '003', q4: '004', q5: '005' },
+  questions: {
+    q1: { item: '001', q: 'q1' }, q2: { item: '002', q: 'q1' }, q3: { item: '003', q: 'q1' },
+    q4: { item: '004', q: 'q1' }, q5: { item: '005', q: 'q1' }
+  },
+  pass: 0.8                                                 // 4 of 5, as the intro screen says
 };
