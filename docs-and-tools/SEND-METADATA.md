@@ -40,4 +40,4 @@ The API key is read from `docs-and-tools/kata-api-key.txt` or `kata-api-key.txt`
 | Date | Step | Result |
 |---|---|---|
 | 2026-11-15 | `-DryRun` (`send-metadata-2026-11-15-dryrun.log`) | No network. Parent `methodica-science-mass-gas-01` read-only; 6 components + 32 items would be created under it (created=38), 03 → 02 linked (updated=1), failed=0. Bodies checked in UTF-8: Arabic titles, `languages: ["Arabic"]`, `hostedContentRef` = `…/720/ar/science/mass-gas/01/<component>/index.html`. |
-| — | `-Preflight` | Not run: no Kata API key in this repo (`docs-and-tools/kata-api-key.txt`, git-ignored). |
+| 2026-11-15 | `-Preflight` (`preflight-metadata-2026-11-15.log`) | Read-only. Parent unit `methodica-science-mass-gas-01` EXISTS (200); the 6 Arabic components ABSENT (404). Nothing written. Key from `$env:KATA_API_KEY` for the run only (no key file in this repo). |
