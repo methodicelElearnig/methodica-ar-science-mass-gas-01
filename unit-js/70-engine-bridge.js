@@ -1,6 +1,6 @@
 'use strict';
 /* ═══════════════════ Engine bridge — the parts' side of the 720 platform layer ═══════════════════
-   methodica-science-mass-gas-01 (2026-11-01). The other units call the shared layer (20-xapi,
+   methodica-ar-science-mass-gas-01 (2026-11-01). The other units call the shared layer (20-xapi,
    40-resume, 50-loader) from per-screen script.js code and declare its per-part seams at the
    bottom of each script.js. This unit's six parts are driven by one data engine (js/engine.js,
    synced from shared/engine.js), so the seams and the call sites live here, once, and are derived
@@ -39,7 +39,7 @@ var _BP = window.PART;
 var _BX = _BP.xapi || {};
 var _BE = window.LOMDA;
 
-var XAPI_COMP_SLUG     = 'methodica-science-mass-gas-01-' + _BP.part;
+var XAPI_COMP_SLUG     = 'methodica-ar-science-mass-gas-01-' + _BP.part;
 var XAPI_COMP_ID       = XAPI_ID_PREFIX + XAPI_COMP_SLUG + '/';
 var XAPI_METADATA_FILE = '../metadata/' + XAPI_COMP_SLUG + '.json';
 var XAPI_LEARNING_PATHS = _BX.paths || {};   /* read by 20-xapi.js xapiSelectedLearningType */

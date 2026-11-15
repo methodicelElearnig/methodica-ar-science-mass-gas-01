@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حجم الغاز · الجزء 02</title>
+  <!-- The shared xAPI library is fetched by unit-js/50-loader.js at the END of the body, i.e. after
+       the parser has already queued every image below; measured live (mass-measure-01), its request
+       did not go out until the last image had finished, which put the resume restore 20-45 s behind
+       a slow line (2026-11-03). Preloading it from the head puts it FIRST in the queue. The href must
+       equal what 50-loader.js builds (no ?v=, no crossorigin) or the browser fetches it twice;
+       the library letter here changes together with LIB720 there (the harness asserts it). -->
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapiwrapper.min.js">
+  <link rel="preload" as="script" fetchpriority="high" href="https://lomdot.education.gov.il/metodica/720active/common/xapi-720-l.js">
+  <link rel="preconnect" href="https://kata.cet.ac.il">
+  <link rel="stylesheet" href="css/engine.css?v=20261115">
+  <link rel="stylesheet" href="css/motion.css?v=20261115">
+  <link rel="stylesheet" href="css/style.css?v=20261115">
+  <link rel="stylesheet" href="../unit-css/25-report.css?v=20261115">
+</head>
+<body data-subject-theme="science">
+<!-- ═══ Boot cover (ADDING-REPORTING-AND-RESUME.md §8.11) ═══
+     Hides the entry screen while a saved position is read and painted (resume), so the learner
+     never sees it flash before the restored one. A SIBLING of #app (scaleApp transforms #app).
+     ../unit-js/50-loader.js removes it on every exit path (dropBootCover); this inline net removes
+     it after 800 ms regardless — or, while a restore is in flight (window.__resumeInFlight), waits
+     for it up to a hard 6 s. Copied from methodica-science-mass-liquid-02. -->
+<div id="boot-cover" style="position:fixed;inset:0;z-index:9999;background:#fff"></div>
+<script>
+(function () {
+  /* A Kata launch (registration in the query) may have a document to restore: raise the
+     flag HERE, before any script is fetched. bootXAPI raises it too, but it runs from the
+     last script tag, and on a cold cache those scripts arrive after the cover's ceiling — so
+     the cover used to drop before the flag existed, exposing screen 0 for the whole wait
+     (2026-11-03). Without a registration (local, dev) the behaviour is unchanged. */
+  if (/[?&]registration=/.test(location.search)) window.__resumeInFlight = true;
+  var t0 = Date.now();
+  function tick() {
+    var c = document.getElementById('boot-cover');
+    if (!c || !c.parentNode) return;
+    if (window.__resumeInFlight && Date.now() - t0 < 6000) { setTimeout(tick, 100); return; }
+    c.parentNode.removeChild(c);
+  }
+  setTimeout(tick, 800);
+})();
+</script>
+<div id="app">
+
+  <!-- GLOBAL — Report / Issue button (Figma 207:3590). Opens the issue-report dialog (../unit-js/25-report.js). -->
+  <button class="flag-btn" id="flag-btn" type="button" aria-label="هل وجدتم مشكلة؟">
+    <span class="flag-btn-icon"></span>
+    <span class="flag-btn-label">هل وجدتم مشكلة؟</span>
+  </button>
+
+  <!-- Screens are rendered here by js/engine.js from the PART config in js/main.js. -->
+  <div id="screens-anchor" hidden></div>
+
+  <!-- GLOBAL — Image zoom modal (shared, outside all .screen sections) -->
+  <div class="img-zoom-modal hidden" id="img-zoom-modal" aria-hidden="true">
+    <div class="img-zoom-modal__backdrop" data-zoom-close="true"></div>
+    <div class="img-zoom-modal__panel" role="dialog" aria-modal="true" aria-label="عرض الصورة المكبَّرة">
+      <button class="img-zoom-modal__close" type="button" aria-label="إغلاق الصورة" data-zoom-close="true"><svg class="img-zoom-modal__close-icon" aria-hidden="true" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.192 1.192L13.808 13.808M13.808 1.192L1.192 13.808" stroke="currentColor" stroke-width="2.383" stroke-linecap="round"/></svg></button>
+      <p class="img-zoom-modal__caption" id="img-zoom-modal-caption"></p>
+      <div class="img-zoom-modal__stage" id="img-zoom-modal-stage"></div>
+    </div>
+  </div>
+
+
+  <!-- ═══ "מצאתם בעיה?" — issue-report dialogs (ADDING-REPORTING-AND-RESUME.md §7) ═══
+       Copied verbatim from methodica-science-mass-liquid-02-02 (← body-matter-01). Last children
+       of #app, outside every .screen; all three carry `hidden`. Behaviour: ../unit-js/25-report.js
+       (wires .flag-btn by delegation), style: ../unit-css/25-report.css. -->
+  <div id="report-modal"
+       class="report-modal-overlay"
+       hidden
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="report-modal-title">
+    <div class="report-modal-box">
+      <button class="report-close-btn" type="button" onclick="tryCloseReportModal()" aria-label="סגירה">&#10005;</button>
+      <h2 class="report-modal-title" id="report-modal-title">דיווח על בעיה</h2>
+      <p class="report-modal-body">משהו לא ברור או לא עובד כמו שצריך?<br>ספרו לנו מה קרה כדי שנטפל.</p>
+
+      <div class="report-field">
+        <label class="report-label" for="report-type"><span class="required-star">*</span> מה סוג הבעיה</label>
+        <div class="report-custom-select" id="report-type-wrapper">
+          <button class="report-select-btn is-placeholder" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span class="report-select-value">בחרו סוג בעיה</span>
+          </button>
+          <ul class="report-select-list" role="listbox" hidden>
+            <li class="report-select-option" data-value="technical" role="option">תקלה טכנית או שמשהו לא עובד</li>
+            <li class="report-select-option" data-value="unclear" role="option">משהו לא ברור לי</li>
+            <li class="report-select-option" data-value="other" role="option">אחר</li>
+          </ul>
+          <input type="hidden" id="report-type" value="">
+        </div>
+        <span class="report-field-error" id="report-type-error" hidden>בחרו את סוג הבעיה</span>
+      </div>
+
+      <div class="report-field">
+        <label class="report-label" for="report-text"><span class="required-star">*</span> מה קרה?</label>
+        <textarea class="report-textarea" id="report-text" maxlength="250" rows="4" placeholder="פרטו מה קרה כדי שנוכל להבין את הבעיה" onblur="reportTextBlur()"></textarea>
+        <span class="report-field-error" id="report-text-error" hidden>כתבו מה קרה</span>
+        <span class="report-char-count" id="report-char-count">0 / 250</span>
+      </div>
+
+      <div class="report-actions">
+        <button class="report-cancel-btn" type="button" onclick="tryCloseReportModal()">ביטול</button>
+        <button class="report-submit-btn" type="button" onclick="submitReport()" disabled>שליחת דיווח</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- מצב "הדיווח נשלח". דיאלוג נפרד מדיאלוג הנטישה שמתחתיו — אין לאחד ביניהם. -->
+  <div id="report-thanks-modal"
+       class="report-modal-overlay"
+       hidden
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="report-thanks-title">
+    <div class="report-modal-box report-confirm-box">
+      <h2 class="report-modal-title" id="report-thanks-title">הדיווח נשלח, תודה!</h2>
+      <p class="report-modal-body">קיבלנו את הדיווח שלכם ונטפל בו בהקדם.</p>
+      <div class="report-actions">
+        <button class="report-submit-btn" type="button" onclick="closeReportThanks()">סגירה</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- אישור נטישה: נפתח רק כשיש קלט שלא נשלח. -->
+  <div id="report-confirm-modal"
+       class="report-modal-overlay"
+       hidden
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="report-confirm-title">
+    <div class="report-modal-box report-confirm-box">
+      <h2 class="report-modal-title" id="report-confirm-title">בטוח לסגור את החלון?</h2>
+      <p class="report-modal-body">בלחיצה על סגירה לא יישלח דיווח</p>
+      <div class="report-actions">
+        <button class="report-cancel-btn" type="button" onclick="forceCloseReportModal()">סגור חלון</button>
+        <button class="report-submit-btn" type="button" onclick="backToReportForm()">אני רוצה לדווח</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#app -->
+
+<!-- 720 platform layer (reporting / resume): the shared declarations first, then the part
+     (motion, widgets, main = window.PART, the engine), the engine bridge, 90-boot last.
+     Same ?v= in every part (guide §3.4); 90-boot.js is a separate tag on purpose (§3.2). -->
+<script src="../unit-js/10-identity.js?v=20261115"></script>
+<script src="../unit-js/20-xapi.js?v=20261115"></script>
+<script src="../unit-js/25-report.js?v=20261115"></script>
+<script src="../unit-js/40-resume.js?v=20261115"></script>
+<script src="../unit-js/50-loader.js?v=20261115"></script>
+<script src="js/motion.js?v=20261115"></script>
+<script src="js/main.js?v=20261115"></script>
+<script src="js/engine.js?v=20261115"></script>
+<script src="../unit-js/70-engine-bridge.js?v=20261115"></script>
+<script src="../unit-js/90-boot.js?v=20261115"></script>
+</body>
+</html>

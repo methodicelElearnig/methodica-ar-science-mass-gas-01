@@ -4,7 +4,7 @@
    ול-initResumeLeaveHandlers(), ו-50-loader.js מריץ את השחזור עצמו.
    העיצוב המלא: RESUME.md בלומדת methodica-math-scale-01 (המקור לדפוס הזה).
 
-   methodica-science-mass-gas-01 (2026-11-01): copied from methodica-science-mass-liquid-02
+   methodica-ar-science-mass-gas-01 (2026-11-01): copied from methodica-science-mass-liquid-02
    (2026-10-25 state, itself from body-matter-01 ← mass-weight-01 ← mass-measure-03) with this
    unit's UI_CHARACTER_KEY, RESULT_KEYS (none) and NAV_EDGE_KEY. The per-part globals this file
    reads at call time — goTo, currentScreen, TOTAL_SCREENS and the four hooks — come from
@@ -149,10 +149,10 @@ function emptyUnitState() {
 /* Namespaced per unit (QA D-6): the origin-wide 'lomda_selectedCharacter' was shared by several
    units with incompatible values, and adoptUnitCharacter copied the foreign value into each
    component's Kata document. */
-var UI_CHARACTER_KEY = 'methodica_science_mass_gas_01_selectedCharacter';
+var UI_CHARACTER_KEY = 'methodica_ar_science_mass_gas_01_selectedCharacter';
 /* The engine (js/engine.js getCharacter/setCharacter) reads and writes the character through
    getUnitCharacter/setUnitCharacter when this file is loaded; its own namespaced JSON key
-   ('methodica-science-mass-gas-01:selectedCharacter') stays the fallback for a page without the
+   ('methodica-ar-science-mass-gas-01:selectedCharacter') stays the fallback for a page without the
    layer. Both keys are this unit's own (D-6). */
 /* The only values this unit's part 01 offers (#s0 .option-card[data-value]). Anything else found
    in the cache (another unit's leftover, a hand-edited key) is ignored rather than adopted
@@ -519,7 +519,7 @@ function sendCompletedOnce(ledger, key, objectType, result, opts) {
    מניסיון קודם עלולה לשלוח לומד למסלול שהוא לא עבר בפעם הזאת. */
 /* ⚠️ נושא את slug היחידה במכוון. שתי יחידות שחולקות את המפתח הזה חולקות יומן,
    וכל אחת משתיקה בשקט את הדיווחים של השנייה. */
-var NAV_EDGE_KEY = 'lomda_nav_edges::methodica-science-mass-gas-01';
+var NAV_EDGE_KEY = 'lomda_nav_edges::methodica-ar-science-mass-gas-01';
 
 function _readEdges() {
   try {

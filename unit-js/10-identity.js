@@ -1,6 +1,6 @@
 'use strict';
 /* ═══════════════════ xAPI (720) — identity ═══════════════════
-   Shared by the six parts of methodica-science-mass-gas-01. Loaded first.
+   Shared by the six parts of methodica-ar-science-mass-gas-01. Loaded first.
    Source: methodica-science-mass-liquid-02/unit-js/10-identity.js (2026-10-25 state, itself from
    body-matter-01 ← mass-weight-01 ← mass-measure-03), values replaced for this unit on 2026-11-01.
    Procedure: 2026/Documentation/reporting-and-resume/ADDING-REPORTING-AND-RESUME.md.
@@ -13,16 +13,21 @@
 
    Lowercase everywhere (ids, folder names, storage keys): Kata derives a uniqueKey from the last
    id segment, and currentPartSlug() derives the state key from location.pathname — a capital
-   letter would split one learner's progress across two documents. */
-var XAPI_ID_PREFIX = 'https://lomdot.education.gov.il/metodica/720active/science/mass-gas/01/';
+   letter would split one learner's progress across two documents.
 
-/* The unit id — a bare SLUG, not an IRI, equal to metadata/methodica-science-mass-gas-01_unit.json
+   Arabic identity (2026-11-15): this is the Arabic twin of methodica-science-mass-gas-01, ported
+   from its 4aaffe3 state. Folders, ids, unit id and storage keys carry "ar" (prefix /720/ar/, as
+   methodica-ar-science-mass-liquid-02), so Hebrew and Arabic never share an id or a stored state.
+   In Kata the Arabic components live inside the Hebrew unit (KATA-API.md, parent-unit mode). */
+var XAPI_ID_PREFIX = 'https://lomdot.education.gov.il/metodica/720/ar/science/mass-gas/01/';
+
+/* The unit id — a bare SLUG, not an IRI, equal to metadata/methodica-ar-science-mass-gas-01_unit.json
    `id` and to `learningUnitId` in every component JSON. MOE v2.5 §2.7 dropped the IRI requirement
    for the content unit only; components and items remain IRIs (hence XAPI_ID_PREFIX above).
    ⚠️ Never replace it with the prefix alone: Kata would take "01" as the uniqueKey and collide with
    every unit 01 of every subject. The issue-report form also posts shortId(learningUnitId) as the
    unit column of the sheet all 720 units share. */
-window.XAPI_UNIT_ID = 'methodica-science-mass-gas-01';
+window.XAPI_UNIT_ID = 'methodica-ar-science-mass-gas-01';
 
 /* The last segment of a canonical id — the short slug the issue-report form records. */
 function shortId(u) { return String(u || '').replace(/\/+$/, '').split('/').pop(); }

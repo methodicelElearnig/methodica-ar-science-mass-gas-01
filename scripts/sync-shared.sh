@@ -7,7 +7,7 @@
 set -e
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 MOTION="${MOTION_ENGINE:-$HOME/.claude/skills/system-animation/engine}"
-for P in "$ROOT"/methodica-science-mass-gas-01-*/; do
+for P in "$ROOT"/methodica-ar-science-mass-gas-01-*/; do
   P="${P%/}"; N="${P##*-}"
   mkdir -p "$P/css" "$P/js"
   cp "$ROOT/shared/engine.css" "$P/css/engine.css"
@@ -18,11 +18,11 @@ for P in "$ROOT"/methodica-science-mass-gas-01-*/; do
   else
     echo "WARN: motion engine not found at $MOTION" >&2
   fi
-  sed "s|<title>.*</title>|<title>DEV — נפח של גז · חלק $N</title>|" "$ROOT/shared/index_dev.template.html" > "$P/index_dev.html"
+  sed "s|<title>.*</title>|<title>DEV — حجم الغاز · الجزء $N</title>|" "$ROOT/shared/index_dev.template.html" > "$P/index_dev.html"
   echo "synced part $N"
 done
 # Drift check: every part's copy must match shared/
-for P in "$ROOT"/methodica-science-mass-gas-01-*/; do
+for P in "$ROOT"/methodica-ar-science-mass-gas-01-*/; do
   cmp -s "$ROOT/shared/engine.js" "$P/js/engine.js" && cmp -s "$ROOT/shared/engine.css" "$P/css/engine.css" || { echo "DRIFT in $P" >&2; exit 1; }
 done
 echo "OK — no drift"

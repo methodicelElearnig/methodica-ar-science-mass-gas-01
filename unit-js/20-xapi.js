@@ -3,7 +3,7 @@
    משותף לששת הסינים. Definition-only: אין כאן שום side effect ברמת top-level,
    והאתחול מונע מבלוק ה"אתחול" שבתחתית כל script.js (שקורא ל-bootXAPI() אחרון).
 
-   methodica-science-mass-gas-01 (2026-11-01): copied, unchanged except this note and one example slug, from
+   methodica-ar-science-mass-gas-01 (2026-11-01): copied, unchanged except this note and one example slug, from
    methodica-science-mass-liquid-02/unit-js/20-xapi.js (2026-10-25 state — the MOE 2026-10-19
    result.response layer with the 10-25 matching fix). Its history, below, is kept as it was.
    In this unit the per-part seams (SCREEN_TO_SUBCONTENT, XAPI_COMP_*, XAPI_EVAL_ITEMS,
@@ -26,7 +26,7 @@
    התפרים הפר-סיניים, כולם נקראים בזמן CALL ולא בזמן טעינה (וזו הסיבה
    ש-script.js יכול להיטען אחרי הקבצים המשותפים):
      SCREEN_TO_SUBCONTENT   מסך -> [סיומת פריט, עמוד-בפריט]; null = אין פריט בקטלוג
-     XAPI_COMP_SLUG         למשל 'methodica-science-mass-gas-01-02'
+     XAPI_COMP_SLUG         למשל 'methodica-ar-science-mass-gas-01-02'
      XAPI_COMP_ID           XAPI_ID_PREFIX + XAPI_COMP_SLUG + '/'
      XAPI_EVAL_ITEMS        פריטים שנושאים שאלה מדורגת בקוד (לא רק במטא-דאטה)
      XAPI_ITEM_RESULT       אופציונלי; סיומת פריט -> פונקציה שמחזירה result מפורש

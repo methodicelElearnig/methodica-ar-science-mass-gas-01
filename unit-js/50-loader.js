@@ -15,7 +15,7 @@
    hop הוחזר ב-2026-08-17 יחד עם unit-js/40-resume.js, והוסר ב-2026-09-16.
    methodica-science-mass-liquid-02 (2026-10-22): copied from body-matter-01 unchanged except
    settleMetadata (volume-solid-01), which waits for window.METADATA when it is still a promise.
-   methodica-science-mass-gas-01 (2026-11-01): copied unchanged from mass-liquid-02. The globals it
+   methodica-ar-science-mass-gas-01 (2026-11-01): copied unchanged from mass-liquid-02. The globals it
    reads at call time (currentScreen, resetScreenState, XAPI_METADATA_FILE, XAPI_COMP_ID) come from
    unit-js/70-engine-bridge.js. */
 

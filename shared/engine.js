@@ -1,6 +1,6 @@
 'use strict';
 /* ═══════════════════════════════════════════════════════════
-   shared/engine.js — methodica-science-mass-gas-01 (Target 9, נפח של גז)
+   shared/engine.js — methodica-ar-science-mass-gas-01 (Target 9, נפח של גז)
    SOURCE OF TRUTH for every part's js/engine.js — edit here, then run
    scripts/sync-shared.sh. Never edit a part's copy directly.
 
@@ -24,7 +24,7 @@
    for decorative video (no seek-to-0).
    ═══════════════════════════════════════════════════════════ */
 (function () {
-  const LOMDA_ID = 'methodica-science-mass-gas-01';
+  const LOMDA_ID = 'methodica-ar-science-mass-gas-01';
   const NS = LOMDA_ID + ':';
   const PART = window.PART;
   const THIS_PART = LOMDA_ID + '-' + PART.part;

@@ -34,7 +34,7 @@
    האחרות. bootXAPI() עוטף כבר את עצמו פנימה.
 
    אין צורך ב-DOMContentLoaded: התג הזה יושב מיד לפני </body>, ולכן ה-DOM שלם. */
-/* methodica-science-mass-gas-01: the engine's own Back on a part's entry screen goes to the
+/* methodica-ar-science-mass-gas-01: the engine's own Back on a part's entry screen goes to the
    previous part (goToPrevPart, through the session nav stack). js/engine.js asks the bridge
    (LOMDA_LMS.partNavAllowed() = DEV_NAV) before showing that button and again before navigating,
    so there is no fixed #s0-back to hide here; kept as a named step so the boot order matches the
