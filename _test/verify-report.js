@@ -219,6 +219,41 @@ ok(/youtube-nocookie\.com\/embed\//.test(rd(`${SLUG}-01/js/main.js`)), '01: YouT
   ok(heIds.length === 0, `identity: no Hebrew-unit slug or prefix left in code (outside comments) — ${heIds.join(', ')}`);
 }
 
+/* Kata patterns (2026-11-15, from the read-back after the draft create — _test/kata-patterns.json):
+   for every question Kata grades, the response 20-xapi.js builds from the metadata's correctAnswers
+   is one of Kata's correctXapiResponsesPattern strings (MOE runbook §3). Questions with an empty
+   pattern (the ungraded open questions) are skipped. */
+{
+  const PATS = JSON.parse(rd('_test/kata-patterns.json'));
+  let checked = 0;
+  for (const p of PARTS) {
+    const meta = JSON.parse(rd(`metadata/${SLUG}-${p}.json`));
+    const ctx = { window: { METADATA: meta }, console: { warn() {}, log() {}, error() {} }, location: { search: '' }, URLSearchParams };
+    ctx.window.window = ctx.window;
+    vm.createContext(ctx);
+    vm.runInContext('var window = this.window; var METADATA = window.METADATA; var XAPI_COMP_ID = METADATA.id; var XAPI_COMP_SLUG = ' + JSON.stringify(`${SLUG}-${p}`) + ';', ctx);
+    vm.runInContext(rd('unit-js/20-xapi.js'), ctx);
+    for (const it of meta.subContent || []) {
+      const suffix = it.id.replace(/\/+$/, '').split('-').pop();
+      for (const q of it.questions || []) {
+        const qid = q.questionId.replace(/\/+$/, ''), pat = PATS[qid];
+        ok(qid in PATS, `kata-patterns: ${qid} is in the Kata read-back`);
+        if (!pat || !pat.length) continue;
+        const ca = q.correctAnswers || [];
+        const spec = q.questionType === 'choice' ? { choices: ca }
+          : q.questionType === 'true-false' ? { value: ca[0] }
+          : q.questionType === 'matching' ? { pairs: ca.map(c => ({ source: c.source, target: c.target })) }
+          : { text: ca[0] };
+        ctx.__a = [suffix, qid.split('/').pop(), spec];
+        const r = vm.runInContext('xapiResponse(__a[0], __a[1], __a[2])', ctx);
+        ok(pat.includes(r.response), `kata-patterns: ${p}-${suffix}/${qid.split('/').pop()} builds a Kata pattern — built ${JSON.stringify(r.response).slice(0, 80)}`);
+        checked++;
+      }
+    }
+  }
+  ok(checked === 28, `kata-patterns: 28 graded questions checked (got ${checked})`);
+}
+
 /* labels */
 const lab =cp.spawnSync(process.execPath, [path.join(ROOT, 'docs-and-tools', 'check-labels.js')], { encoding: 'utf8' });
 const labBad = (lab.stdout || '').split('\n').filter(l => l.startsWith('✗'));
