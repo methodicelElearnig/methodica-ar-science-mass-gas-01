@@ -8,7 +8,7 @@
    together with the unit's move to the -k library (helpType on 'requested') and the
    per-component State document (v5).
 
-   methodica-science-mass-gas-01 (2026-11-01): copied from methodica-science-mass-liquid-02/_test/, with
+   methodica-ar-science-mass-gas-01 (2026-11-01): copied from methodica-science-mass-liquid-02/_test/, with
    __reset retargeted to this unit (state keys, the engine's own session keys, the character).
    methodica-science-mass-liquid-02 (2026-10-22): copied from methodica-science-volume-solid-01/_test/
    xapi-720-k.js (whose __reset clears the right keys — body-matter-01's still cleared ratio-01's),
@@ -223,8 +223,8 @@
         .forEach(function (k) { sessionStorage.removeItem(k); });
       sessionStorage.removeItem(LOG_KEY);
       sessionStorage.removeItem(FAIL_KEY);
-      sessionStorage.removeItem('lomda_nav_edges::methodica-science-mass-gas-01');
-      Object.keys(sessionStorage).filter(function (k) { return k.indexOf('methodica-science-mass-gas-01:') === 0; })
+      sessionStorage.removeItem('lomda_nav_edges::methodica-ar-science-mass-gas-01');
+      Object.keys(sessionStorage).filter(function (k) { return k.indexOf('methodica-ar-science-mass-gas-01:') === 0; })
         .forEach(function (k) { sessionStorage.removeItem(k); });
     } catch (e) {}
     /* The character and the מועד א verdict live in the State document; localStorage is a cache
@@ -232,9 +232,9 @@
        alive in the window before the document is read. Same cleanup as initResumeResetHatch:
        UI_CHARACTER_KEY and RESULT_KEYS in unit-js/40-resume.js. */
     try {
-      localStorage.removeItem('methodica_science_mass_gas_01_selectedCharacter');
-      localStorage.removeItem('methodica-science-mass-gas-01:selectedCharacter');
-      localStorage.removeItem('methodica-science-mass-gas-01:unitCompleted');
+      localStorage.removeItem('methodica_ar_science_mass_gas_01_selectedCharacter');
+      localStorage.removeItem('methodica-ar-science-mass-gas-01:selectedCharacter');
+      localStorage.removeItem('methodica-ar-science-mass-gas-01:unitCompleted');
     } catch (e) {}
     return 'cleared';
   };

@@ -1,10 +1,14 @@
-# Resume — methodica-science-mass-gas-01
+# Resume — methodica-ar-science-mass-gas-01
+
+> **Arabic twin (2026-11-15).** This file came with the port of the Hebrew unit `methodica-science-mass-gas-01`
+> (`4aaffe3`); ids and keys are retargeted to the Arabic identity (`methodica-ar-…`, `/720/ar/science/mass-gas/01/`).
+> The dated history below is the Hebrew unit's. Arabic specifics: [README](../README.md#arabic-build).
 
 Kata xAPI State API, one document per component (`?registration`), state id
 `execution-state::<component slug>`, document v5 (`unit-js/40-resume.js`, from mass-liquid-02):
 
 ```js
-{ v: 5, component: 'methodica-science-mass-gas-01-0N',
+{ v: 5, component: 'methodica-ar-science-mass-gas-01-0N',
   payload: { currentScreen, key, snap, xr },   // 70-engine-bridge.js capturePartPayload()
   done, doneItems, hints, picks,               // ledgers: completed / item completed / hints / selected
   ui: { character }, results: {} }
@@ -28,7 +32,7 @@ Kata xAPI State API, one document per component (`?registration`), state id
   button, `xapiSeedAnsweredFromResume`, then the landing item's `initialized`.
 - **Character:** chosen in part 01, kept in `ui.character` of each component's document and cached
   in localStorage `methodica_science_mass_gas_01_selectedCharacter` (the engine's own
-  `methodica-science-mass-gas-01:selectedCharacter` stays the fallback without the layer). Part 01's
+  `methodica-ar-science-mass-gas-01:selectedCharacter` stays the fallback without the layer). Part 01's
   selection screen still never pre-selects (720 companion rule).
 - Boot cover in every page; `?resetState` clears document and caches.
 

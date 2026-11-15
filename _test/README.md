@@ -1,4 +1,4 @@
-# Tests — methodica-science-mass-gas-01
+# Tests — methodica-ar-science-mass-gas-01
 
 Not shipped.
 
@@ -43,7 +43,7 @@ Serve the repo (`python scripts/serve.py`, port 8765) and open a part with the s
 localhost only, `50-loader.js` honours `?xapiLib`:
 
 ```
-http://localhost:8765/methodica-science-mass-gas-01-02/index.html?registration=t1&xapiLib=../_test/xapi-720-k.js&resetState
+http://localhost:8765/methodica-ar-science-mass-gas-01-02/index.html?registration=t1&xapiLib=../_test/xapi-720-k.js&resetState
 ```
 
 Console: `__stmts()` (statement log, survives reloads), `__state()` (the state document), `__dupes()`

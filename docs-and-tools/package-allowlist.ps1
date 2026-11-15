@@ -21,10 +21,10 @@
     This file never ships: docs-and-tools/ is excluded wholesale, and *.ps1 twice over.
 
 .NOTES
-    methodica-science-mass-gas-01 (2026-11-01): copied from methodica-science-mass-liquid-02 (itself
+    methodica-ar-science-mass-gas-01 (2026-11-01): copied from methodica-science-mass-liquid-02 (itself
     from volume-solid-01 <- body-matter-01 <- the ratio units). build-package.ps1 and
     verify-package.ps1 are byte-identical to liquid-02's — only this file differs:
-      1. $ComponentGlob is locked to methodica-science-mass-gas-01-NN.
+      1. $ComponentGlob is locked to methodica-ar-science-mass-gas-01-NN.
       2. Each component keeps its code in SUBFOLDERS: css/{engine,motion,style}.css and
          js/{engine,motion,main}.js, plus js/widgets.js in part 01 (the engine and the animation
          system are synced copies — scripts/sync-shared.sh). index.html stays at the root of the
@@ -74,7 +74,7 @@ $UnitDirs = @{
 # everything under assets/.
 $ComponentFiles       = @('index.html')
 $ComponentSubdirFiles = @{ 'css' = @('engine.css', 'motion.css', 'style.css'); 'js' = @('engine.js', 'motion.js', 'main.js', 'widgets.js') }
-$ComponentGlob        = 'methodica-science-mass-gas-01-[0-9][0-9]'
+$ComponentGlob        = 'methodica-ar-science-mass-gas-01-[0-9][0-9]'
 
 # ── Sub-apps: a self-contained site inside a component, loaded by <iframe> ───
 $ComponentSubApps = @()

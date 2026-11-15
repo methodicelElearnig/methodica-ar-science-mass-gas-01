@@ -1,4 +1,8 @@
-# xAPI reporting — methodica-science-mass-gas-01
+# xAPI reporting — methodica-ar-science-mass-gas-01
+
+> **Arabic twin (2026-11-15).** This file came with the port of the Hebrew unit `methodica-science-mass-gas-01`
+> (`4aaffe3`); ids and keys are retargeted to the Arabic identity (`methodica-ar-…`, `/720/ar/science/mass-gas/01/`).
+> The dated history below is the Hebrew unit's. Arabic specifics: [README](../README.md#arabic-build).
 
 Added 2026-11-01 following `2026/Documentation/reporting-and-resume/ADDING-REPORTING-AND-RESUME.md`
 and the MOE request of 2026-10-19 (`Documentation/MOE/דיוק ביישום תקן XAPI.docx`).
@@ -70,7 +74,7 @@ Split item (QA 2026-10-26): the catalogue already has the split shape — 005 is
 (no questions), 006 the video path, 007–009 the three simulations, 010 the shared flip cards; both
 paths are mapped (D-5). No resume migration was needed (no earlier state document existed).
 The catalogue for Kata is this repo's `metadata/` (component files `updatedAt` 2026-10-29), not
-`QA/2026-10-26/split-method-choice-final/methodica-science-mass-gas-01-01.json` (2026-10-22): same
+`QA/2026-10-26/split-method-choice-final/methodica-ar-science-mass-gas-01-01.json` (2026-10-22): same
 item ids, but the repo version declares 006/q1–q3 and has the later titles / informationToBot —
 owner decision 2026-11-01.
 

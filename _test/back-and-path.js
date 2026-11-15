@@ -17,7 +17,7 @@ let JSDOM;
 try { ({ JSDOM } = require('jsdom')); } catch (e) { console.log('SKIPPED: jsdom not on NODE_PATH'); process.exit(0); }
 
 const ROOT = path.resolve(__dirname, '..');
-const SLUG = 'methodica-science-mass-gas-01';
+const SLUG = 'methodica-ar-science-mass-gas-01';
 const PARTS = ['01', '02', '03', '04', '05', '06'];
 let fails = 0, passes = 0;
 const ok = (cond, msg, detail) => { if (cond) passes++; else { fails++; console.log('✗ ' + msg + (detail ? '\n    -> ' + detail : '')); } };

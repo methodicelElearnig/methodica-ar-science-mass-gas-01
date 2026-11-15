@@ -21,7 +21,7 @@
 'use strict';
 const fs = require('fs'), path = require('path'), vm = require('vm'), cp = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
-const SLUG = 'methodica-science-mass-gas-01';
+const SLUG = 'methodica-ar-science-mass-gas-01';
 const PARTS = ['01', '02', '03', '04', '05', '06'];
 const rd = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 let fails = 0, passes = 0;
@@ -162,8 +162,65 @@ ok(/youtube-nocookie\.com\/embed\//.test(rd(`${SLUG}-01/js/main.js`)), '01: YouT
   ok(!/pathChosen/.test((/function twoOptionWire[\s\S]*?\n  \}/.exec(w01) || [''])[0]), '01: a card click (twoOptionWire) does not report');
 }
 
+/* Arabic build (as methodica-ar-science-mass-liquid-02 _test/verify-report.js §8). What a learner sees
+   must be Arabic. Hebrew is allowed only in comments, console messages and REPORT_TYPE_LABELS (the
+   value posted to the issue form every 720 unit shares); the learner sees REPORT_TYPE_DISPLAY. */
+{
+  const HEB = /[\u0590-\u05FF]/;
+  const noBlock = s => s.replace(/\/\*[\s\S]*?\*\//g, m => m.replace(/[^\n]/g, ''));
+  const noLine = s => s.replace(/(^|[\s;{}(,])\/\/.*$/gm, '$1');
+  const noHtml = s => s.replace(/<!--[\s\S]*?-->/g, m => m.replace(/[^\n]/g, ''));
+  const hebLines = (s, f) => s.split('\n').map((l, i) => [f + ':' + (i + 1), l]).filter(([, l]) => HEB.test(l)).map(([w, l]) => w + ' ' + l.trim().slice(0, 80));
+  const code = s => noLine(noBlock(s));
+  for (const p of PARTS) {
+    const dir = `${SLUG}-${p}`;
+    const html = rd(`${dir}/index.html`);
+    ok(/<html lang="ar" dir="rtl">/.test(html), `${p}: index.html is lang="ar" dir="rtl"`);
+    const heb = [].concat(
+      hebLines(code(noHtml(html)), 'index.html'),
+      hebLines(code(rd(`${dir}/js/main.js`)), 'main.js'),
+      p === '01' ? hebLines(code(rd(`${dir}/js/widgets.js`)), 'widgets.js') : [],
+      hebLines(noBlock(rd(`${dir}/css/style.css`)), 'style.css'));
+    ok(heb.length === 0, `${p}: no Hebrew outside comments — ${heb.slice(0, 3).join(' | ')}`);
+  }
+  const eng = hebLines(code(rd('shared/engine.js')), 'engine.js').concat(hebLines(noBlock(rd('shared/engine.css')), 'engine.css'));
+  ok(eng.length === 0, `shared engine: no Hebrew outside comments — ${eng.slice(0, 3).join(' | ')}`);
+  ok(/<html lang="ar" dir="rtl">/.test(rd('index.html')) && !HEB.test(noHtml(rd('index.html'))), 'root index.html: Arabic');
+  for (const f of fs.readdirSync(path.join(ROOT, 'unit-css'))) {
+    const heb = hebLines(noBlock(rd(`unit-css/${f}`)), f);
+    ok(heb.length === 0, `unit-css/${f}: no Hebrew outside comments — ${heb.slice(0, 3).join(' | ')}`);
+  }
+  for (const f of fs.readdirSync(path.join(ROOT, 'unit-js'))) {
+    const c = code(rd(`unit-js/${f}`))
+      .replace(/console\.\w+\([\s\S]*?\);/g, '')
+      .replace(/var REPORT_TYPE_LABELS = \{[\s\S]*?\};/, '')
+      .replace(/\[׳’ʼ\]/g, '');   // _xapiNorm folds the Hebrew geresh — a character class, not text
+    const heb = hebLines(c, f);
+    ok(heb.length === 0, `unit-js/${f}: no Hebrew outside comments, console and REPORT_TYPE_LABELS — ${heb.slice(0, 3).join(' | ')}`);
+  }
+  const report = rd('unit-js/25-report.js');
+  ok(/valSpan\.textContent = REPORT_TYPE_DISPLAY\[hidden\.value\]/.test(report) && /'technical':\s*'[\u0600-\u06FF]/.test(report.slice(report.indexOf('var REPORT_TYPE_DISPLAY'))),
+    'report: the type dropdown shows REPORT_TYPE_DISPLAY (Arabic)');
+  ok(/var REPORT_TYPE_LABELS = \{\s*'technical':\s*'[\u0590-\u05FF]/.test(report), 'report: REPORT_TYPE_LABELS (posted to the shared form) stays Hebrew');
+  ok(!/Assistant/.test(noBlock(rd('unit-css/25-report.css') + rd('shared/engine.css'))), 'fonts: no Assistant font (Arabic build uses Calibri)');
+  const xa = rd('unit-js/20-xapi.js');
+  ok(/var _XAPI_BIDI = \/\[\\u061C\\u200B-\\u200F\\u202A-\\u202E\\u2066-\\u2069\\uFEFF\]\/g;/.test(xa) && /s\.replace\(_XAPI_BIDI, ''\)/.test(xa),
+    '20-xapi: _xapiNorm strips the invisible bidi marks (written as \\u escapes)');
+  const m01 = rd(`${SLUG}-01/js/main.js`);
+  ok(/hl=ar&/.test(m01) && !/hl[=:] ?'?he/.test(m01), '01: YouTube player language is Arabic (hl=ar)');
+  ok(/onReady: \(\) => \{ keepTitle\(\);/.test(m01) && /onStateChange: e => \{\s*keepTitle\(\);/.test(m01), '01: the Arabic iframe title is re-applied on ready and on every state change');
+  ok(/const VIDEO_YT = 'l3KqVtKepxA';/.test(m01) && /\{ t: 43,/.test(m01) && /\{ t: 86,/.test(m01) && /\{ t: 119,[^\n]*end: true/.test(m01), '01: Arabic video and its stops (0:43, 1:26, 1:59)');
+  ok(/var NAV_EDGE_KEY = 'lomda_nav_edges::methodica-ar-science-mass-gas-01';/.test(rd('unit-js/40-resume.js')), 'resume: NAV_EDGE_KEY is the Arabic unit key');
+  ok(/const LOMDA_ID = 'methodica-ar-science-mass-gas-01';/.test(rd('shared/engine.js')), 'engine: LOMDA_ID (storage namespace) is the Arabic unit key');
+  const src = ['index.html', 'shared/engine.js', 'shared/index_dev.template.html', 'scripts/sync-shared.sh']
+    .concat(fs.readdirSync(path.join(ROOT, 'unit-js')).map(f => `unit-js/${f}`))
+    .concat(PARTS.flatMap(p => [`${SLUG}-${p}/index.html`, `${SLUG}-${p}/js/main.js`]));
+  const heIds = src.filter(f => /methodica[-_]science[-_]mass[-_]gas|720active\/science\/mass-gas/.test(code(noHtml(rd(f)))));
+  ok(heIds.length === 0, `identity: no Hebrew-unit slug or prefix left in code (outside comments) — ${heIds.join(', ')}`);
+}
+
 /* labels */
-const lab = cp.spawnSync(process.execPath, [path.join(ROOT, 'docs-and-tools', 'check-labels.js')], { encoding: 'utf8' });
+const lab =cp.spawnSync(process.execPath, [path.join(ROOT, 'docs-and-tools', 'check-labels.js')], { encoding: 'utf8' });
 const labBad = (lab.stdout || '').split('\n').filter(l => l.startsWith('✗'));
 labBad.forEach(l => ok(false, 'labels: ' + l));
 ok(lab.status === 0, 'labels: check-labels.js exits 0');

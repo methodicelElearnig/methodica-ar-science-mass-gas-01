@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 
 const BASE = process.argv[2] || path.join(__dirname, '..');
-const UNIT_SLUG = 'methodica-science-mass-gas-01';
+const UNIT_SLUG = 'methodica-ar-science-mass-gas-01';
 const PARTS = ['01', '02', '03', '04', '05', '06'];
 const CDN = 'https://lomdot.education.gov.il/metodica/720active/common/';
 

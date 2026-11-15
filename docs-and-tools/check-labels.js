@@ -8,7 +8,7 @@
 'use strict';
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const ROOT = path.resolve(__dirname, '..');
-const SLUG = 'methodica-science-mass-gas-01';
+const SLUG = 'methodica-ar-science-mass-gas-01';
 
 /* Visible text of an option's HTML: tooltips/info buttons dropped, tags
    stripped, whitespace collapsed — the same normalisation the bridge uses. */

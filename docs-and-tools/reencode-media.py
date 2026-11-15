@@ -35,7 +35,7 @@ from PIL import Image, ImageOps
 import imagequant
 
 ROOT = Path(__file__).resolve().parent.parent
-UNIT = 'methodica-science-mass-gas-01'
+UNIT = 'methodica-ar-science-mass-gas-01'
 PARTS = [f'{UNIT}-0{n}' for n in range(1, 7)]
 BOXES = json.loads((ROOT / 'docs-and-tools' / 'media-display-boxes.json').read_text('utf-8'))['boxes']
 ROWS_OUT = ROOT / 'docs-and-tools' / 'reencode-rows.md'

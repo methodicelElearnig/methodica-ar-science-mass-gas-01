@@ -354,10 +354,16 @@ function xapiQMeta(suffix, qKey) {
 var XAPI_SEP_LIST = '[,]', XAPI_SEP_PAIR = '[.]';
 var _XAPI_DELIMS = /\[,\]|\[\.\]|\[:\]/g;
 
+/* Arabic build (guide §6.3c rule 5): invisible direction / joiner marks never reach a response —
+   ZWSP, ZWNJ, ZWJ, LRM, RLM (U+200B–U+200F), ALM (U+061C), the bidi embeddings and overrides
+   (U+202A–U+202E), the isolates (U+2066–U+2069) and the BOM. The Arabic screens carry LRMs for
+   display (e.g. after "!"); metadata carries none, so text matched against it must drop them too. */
+var _XAPI_BIDI = /[\u061C\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g;
+
 function _xapiNorm(s) {
   s = String(s == null ? '' : s);
   if (s.normalize) s = s.normalize('NFC');
-  return s.replace(/[׳’ʼ]/g, "'").replace(/\s+/g, ' ').trim();
+  return s.replace(_XAPI_BIDI, '').replace(/[׳’ʼ]/g, "'").replace(/\s+/g, ' ').trim();
 }
 /* learner-typed text: the delimiters cannot be escaped in xAPI, so they are blanked */
 function _xapiFree(s) { return _xapiNorm(s).replace(_XAPI_DELIMS, ' ').replace(/\s+/g, ' ').trim(); }
