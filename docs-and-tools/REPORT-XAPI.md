@@ -29,7 +29,7 @@ bridge (`lms(...)`, a no-op without the layer) and the bridge holds every call s
 | `goTo` tail | `onScreen(n)` | `xapiOnScreen(n)` item initialized/completed pairs, `scheduleResumeSave()`, D-8 end button |
 | every graded attempt (`qCheck`) | `onAnswered(n, ok, isLast)` | `xapiAnswered(item, q, ok, isLast, {choices:[index], value})`, `flushResumeSave()` |
 | hint opened (`openHint`, after its guards) | `onHint(n)` | `xapiRequestedHint(item, q)` (once per question, hints ledger) |
-| learning path confirmed (01 בחרתי, a switch on the path toggle) | `pathChosen(p)` | `selected` / `learning-type`, object = component, `response` = the path item's `mediaFormat`, on every confirmed choice and every path switch (2026-11-12; was once per distinct path). `setLearningPath` → `onPath(p)` only saves |
+| learning path confirmed (01 בחרתי, a switch on the path toggle) | `pathChosen(p)` | `selected` / `learning-type`, object = component, `response` = the path item's `mediaFormat`, on every confirmed choice and every path switch (2026-11-12; was once per distinct path). `setLearningPath` → `onPath(p)` only saves. A switch on the toggle sends no item `completed`: the toggle calls `pathSwitch()` right before its `goTo` and `xapiOnScreen` skips the close; a path item closes on the forward move out of it (2026-11-17, monday 13451740972) |
 | target outside the part (`advanceScreen`) | `onPartEnd(n)` | `xapiEndComponent(xapiPartResult(), button)`; returns `false` (stay) unless `DEV_NAV` |
 | part code: DnD board complete | `answered('summary-dnd', true, true, {pairs})` | matching response |
 | part code: YouTube `onStateChange` | `youtubeState(e, 'video')` | `xapiYouTubeState(e, '006')` played / paused |

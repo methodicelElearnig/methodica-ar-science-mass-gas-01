@@ -34,8 +34,12 @@ NODE_PATH=/tmp/lomda-test/node_modules node _test/back-and-path.js
 2026-11-12, monday 13454123722 (B) and 13451706244 (T). B, in every part with an evaluated question
 that has an earlier item (02, 03, 04): wrong first try → Back → no item `completed`; return → right →
 forward → exactly one, `success:true`. T, part 01: בחרתי video → toggle hands-on → toggle video → a click
-on the active tab gives three `selected` (video, interactive-content, video), and both switches close the
-item they leave (the path starts are B-2 hubs). On the old `20-xapi.js` 8 checks fail; without the hubs 1.
+on the active tab gives three `selected` (video, interactive-content, video).
+
+2026-11-17, monday 13451740972 (S): a switch on the path toggle sends no item `completed`, in either
+direction and from the flipcards screen too; the path item closes on the forward move out of it. The path
+starts are no longer B-2 hubs. On the 13.11 `20-xapi.js` 5 checks fail; without the mark in
+`js/widgets.js` 2.
 
 ## Browser walk (offline stub)
 

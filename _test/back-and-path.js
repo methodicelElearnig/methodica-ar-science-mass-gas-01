@@ -105,18 +105,44 @@ function check(r, n, id) {
     ok(sel().length === 0, tag + ': a card click does not report');
     L.advanceScreen();                                         // בחרתי
     ok(L.current === L.indexOf('video'), tag + ': בחרתי goes to the video screen', String(L.current));
+    const pathDone = () => ['006', '007', '008', '009'].map((i) => i + ':' + r.itemDone(i).length).join(' ');
+    const inits = (i) => r.sent.filter((s) => s.verb === 'initialized' && s.ctx && new RegExp('-' + i + '/?$').test(s.ctx.objectId || '')).length;
     toggle('hands-on'); await tick(400);
     ok(L.current === L.indexOf('obs-intro'), tag + ': the toggle goes to the hands-on path', String(L.current));
-    ok(r.itemDone('006').length === 1, tag + ': the switch closes the video item (006)');
+    ok(r.itemDone('006').length === 0, tag + ': S: the switch (a higher screen) sends no completed for the video item 006', pathDone());
+    ok(inits('007') === 1, tag + ': S: the switch opens the hands-on item 007', String(inits('007')));
     toggle('video'); await tick(400);
     ok(L.current === L.indexOf('video'), tag + ': the toggle goes back to the video path', String(L.current));
-    ok(r.itemDone('007').length === 1, tag + ': the switch to the earlier path still closes the hands-on item (007, hub)');
+    ok(r.itemDone('007').length === 0, tag + ': S: the switch back sends no completed for the hands-on item 007', pathDone());
+    ok(pathDone() === '006:0 007:0 008:0 009:0', tag + ': S: video -> hands-on -> video = no completed for any path item', pathDone());
     toggle('video'); await tick(400);                          // the already-active tab
     const s = sel();
     ok(s.length === 3, tag + ': three selected (choice + two switches; the active tab adds none)', String(s.length));
     ok(JSON.stringify(s.map((x) => x.result && x.result.response)) === JSON.stringify(['video', 'interactive-content', 'video']),
       tag + ': responses video, interactive-content, video', JSON.stringify(s.map((x) => x.result && x.result.response)));
     ok(s.every((x) => x.ctx && x.ctx.category === 'learning-type'), tag + ': category learning-type');
+    /* S: the path item closes like any other, on the forward move out of it */
+    L.goTo(L.indexOf('flipcards'));                            // the video screen's next (Continue is gated on the clip)
+    ok(pathDone() === '006:1 007:0 008:0 009:0', tag + ': S: the forward move out closes the video item 006 once, and only it', pathDone());
+    /* S: the toggle on a later screen (flipcards) does not close that screen's item either */
+    const fc = r.w.SCREEN_TO_SUBCONTENT[L.current][0];
+    toggle('hands-on'); await tick(400);
+    ok(L.current === L.indexOf('obs-intro'), tag + ': S: the toggle on flipcards goes to the hands-on path', String(L.current));
+    ok(r.itemDone(fc).length === 0, tag + ': S: the switch from flipcards sends no completed for item ' + fc);
+    ok(typeof r.w.XAPI_HUB_SCREENS === 'undefined', tag + ': S: no XAPI_HUB_SCREENS (the path starts are not hubs)');
+    ok(r.errors.length === 0, tag + ': no console.error', r.errors.slice(0, 2).join(' | '));
+  }
+
+  /* S: a mark that no item change consumed cannot leak into a later move: every xapiOnScreen clears it */
+  {
+    const r = load('01'); await start(r);
+    const L = r.w.LOMDA, tag = '01 S mark';
+    const v = L.indexOf('video');
+    L.goTo(v);
+    ok(typeof r.w.xapiPathSwitch === 'function', tag + ': 20-xapi.js has xapiPathSwitch');
+    if (typeof r.w.xapiPathSwitch === 'function') { r.w.xapiPathSwitch(); r.w.xapiOnScreen(v); }   // same item: returns early, the mark must still clear
+    L.goTo(L.indexOf('flipcards'));
+    ok(r.itemDone('006').length === 1, tag + ': a forward move after a spent mark closes the item', String(r.itemDone('006').length));
     ok(r.errors.length === 0, tag + ': no console.error', r.errors.slice(0, 2).join(' | '));
   }
 

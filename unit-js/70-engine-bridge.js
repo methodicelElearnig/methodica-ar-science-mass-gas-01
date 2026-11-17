@@ -58,15 +58,6 @@ var SCREEN_TO_SUBCONTENT = (function () {
   return map;
 })();
 
-/* B-2 hubs (20-xapi.js _xapiIsBackward, 2026-11-12): the first screen of each learning path. A switch on
-   the path toggle into the earlier path is a lower screen, but it is a choice, not a Back: it must close
-   the item it leaves, as before. */
-var XAPI_HUB_SCREENS = {};
-Object.keys(_BX.paths || {}).forEach(function (p) {
-  var item = _BX.paths[p].item;
-  for (var n = 0; n < TOTAL_SCREENS; n++) if (SCREEN_TO_SUBCONTENT[n] && SCREEN_TO_SUBCONTENT[n][0] === item) { XAPI_HUB_SCREENS[n] = 1; break; }
-});
-
 /* items that carry an engine- or widget-graded question */
 var XAPI_EVAL_ITEMS = {};
 Object.keys(_BX.questions || {}).forEach(function (k) { XAPI_EVAL_ITEMS[_BX.questions[k].item] = 1; });
@@ -236,6 +227,12 @@ window.LOMDA_LMS = {
      (20-xapi.js xapiSelectedLearningType; guide §6.3a) */
   pathChosen: function (p) {
     xapiSelectedLearningType(p);
+  },
+
+  /* the path toggle is about to navigate (js/widgets.js toggleSync, right before its goTo): the switch
+     must not close the item it leaves (monday 13451740972, 2026-11-17; 20-xapi.js xapiPathSwitch) */
+  pathSwitch: function () {
+    xapiPathSwitch();
   },
 
   /* the part's last click: component 'completed' (pass or fail), button disabled; in a platform
