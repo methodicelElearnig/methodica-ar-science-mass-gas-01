@@ -96,7 +96,10 @@ window.P01 = (function () {
       const p = b.dataset.path; if (p === window.lomdaState.learningPath) return;
       api.setLearningPath(p); t.dataset.active = p;
       if (window.LOMDA_LMS && window.LOMDA_LMS.pathChosen) window.LOMDA_LMS.pathChosen(p);   // switching path is a choice too
-      setTimeout(() => api.goTo(api.indexOf(starts[p])), 260);
+      setTimeout(() => {
+        if (window.LOMDA_LMS && window.LOMDA_LMS.pathSwitch) window.LOMDA_LMS.pathSwitch();   // a switch is not a forward move: no 'completed' for the item left
+        api.goTo(api.indexOf(starts[p]));
+      }, 260);
     });
   }
 
